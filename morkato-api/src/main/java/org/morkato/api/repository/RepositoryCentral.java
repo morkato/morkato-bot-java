@@ -5,4 +5,6 @@ import javax.annotation.Nonnull;
 public interface RepositoryCentral {
   @Nonnull
   GuildRepository guild();
+  @Nonnull
+  ArtRepository art();
 }

@@ -1,9 +1,11 @@
 package org.morkato.api.entity.guild;
 
+import org.morkato.api.DeleteApiModel;
+
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 
-public interface Guild {
+public interface Guild extends DeleteApiModel<Guild> {
   static String representation(Guild guild) {
     return "Guild[id = " + guild.getId() + "]";
   }

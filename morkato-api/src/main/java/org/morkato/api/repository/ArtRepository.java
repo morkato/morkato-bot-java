@@ -9,13 +9,13 @@ import javax.annotation.Nonnull;
 
 public interface ArtRepository {
   @Nonnull
-  Future<Art[]> fetchAll(String guildId);
+  Art[] fetchAll(String guildId);
   @Nonnull
-  Future<Art> fetch(ArtFetchQuery query);
+  Art fetch(ArtFetchQuery query);
   @Nonnull
-  Future<Art> create(ArtCreationQuery query);
+  Art create(ArtCreationQuery query);
   @Nonnull
-  Future<Art> update(ArtUpdateQuery query);
+  Art update(ArtUpdateQuery query);
   @Nonnull
-  Future<Art> delete(ArtFetchQuery query);
+  Art delete(Art art);
 }
