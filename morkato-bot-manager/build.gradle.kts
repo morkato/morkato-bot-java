@@ -2,7 +2,7 @@ plugins {
   kotlin("jvm")
 }
 
-group = "com.morkato.bmt"
+group = "org.morkato.bmt"
 version = "1.0"
 
 repositories {
@@ -12,6 +12,7 @@ repositories {
 dependencies {
   testImplementation(kotlin("test"))
   implementation("org.springframework:spring-context:6.0.0")
+  implementation("org.reflections:reflections:0.10.2")
   implementation("org.apache.commons:commons-lang3:3.12.0")
   implementation("com.google.code.findbugs:jsr305:3.0.2")
   implementation("ch.qos.logback:logback-classic:1.4.14")

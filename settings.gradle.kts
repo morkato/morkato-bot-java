@@ -4,7 +4,10 @@ plugins {
 
 rootProject.name = "morkato-bot-kts"
 include("morkato-bot")
-include("morkato-resolver")
 include("morkato-bot-manager")
 include("morkato-utils")
-include("morkato-service")
+//include("morkato-http-client")
+//include("morkato-http-api")
+include("morkato-api-database")
+include("morkato-api")
+include("morkato-api-tests")

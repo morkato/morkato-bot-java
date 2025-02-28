@@ -3,7 +3,7 @@ plugins {
   kotlin("jvm")
 }
 
-group = "com.morkato.bot"
+group = "org.morkato.bot"
 version = "1.0"
 
 application {
@@ -17,9 +17,10 @@ repositories {
 dependencies {
   testImplementation(kotlin("test"))
   implementation("ch.qos.logback:logback-classic:1.4.14")
-  implementation("org.springframework:spring-context:6.0.0")
   implementation("net.dv8tion:JDA:5.0.0-beta.18")
   implementation(project(":morkato-bot-manager"))
+  implementation(project(":morkato-utils"))
+  implementation(project(":morkato-api"))
 }
 
 
@@ -27,9 +28,9 @@ dependencies {
 tasks.register<JavaExec>("runClient") {
   group = "application"
   description = "Executa o cliente discord bot."
-  getMainClass().set("com.morkato.bot.Client")
+  getMainClass().set("org.morkato.bot.Client")
   classpath = sourceSets.main.get().getRuntimeClasspath()
-  jvmArgs = listOf("-Xmx1024m")
+  jvmArgs = listOf("-Xmx1024m", "-Dmorkato.conf=morkato.conf")
 }
 
 tasks.register<Jar>("clientJar") {

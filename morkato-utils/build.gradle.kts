@@ -2,7 +2,7 @@ plugins {
   kotlin("jvm")
 }
 
-group = "com.morkato.utility"
+group = "org.morkato.utility"
 version = "1.0"
 
 repositories {
@@ -12,11 +12,9 @@ repositories {
 dependencies {
   testImplementation(kotlin("test"))
   implementation("com.google.guava:guava:33.4.0-jre")
+  implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
 }
 
 tasks.test {
   useJUnitPlatform()
-}
-kotlin {
-  jvmToolchain(23)
 }

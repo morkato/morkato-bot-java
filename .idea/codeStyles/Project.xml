@@ -6,6 +6,7 @@
         <option name="TAB_SIZE" value="2" />
       </value>
     </option>
+    <option name="FORMATTER_TAGS_ENABLED" value="false" />
     <JavaCodeStyleSettings>
       <option name="SPACE_AROUND_TYPE_BOUNDS_IN_TYPE_PARAMETERS" value="false" />
       <option name="SPACE_AROUND_ANNOTATION_EQ" value="false" />
