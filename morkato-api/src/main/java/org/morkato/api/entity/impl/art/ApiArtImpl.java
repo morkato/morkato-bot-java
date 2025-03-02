@@ -1,13 +1,18 @@
-package org.morkato.api.entity.art;
+package org.morkato.api.entity.impl.art;
 
 import org.morkato.api.dto.ArtDTO;
+import org.morkato.api.entity.art.Art;
+import org.morkato.api.entity.art.ArtType;
+import org.morkato.api.entity.art.ArtUpdateBuilder;
+import org.morkato.api.entity.attack.Attack;
 import org.morkato.api.entity.guild.Guild;
 import org.morkato.api.repository.ArtRepository;
 import org.morkato.api.repository.RepositoryCentral;
+import org.morkato.api.repository.queries.attack.AttackUpdateQuery;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Objects;
+import java.util.*;
 
 public class ApiArtImpl implements Art {
   private final RepositoryCentral central;
@@ -18,8 +23,13 @@ public class ApiArtImpl implements Art {
   private ArtType type;
   private String description;
   private String banner;
+  private Map<String, Attack> attacks;
 
-  public ApiArtImpl(RepositoryCentral central, Guild guild, ArtDTO dto) {
+  public ApiArtImpl(
+    @Nonnull RepositoryCentral central,
+    @Nonnull Guild guild,
+    @Nonnull ArtDTO dto
+  ) {
     Objects.requireNonNull(central);
     Objects.requireNonNull(guild);
     Objects.requireNonNull(dto);
@@ -29,6 +39,15 @@ public class ApiArtImpl implements Art {
       /* TODO: Add custom error for stupid context. */
       throw new RuntimeException("");
     this.fromDTO(dto);
+    /* TODO: Add logic for attacks in art context >_< */
+    this.attacks = new HashMap<>();
+  }
+
+  public ApiArtImpl(
+    @Nonnull RepositoryCentral central,
+    @Nonnull ArtDTO dto
+  ) {
+    this(Objects.requireNonNull(central), central.guild().fetch(dto.getGuildId()), dto);
   }
 
   private void fromDTO(ArtDTO dto) {
@@ -52,6 +71,12 @@ public class ApiArtImpl implements Art {
   public Guild getGuild() {
     Objects.requireNonNull(this.guild);
     return this.guild;
+  }
+
+  @Nonnull
+  @Override
+  public Map<String, Attack> getAttacks() {
+    return Collections.unmodifiableMap(this.attacks);
   }
 
   @Nonnull
@@ -88,8 +113,13 @@ public class ApiArtImpl implements Art {
   }
 
   @Override
-  public ArtEditBuilder doUpdate() {
-    throw new RuntimeException("Not implemented error");
+  public ArtUpdateBuilder doUpdate() {
+    return new ApiArtUpdateBuilderImpl(this);
+  }
+
+  @Override
+  public void update(AttackUpdateQuery query){
+    throw new RuntimeException("Not implemented error.");
   }
 
   @Override

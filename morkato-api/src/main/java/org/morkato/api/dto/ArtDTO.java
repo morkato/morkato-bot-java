@@ -17,17 +17,17 @@ import org.morkato.api.validation.groups.OnCreate;
 import org.morkato.api.validation.groups.OnUpdate;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = false, of = {"guildId","id"})
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ArtDTO extends DefaultDTO<ArtDTO> {
-  @NotNull(groups = {Default.class, OnCreate.class})
-  @MorkatoSnowflakeId(groups = {Default.class, OnCreate.class})
+public final class ArtDTO extends DefaultDTO<ArtDTO> {
+  @NotNull(groups = {Default.class, OnCreate.class, OnUpdate.class})
+  @MorkatoSnowflakeId(groups = {Default.class, OnCreate.class, OnUpdate.class})
   private String guildId;
-  @NotNull(groups = Default.class)
-  @MorkatoSnowflakeId(groups = Default.class)
+  @NotNull(groups = {Default.class, OnCreate.class, OnUpdate.class})
+  @MorkatoSnowflakeId(groups = {Default.class, OnCreate.class, OnUpdate.class})
   private String id;
   @NotNull(groups = {Default.class, OnCreate.class})
   @MorkatoModelName(groups = {Default.class, OnCreate.class, OnUpdate.class})

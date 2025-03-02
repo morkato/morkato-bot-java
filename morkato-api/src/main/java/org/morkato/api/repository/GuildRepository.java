@@ -10,7 +10,7 @@ import org.morkato.api.repository.queries.GuildIdQuery;
 import javax.annotation.Nonnull;
 import java.util.concurrent.Future;
 
-public interface GuildRepository {
+public interface GuildRepository extends Repository {
   @Nonnull
   Guild fetch(@Nonnull GuildIdQuery query) throws RepositoryInternalError, GuildNotFoundError, GuildIdInvalidError;
   @Nonnull

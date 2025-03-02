@@ -8,6 +8,9 @@
 --  // (1 << 4): Não contra atacável
 --  // (1 << 5): Contra Ataque
 --  // (1 << 6): Usável para defesa
+--  // (1 << 7): Atributo Técnica
+--  // (1 << 8): Atributo Exclusivo da Arte
+--  // (1 << 9): Glicínia
 
 CREATE SEQUENCE "attack_snowflake_seq";
 CREATE TABLE "attacks" (

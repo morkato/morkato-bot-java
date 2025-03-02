@@ -1,7 +1,7 @@
 package org.morkato.database
 
 import org.morkato.api.entity.art.Art
-import org.morkato.api.entity.art.ArtEditBuilder
+import org.morkato.api.entity.art.ArtUpdateBuilder
 import org.morkato.api.entity.art.ArtType
 import org.morkato.api.entity.guild.Guild
 import java.util.concurrent.Future
@@ -35,7 +35,7 @@ class DatabaseArt() : Art {
     TODO("Not yet implemented")
   }
 
-  override fun doUpdate(): ArtEditBuilder {
+  override fun doUpdate(): ArtUpdateBuilder {
     TODO("Not yet implemented")
   }
 

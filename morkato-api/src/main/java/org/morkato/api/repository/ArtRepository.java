@@ -1,21 +1,22 @@
 package org.morkato.api.repository;
 
+import org.morkato.api.entity.art.ArtId;
+import org.morkato.api.exception.repository.RepositoryException;
 import org.morkato.api.repository.queries.ArtUpdateQuery;
 import org.morkato.api.repository.queries.ArtCreationQuery;
-import org.morkato.api.repository.queries.ArtFetchQuery;
 import org.morkato.api.entity.art.Art;
-import java.util.concurrent.Future;
+
 import javax.annotation.Nonnull;
 
-public interface ArtRepository {
+public interface ArtRepository extends Repository {
   @Nonnull
-  Art[] fetchAll(String guildId);
+  Art[] fetchAll(String guildId) throws RepositoryException;
   @Nonnull
-  Art fetch(ArtFetchQuery query);
+  Art fetch(ArtId query) throws RepositoryException;
   @Nonnull
-  Art create(ArtCreationQuery query);
+  Art create(ArtCreationQuery query) throws RepositoryException;
   @Nonnull
-  Art update(ArtUpdateQuery query);
+  Art update(ArtUpdateQuery query) throws RepositoryException;
   @Nonnull
-  Art delete(Art art);
+  void delete(ArtId art) throws RepositoryException;
 }
