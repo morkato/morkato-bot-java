@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.morkato.api.repository.queries.attack.AttackUpdateQuery;
 import org.morkato.api.validation.constraints.*;
 import org.morkato.api.validation.groups.OnCreate;
 import org.morkato.api.validation.groups.OnId;
@@ -55,6 +56,10 @@ public final class AttackDTO extends DefaultDTO<AttackDTO> {
   private BigDecimal blood;
   @Min(0)
   private int flags;
+
+  public static AttackDTO from(AttackUpdateQuery query) {
+    throw new RuntimeException("Not implemented error");
+  }
 
   @Override
   public Set<ConstraintViolation<AttackDTO>> safeValidate(Validator validator, Class<?>... classes) {

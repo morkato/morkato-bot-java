@@ -50,6 +50,9 @@ public class ContextImpl<Args> implements TextCommandContext<Args>{
     }
     return this.args;
   }
+  public void setArgs(Args args) {
+    this.args = args;
+  }
   @Override
   public boolean isFromGuild() {
     return this.fromGuild;

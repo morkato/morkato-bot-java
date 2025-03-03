@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = {})
-@Digits(integer = 3, fraction = 0)
+@Digits(integer = 12, fraction = 0)
 @Min(0L)
 @Max(1000000000000L)
 public @interface MorkatoModelAttribute {

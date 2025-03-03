@@ -1,6 +1,9 @@
 package org.morkato.api.entity.impl.guild;
 
+import org.morkato.api.entity.ObjectResolver;
+import org.morkato.api.entity.art.Art;
 import org.morkato.api.entity.guild.Guild;
+import org.morkato.api.entity.guild.GuildArtResolver;
 import org.morkato.api.repository.GuildRepository;
 import org.morkato.api.repository.RepositoryCentral;
 import org.morkato.api.dto.GuildDTO;
@@ -9,8 +12,9 @@ import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class ApiGuildImpl implements Guild{
+public class ApiGuildImpl implements Guild {
   private final RepositoryCentral central;
+  private final GuildArtResolver arts;
   private String id;
   private BigDecimal humanInitialLife;
   private BigDecimal oniInitialLife;
@@ -25,6 +29,7 @@ public class ApiGuildImpl implements Guild{
   ) {
     this.central = central;
     this.fromDTO(dto);
+    this.arts = new GuildArtResolver(this, central);
   }
 
   private void fromDTO(GuildDTO dto) {
@@ -97,6 +102,11 @@ public class ApiGuildImpl implements Guild{
   public BigDecimal getFamilyRoll() {
     Objects.requireNonNull(this.familyRoll);
     return this.familyRoll;
+  }
+
+  @Override
+  public ObjectResolver<Art> getArtResolver() {
+    return this.arts;
   }
 
   @Override

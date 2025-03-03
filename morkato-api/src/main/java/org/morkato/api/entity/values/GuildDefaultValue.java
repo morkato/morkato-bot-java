@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.morkato.api.dto.GuildDTO;
 import org.morkato.api.entity.guild.Guild;
 import org.morkato.api.repository.queries.GuildCreateQuery;
 
@@ -50,6 +51,17 @@ public final class GuildDefaultValue {
     if (Objects.nonNull(query.getFamilyRoll()))
       values.setFamilyRoll(query.getFamilyRoll());
     return values;
+  }
+
+  public GuildDTO getDTO() {
+    return new GuildDTO()
+      .setHumanInitialLife(this.getHumanInitialLife())
+      .setOniInitialLife(this.getHumanInitialLife())
+      .setHybridInitialLife(this.getHybridInitialLife())
+      .setBreathInitial(this.getBreathInitial())
+      .setBloodInitial(this.getBloodInitial())
+      .setAbilityRoll(this.getAbilityRoll())
+      .setFamilyRoll(this.getFamilyRoll());
   }
 
   public boolean isHumanInitialLife(Guild guild) {

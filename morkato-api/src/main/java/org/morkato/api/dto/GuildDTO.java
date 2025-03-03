@@ -30,19 +30,19 @@ public class GuildDTO extends DefaultDTO<GuildDTO> {
   @MorkatoSnowflakeId(groups = {Default.class, OnCreate.class, OnId.class})
   private String id;
   @NotNull(groups = Default.class)
-  @MorkatoModelAttribute
+  @MorkatoModelAttribute(groups = Default.class)
   private BigDecimal humanInitialLife;
   @NotNull(groups = Default.class)
-  @MorkatoModelAttribute
+  @MorkatoModelAttribute(groups = Default.class)
   private BigDecimal oniInitialLife;
   @NotNull(groups = Default.class)
-  @MorkatoModelAttribute
+  @MorkatoModelAttribute(groups = Default.class)
   private BigDecimal hybridInitialLife;
   @NotNull(groups = Default.class)
-  @MorkatoModelAttribute
+  @MorkatoModelAttribute(groups = Default.class)
   private BigDecimal breathInitial;
   @NotNull(groups = Default.class)
-  @MorkatoModelAttribute
+  @MorkatoModelAttribute(groups = Default.class)
   private BigDecimal bloodInitial;
   @NotNull(groups = Default.class)
   @MorkatoModelRoll(groups = Default.class)

@@ -2,6 +2,7 @@ package org.morkato.bmt.argument;
 
 import org.morkato.bmt.components.ObjectGenericParser;
 import org.morkato.bmt.components.ObjectParser;
+import org.morkato.bmt.context.TextCommandContext;
 import org.morkato.bmt.errors.ArgumentParserException;
 import org.morkato.bmt.management.ArgumentManager;
 import org.morkato.utility.StringView;
@@ -30,19 +31,15 @@ public class ArgumentParser {
 //    parsers.put(BigDecimal.class, BigDecimal::new);
 //    parsers.put(BigInteger.class, BigInteger::new);
   }
-  private static <T> T castOrNull(
-    @Nonnull Class<T> clazz,
-    @Nonnull Object object
-  ) {
-    try {
-      return clazz.cast(object);
-    } catch (ClassCastException exc) {
-      return null;
-    }
+
+  public static ArgumentManager getManager() {
+    return manager;
   }
+
   @SuppressWarnings("unchecked")
   public <T> T parse(
     @Nonnull Class<T> clazz,
+    @Nonnull TextCommandContext<?> ctx,
     @Nonnull StringView view
   ) throws ArgumentParserException {
     view.skipWhitespace();
@@ -52,11 +49,11 @@ public class ArgumentParser {
       return null;
     ObjectGenericParser<T> genericParser = manager.getGenericParser(clazz);
     if (genericParser != null) {
-      return (T) genericParser.transform(clazz, manager, view);
+      return (T) genericParser.transform(clazz, ctx, manager, view);
     }
     ObjectParser<T> parser = manager.getObjectParser(clazz);
     if (parser == null)
       return null;
-    return parser.parse(view.rest(), clazz.getAnnotations());
+    return parser.parse(ctx, view.rest(), clazz.getAnnotations());
   }
 }

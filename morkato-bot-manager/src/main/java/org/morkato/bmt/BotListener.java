@@ -31,7 +31,7 @@ public class BotListener extends ListenerAdapter {
   @Override
   public void onReady(ReadyEvent event) {
     /* Carregado quando o bot faz login! Sendo assim, é carregado todas as extensões, errors bouders e comandos! */
-    logger.info("Estou conectado, como: {}", event.getJDA().getSelfUser().getAsTag());
+    logger.info("Estou conectado, como: {}", event.getJDA().getSelfUser().getName());
   }
 
   @Override

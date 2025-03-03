@@ -1,5 +1,6 @@
 package org.morkato.api.repository;
 
+import org.morkato.api.dto.ArtDTO;
 import org.morkato.api.entity.art.ArtId;
 import org.morkato.api.exception.repository.RepositoryException;
 import org.morkato.api.repository.queries.ArtUpdateQuery;
@@ -10,13 +11,13 @@ import javax.annotation.Nonnull;
 
 public interface ArtRepository extends Repository {
   @Nonnull
-  Art[] fetchAll(String guildId) throws RepositoryException;
+  ArtDTO[] fetchAll(String guildId) throws RepositoryException;
   @Nonnull
-  Art fetch(ArtId query) throws RepositoryException;
+  ArtDTO fetch(ArtId query) throws RepositoryException;
   @Nonnull
-  Art create(ArtCreationQuery query) throws RepositoryException;
+  ArtDTO create(ArtCreationQuery query) throws RepositoryException;
   @Nonnull
-  Art update(ArtUpdateQuery query) throws RepositoryException;
+  ArtDTO update(ArtUpdateQuery query) throws RepositoryException;
   @Nonnull
   void delete(ArtId art) throws RepositoryException;
 }

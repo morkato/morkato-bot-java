@@ -4,7 +4,9 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.morkato.bmt.annotation.AutoInject;
+import org.morkato.bmt.argument.ArgumentParser;
 import org.morkato.bmt.commands.CommandExecutor;
+import org.morkato.bmt.management.ArgumentManager;
 import org.morkato.utility.ClassInjectorMap;
 import org.morkato.bmt.components.Extension;
 import org.morkato.bmt.management.ComponentManager;
@@ -52,7 +54,7 @@ public class Main {
       injector.inject(user);
     } catch (ValueAlreadyInjected exc) {}
     ExtensionLoader extensionLoader = new ExtensionLoader(commands, injector, properties);
-    ComponentLoader componentLoader = new ComponentLoader(commands, commands.getExceptionManager(), injector);
+    ComponentLoader componentLoader = new ComponentLoader(commands, commands.getExceptionManager(), ArgumentParser.getManager(), injector);
     extensionLoader.load(extensions);
     componentLoader.loadAll(components.from(Extension.class));
     for (Extension extension : extensionLoader.getLoaded()) {

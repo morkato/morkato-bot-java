@@ -5,13 +5,16 @@ plugins {
 group = "org.morkato.bmt"
 version = "1.0"
 
+java {
+  toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+}
+
 repositories {
   mavenCentral()
 }
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation("org.springframework:spring-context:6.0.0")
   implementation("org.reflections:reflections:0.10.2")
   implementation("org.apache.commons:commons-lang3:3.12.0")
   implementation("com.google.code.findbugs:jsr305:3.0.2")
@@ -38,5 +41,5 @@ tasks.test {
   useJUnitPlatform()
 }
 kotlin {
-  jvmToolchain(23)
+  jvmToolchain(21)
 }

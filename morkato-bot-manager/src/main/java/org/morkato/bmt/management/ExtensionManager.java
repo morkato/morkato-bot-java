@@ -38,6 +38,6 @@ public class ExtensionManager {
       logger.warn("Extension Class: {} already registered in this context. Ignoring...", extension.getName());
       return;
     }
-    logger.debug("Extension: {} has registered.", extension.getName());
+    logger.info("Extension: {} has registered.", extension.getName());
   }
 }

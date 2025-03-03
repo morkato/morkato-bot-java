@@ -49,7 +49,7 @@ public class CommandExecutor {
     return manager;
   }
   @Nonnull
-  public ArgumentParser getArgumentParser(){
+  public ArgumentParser getArgumentParser() {
     return this.parser;
   }
 

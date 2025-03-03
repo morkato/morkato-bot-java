@@ -55,12 +55,12 @@ public class CommandManager {
     Class<?> commandClass = command.getClass();
     CommandRegistry<?> other = commands.get(commandClass);
     if (other != null) {
-      logger.debug("Command ID: {} already registered. Ignoring...", other.getCommandClassName());
+      logger.warn("Command ID: {} already registered. Ignoring...", other.getCommandClassName());
       return other;
     }
     CommandRegistry<T> registry = new CommandRegistry<>(exceptions, command);
     commands.put(command.getClass(), registry);
-    logger.debug("Command ID: {} is registered.", registry.getCommandClassName());
+    logger.info("Command ID: {} is registered.", registry.getCommandClassName());
     return registry;
   }
 
@@ -69,6 +69,6 @@ public class CommandManager {
     @Nonnull String name
   ) {
     this.names.put(name, command);
-    logger.debug("Name pointer registered: {} into the command: {}.", name, command.getName());
+    logger.info("Name pointer registered: {} into the command: {}.", name, command.getName());
   }
 }

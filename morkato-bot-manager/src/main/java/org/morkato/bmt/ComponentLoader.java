@@ -1,5 +1,6 @@
 package org.morkato.bmt;
 
+import org.morkato.bmt.management.ArgumentManager;
 import org.morkato.bmt.management.CommandExceptionManager;
 import org.morkato.bmt.management.CommandManager;
 import org.morkato.utility.ClassInjectorMap;
@@ -23,8 +24,8 @@ public class ComponentLoader {
     this.loader = loader;
     this.injector = injector;
   }
-  public ComponentLoader(CommandManager commands, CommandExceptionManager exceptions, ClassInjectorMap injector) {
-    this(new ComponentLoaderFactory(commands, exceptions), injector);
+  public ComponentLoader(CommandManager commands, CommandExceptionManager exceptions, ArgumentManager arguments, ClassInjectorMap injector) {
+    this(new ComponentLoaderFactory(commands, exceptions, arguments), injector);
   }
 
   public Map<Class<?>,Object> getLoaded() {

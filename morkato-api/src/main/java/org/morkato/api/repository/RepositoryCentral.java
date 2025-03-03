@@ -9,7 +9,4 @@ public interface RepositoryCentral {
   AttackRepository attack();
   @Nonnull
   ArtRepository art();
-  void setGuildRepository(@Nonnull GuildRepository repository);
-  void setArtRepository(@Nonnull ArtRepository repository);
-  void setAttackRepository(@Nonnull AttackRepository repository);
 }

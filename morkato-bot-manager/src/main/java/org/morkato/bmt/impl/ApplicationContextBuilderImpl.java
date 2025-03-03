@@ -29,6 +29,11 @@ public class ApplicationContextBuilderImpl implements ApplicationContextBuilder 
   }
 
   @Override
+  public Properties getProperties(){
+    return properties;
+  }
+
+  @Override
   public String getProperty(String key, String def) {
     String value = this.getProperty(key);
     return (value == null) ? def : value;

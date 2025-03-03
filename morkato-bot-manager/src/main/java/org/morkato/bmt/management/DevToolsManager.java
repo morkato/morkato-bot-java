@@ -30,7 +30,7 @@ public class DevToolsManager {
     DevToolsManager devtools = new DevToolsManager(executor);
     devtools.register("rn", devtools::onRunCommandTool);
     devtools.register("ri", devtools::onCommandNameInfo);
-    devtools.register("pn", devtools::onParameterCheckTool);
+//    devtools.register("pn", devtools::onParameterCheckTool);
     devtools.register("tmc", devtools::onTimerCommand);
     return devtools;
   }
@@ -71,25 +71,25 @@ public class DevToolsManager {
     }
   }
 
-  public void onParameterCheckTool(MessageReceivedEvent event, StringView view) {
-    Message message = event.getMessage();
-    String classpath = view.word();
-    if (classpath == null) {
-      message.reply("It's necessary specifics a java class.").mentionRepliedUser(false).queue();
-      return;
-    }
-    try {
-      Class<?> clazz =  Class.forName(classpath);
-      Object parsed = this.parser.parse(clazz, view);
-      if (parsed == null) {
-        message.reply("```\nClass parsed :"  + clazz.getName() + ": <unknown parse>```").mentionRepliedUser(false).queue();
-        return;
-      }
-      message.reply("```\nClass parsed :"  + clazz.getName() + ": " + parsed.toString() + "```").mentionRepliedUser(false).queue();
-    } catch (ClassNotFoundException exc) {
-      message.reply("Error: " + classpath + " class is not found.").mentionRepliedUser(false).queue();
-    } catch (Throwable exc) {}
-  }
+//  public void onParameterCheckTool(MessageReceivedEvent event, StringView view) {
+//    Message message = event.getMessage();
+//    String classpath = view.word();
+//    if (classpath == null) {
+//      message.reply("It's necessary specifics a java class.").mentionRepliedUser(false).queue();
+//      return;
+//    }
+//    try {
+//      Class<?> clazz =  Class.forName(classpath);
+//      Object parsed = this.parser.parse(clazz, view);
+//      if (parsed == null) {
+//        message.reply("```\nClass parsed :"  + clazz.getName() + ": <unknown parse>```").mentionRepliedUser(false).queue();
+//        return;
+//      }
+//      message.reply("```\nClass parsed :"  + clazz.getName() + ": " + parsed.toString() + "```").mentionRepliedUser(false).queue();
+//    } catch (ClassNotFoundException exc) {
+//      message.reply("Error: " + classpath + " class is not found.").mentionRepliedUser(false).queue();
+//    } catch (Throwable exc) {}
+//  }
 
   public void onCommandNameInfo(MessageReceivedEvent event, StringView view) {
     view.skipWhitespace();

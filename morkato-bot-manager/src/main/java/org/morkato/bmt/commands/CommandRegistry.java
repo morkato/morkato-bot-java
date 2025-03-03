@@ -49,14 +49,10 @@ public class CommandRegistry<T> {
     return () -> this.invoke(message, parser, view);
   }
   public void invoke(Message message, ArgumentParser parser, StringView view) {
-    T object = null;
-    if (args != NoArgs.class) {
-      try {
-        object = parser.parse(args, view);
-      } catch (Throwable exc) {}
-    }
-    TextCommandContext<T> context = new ContextImpl<>(command, message, object);
+    ContextImpl<T> context = new ContextImpl<>(command, message, null);
     try {
+      if (args != NoArgs.class)
+        context.setArgs(parser.parse(args, context, view));
       command.invoke(context);
     } catch (Throwable exc) {
       this.onError(context, exc);
