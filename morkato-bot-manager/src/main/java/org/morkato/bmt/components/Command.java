@@ -1,6 +1,5 @@
 package org.morkato.bmt.components;
 
-import org.morkato.bmt.annotation.MorkatoComponent;
 import org.morkato.bmt.argument.NoArgs;
 import org.morkato.bmt.context.TextCommandContext;
 import org.apache.commons.lang3.reflect.TypeUtils;
@@ -39,11 +38,6 @@ public interface Command<Args> {
     if (!isClass)
       return NoArgs.class;
     return (Class<?>) type;
-  }
-  static Class<? extends Extension> getExtension(Class<? extends Command> clazz) {
-    if (clazz.isAnnotationPresent(MorkatoComponent.class))
-      return null;
-    return clazz.getAnnotation(MorkatoComponent.class).extension();
   }
   void invoke(TextCommandContext<Args> context) throws Throwable;
 }

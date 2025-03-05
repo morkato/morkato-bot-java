@@ -1,7 +1,7 @@
 package org.morkato.bmt.commands;
 
-import org.morkato.bmt.argument.ArgumentParser;
 import org.morkato.bmt.function.DevToolConsumer;
+import org.morkato.bmt.management.ArgumentManager;
 import org.morkato.bmt.management.CommandExceptionManager;
 import org.morkato.bmt.management.CommandManager;
 import org.morkato.bmt.management.DevToolsManager;
@@ -10,6 +10,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.entities.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 import java.util.concurrent.*;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -18,21 +20,21 @@ import java.util.Map;
 public class CommandExecutor {
   private static final Logger logger = LoggerFactory.getLogger(CommandExecutor.class);
   public static final char SPECIAL_CHARACTER = ':';
-  public static final int THREAD_POOL_SIZE = 4;
+  public static final int THREAD_POOL_SIZE = 10;
   private final Map<String,DevToolConsumer> specials = new HashMap<>();
-  public final ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+  private ExecutorService executor = null;
+  private final ArgumentManager arguments;
   private final DevToolsManager devtools;
-  private final ArgumentParser parser = new ArgumentParser();
-  private final CommandExceptionManager exceptions;
   private final CommandManager manager;
   public boolean ready = false;
   private String prefix;
   public CommandExecutor(
-    @Nonnull CommandManager manager
-  ) {
-    this.exceptions = manager.getExceptionManager();
+    @Nonnull CommandManager manager,
+    @Nonnull ArgumentManager arguments
+    ) {
     this.manager = manager;
     this.devtools = DevToolsManager.get(this);
+    this.arguments = arguments;
   }
 
   public String getPrefix() {
@@ -48,16 +50,13 @@ public class CommandExecutor {
   public CommandManager getCommandManager() {
     return manager;
   }
-  @Nonnull
-  public ArgumentParser getArgumentParser() {
-    return this.parser;
-  }
 
   public boolean isReady() {
     return this.ready;
   }
   public void setReady() {
     logger.info("{} is ready to execute commands.", this.getClass().getSimpleName());
+    Executors.newFixedThreadPool(THREAD_POOL_SIZE);
     this.ready = true;
   }
 
@@ -87,7 +86,7 @@ public class CommandExecutor {
     CommandRegistry<?> registry = this.processCommand(view);
     if (registry == null)
       return null;
-    return registry.prepareRunnable(event.getMessage(), parser, view);
+    return registry.prepareRunnable(event.getMessage(), arguments, view);
   }
   public StringView process(MessageReceivedEvent event) {
     Message message = event.getMessage();
@@ -113,6 +112,8 @@ public class CommandExecutor {
 
   public void shutdown() {
     logger.info("Closing command executor...");
+    if (Objects.isNull(executor))
+      return;
     executor.shutdown();
     try {
       if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {

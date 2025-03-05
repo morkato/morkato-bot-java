@@ -1,37 +1,37 @@
 package org.morkato.bmt.commands;
 
-import org.morkato.bmt.argument.ArgumentParser;
 import org.morkato.bmt.argument.NoArgs;
 import org.morkato.bmt.components.Command;
 import org.morkato.bmt.components.CommandException;
-import org.morkato.bmt.components.Extension;
+import org.morkato.bmt.extensions.Extension;
+import org.morkato.bmt.components.ObjectParser;
+import org.morkato.bmt.context.ObjectParserContext;
 import org.morkato.bmt.context.TextCommandContext;
 import org.morkato.bmt.dfa.CommandThrowableException;
 import org.morkato.bmt.impl.ContextImpl;
+import org.morkato.bmt.management.ArgumentManager;
 import org.morkato.bmt.management.CommandExceptionManager;
 import org.morkato.utility.StringView;
 import net.dv8tion.jda.api.entities.Message;
 import javax.annotation.Nonnull;
+import java.lang.annotation.Annotation;
 
 public class CommandRegistry<T> {
   private final CommandExceptionManager exceptions;
   private final Command<T> command;
-  private final Class<? extends Extension> extension;
+  private final ObjectParser<T> parser;
   private final Class<T> args;
-  public CommandRegistry(CommandExceptionManager exceptions, Command<T> command) {
-    Class<T> clazz = (Class<T>) Command.getArgument(command.getClass());
-    Class<? extends Extension> extension = Command.getExtension(command.getClass());
+  public CommandRegistry(CommandExceptionManager exceptions, Command<T> command, ObjectParser<T> parser) {
+    Class<T> clazz = (Class<T>)Command.getArgument(command.getClass());
     this.exceptions = exceptions;
-    this.extension = extension;
     this.command = command;
+    this.parser = parser;
     this.args = clazz;
   }
-  public Class<? extends Extension> getOwnerExtension() {
-    return this.extension;
-  }
   @Nonnull
-  public Class<? extends Command> getCommandClass() {
-    return this.command.getClass();
+  @SuppressWarnings("unchecked")
+  public Class<? extends Command<T>> getCommandClass() {
+    return (Class<? extends Command<T>>)this.command.getClass();
   }
   @Nonnull
   public String getCommandClassName() {
@@ -45,14 +45,17 @@ public class CommandRegistry<T> {
   public String getArgumentClassName() {
     return this.getArgumentClass().getName();
   }
-  public Runnable prepareRunnable(Message message, ArgumentParser parser, StringView view) {
-    return () -> this.invoke(message, parser, view);
+  public Runnable prepareRunnable(Message message, ArgumentManager arguments, StringView view) {
+    return () -> this.invoke(message, arguments, view);
   }
-  public void invoke(Message message, ArgumentParser parser, StringView view) {
+  public void invoke(Message message, ArgumentManager arguments, StringView view) {
     ContextImpl<T> context = new ContextImpl<>(command, message, null);
     try {
-      if (args != NoArgs.class)
-        context.setArgs(parser.parse(args, context, view));
+      if (args != NoArgs.class) {
+        view.skipWhitespace();
+        T argument = (T)parser.parse(new ObjectParserContext(context, new Annotation[0], view.rest(), args, arguments));
+        context.setArgs(argument);
+      }
       command.invoke(context);
     } catch (Throwable exc) {
       this.onError(context, exc);

@@ -10,6 +10,9 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 public interface Art extends ArtId, UpdateApiModel<Art,ArtUpdateBuilder>, DeleteApiModel<Art> {
+  static String representation(Art art) {
+    return "Art[guild = " + art.getGuild() + ", id = " + art.getId() + ", name = " + art.getName() + "]";
+  }
   @Nonnull
   Guild getGuild();
   @Nonnull

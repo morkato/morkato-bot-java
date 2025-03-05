@@ -20,14 +20,9 @@ repositories {
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation("ch.qos.logback:logback-classic:1.4.14")
-  implementation("net.dv8tion:JDA:5.0.0-beta.18")
-  implementation("org.jetbrains.exposed:exposed-core:0.44.0")
-  implementation("org.jetbrains.exposed:exposed-dao:0.44.0")
-  implementation("org.jetbrains.exposed:exposed-jdbc:0.44.0")
   implementation("jakarta.validation:jakarta.validation-api:3.0.2")
-  implementation("org.flywaydb:flyway-core")
-  implementation("org.flywaydb:flyway-database-postgresql:10.0.0")
+  implementation("ch.qos.logback:logback-classic:1.4.14")
+  implementation(project(":morkato-bot-manager-starter"))
   implementation(project(":morkato-bot-manager"))
   implementation(project(":morkato-api-database"))
   implementation(project(":morkato-utils"))
@@ -44,19 +39,23 @@ tasks.register<JavaExec>("runClient") {
   jvmArgs = listOf("-Xmx1024m", "-Dmorkato.conf=../morkato.conf")
 }
 
-tasks.register<Jar>("clientJar") {
-  dependsOn(":morkato-bot-manager:bmtJar")
+tasks.register<Jar>("buildClient") {
   dependsOn("build")
   group = "build"
   description = "Cria um Jar para o discord bot."
   getArchiveFileName().set("morkato-bot-$version.jar")
   getDestinationDirectory().set(file("."))
+  archiveClassifier = "all"
   manifest {
-    attributes["Main-Class"] = "com.morkato.bot.Client"
-    attributes["Class-Path"] = sourceSets.main.get().getRuntimeClasspath()
+    attributes["Main-Class"] = "org.morkato.bot.Client"
   }
+  val dependencies = configurations
+    .runtimeClasspath
+    .get()
+    .map(::zipTree)
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  from(dependencies)
   from(sourceSets["main"].output)
-  from(configurations.runtimeClasspath.get())
 }
 
 tasks.test {

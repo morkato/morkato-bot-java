@@ -11,8 +11,9 @@ repositories {
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation("com.google.guava:guava:33.4.0-jre")
   implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
+  implementation("org.apache.commons:commons-text:1.10.0")
+  implementation("com.google.guava:guava:33.4.0-jre")
 }
 
 tasks.test {

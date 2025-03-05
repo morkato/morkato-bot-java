@@ -10,10 +10,11 @@ import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CommandExceptionManager {
+public class CommandExceptionManager implements RegisterManagement<CommandException<?>>{
   private static final Logger logger = LoggerFactory.getLogger(CommandExceptionManager.class);
   private final Map<Class<? extends Throwable>, CommandException<?>> exceptions = new HashMap<>();
   @SuppressWarnings("unchecked")
+  @Override
   public void register(CommandException<?> bounder) {
     Map<TypeVariable<?>,Type> typeArguments = TypeUtils.getTypeArguments(bounder.getClass(), CommandException.class);
     Class<? extends Throwable> exception = (Class<? extends Throwable>) typeArguments.values().iterator().next();

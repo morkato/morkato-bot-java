@@ -50,6 +50,11 @@ public class ApiArtImpl implements Art {
     this(Objects.requireNonNull(central), central.guild().fetch(dto.getGuildId()), dto);
   }
 
+  @Override
+  public String toString() {
+    return Art.representation(this);
+  }
+
   private void fromDTO(ArtDTO dto) {
     this.guildId = dto.getGuildId();
     this.id = dto.getId();

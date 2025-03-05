@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.StreamSupport;
 
+@MorkatoComponent
 public class RepositoryTest implements Command<NoArgs> {
   @AutoInject
   RepositoryCentral repository;

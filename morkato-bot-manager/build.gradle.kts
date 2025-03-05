@@ -1,4 +1,5 @@
 plugins {
+  id("java-library")
   kotlin("jvm")
 }
 
@@ -15,31 +16,18 @@ repositories {
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation("org.reflections:reflections:0.10.2")
   implementation("org.apache.commons:commons-lang3:3.12.0")
   implementation("com.google.code.findbugs:jsr305:3.0.2")
   implementation("ch.qos.logback:logback-classic:1.4.14")
   implementation("org.jetbrains:annotations:24.0.0")
-  implementation("net.dv8tion:JDA:5.0.0-beta.18")
   implementation(project(":morkato-utils"))
-}
-
-tasks.register<Jar>("bmtJar") {
-  dependsOn("build")
-  group = "build"
-  description = "Cria um Jar para o discord bot."
-  getArchiveFileName().set("morkato-bmt-$version.jar")
-  getDestinationDirectory().set(file("."))
-  manifest {
-    attributes["Main-Class"] = "com.morkato.bmt.Main"
-  }
-  from(sourceSets["main"].output)
-  from(configurations.runtimeClasspath.get())
+  api("net.dv8tion:JDA:5.3.0")
 }
 
 tasks.test {
   useJUnitPlatform()
 }
+
 kotlin {
   jvmToolchain(21)
 }

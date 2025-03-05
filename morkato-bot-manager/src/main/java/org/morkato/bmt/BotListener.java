@@ -1,11 +1,6 @@
 package org.morkato.bmt;
 
 import org.morkato.bmt.commands.CommandExecutor;
-import org.morkato.bmt.management.CommandManager;
-import org.morkato.bmt.components.Extension;
-import org.morkato.bmt.management.ComponentManager;
-import org.morkato.bmt.management.ExtensionManager;
-import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
@@ -13,13 +8,8 @@ import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import org.jetbrains.annotations.NotNull;
-import org.morkato.utility.ClassInjectorMap;
-import org.morkato.utility.exception.ValueAlreadyInjected;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.annotation.Nonnull;
-import java.util.*;
 
 public class BotListener extends ListenerAdapter {
   private static final Logger logger = LoggerFactory.getLogger(BotListener.class);

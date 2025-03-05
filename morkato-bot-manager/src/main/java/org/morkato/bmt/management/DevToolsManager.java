@@ -1,6 +1,5 @@
 package org.morkato.bmt.management;
 
-import org.morkato.bmt.argument.ArgumentParser;
 import org.morkato.bmt.commands.CommandExecutor;
 import org.morkato.bmt.commands.CommandRegistry;
 import org.morkato.utility.StringView;
@@ -21,14 +20,13 @@ import java.util.concurrent.CompletableFuture;
 public class DevToolsManager {
   private final Map<String,DevToolConsumer> devtools = new HashMap<>();
   private final CommandManager commands;
-  private final ArgumentParser parser;
   private final CommandExecutor executor;
   @Nonnull
   public static DevToolsManager get(
     @Nonnull CommandExecutor executor
   ) {
     DevToolsManager devtools = new DevToolsManager(executor);
-    devtools.register("rn", devtools::onRunCommandTool);
+//    devtools.register("rn", devtools::onRunCommandTool);
     devtools.register("ri", devtools::onCommandNameInfo);
 //    devtools.register("pn", devtools::onParameterCheckTool);
     devtools.register("tmc", devtools::onTimerCommand);
@@ -39,7 +37,6 @@ public class DevToolsManager {
   ) {
     this.executor = executor;
     this.commands = executor.getCommandManager();
-    this.parser = executor.getArgumentParser();
   }
   public DevToolConsumer getDevTool(
     @Nonnull String name
@@ -53,23 +50,23 @@ public class DevToolsManager {
     this.devtools.put(name, devtool);
   }
 
-  public void onRunCommandTool(MessageReceivedEvent event, StringView view) {
-    Message message = event.getMessage();
-    String classpath = view.word();
-    try {
-      Class<?> clazz = Class.forName(classpath);
-      CommandRegistry<?> command = commands.getRegistry((Class<? extends Command>)clazz);
-      if (command == null) {
-        message.reply("This Java Class is not a Command!").queue();
-        return;
-      }
-      view.skipWhitespace();
-      Runnable spawned = command.prepareRunnable(message, parser, view);
-      spawned.run();
-    } catch (ClassNotFoundException exc) {
-      message.reply("Java Class not found!").queue();
-    }
-  }
+//  public void onRunCommandTool(MessageReceivedEvent event, StringView view) {
+//    Message message = event.getMessage();
+//    String classpath = view.word();
+//    try {
+//      Class<?> clazz = Class.forName(classpath);
+//      CommandRegistry<?> command = commands.getRegistry((Class<? extends Command>)clazz);
+//      if (command == null) {
+//        message.reply("This Java Class is not a Command!").queue();
+//        return;
+//      }
+//      view.skipWhitespace();
+//      Runnable spawned = command.prepareRunnable(message, parser, view);
+//      spawned.run();
+//    } catch (ClassNotFoundException exc) {
+//      message.reply("Java Class not found!").queue();
+//    }
+//  }
 
 //  public void onParameterCheckTool(MessageReceivedEvent event, StringView view) {
 //    Message message = event.getMessage();

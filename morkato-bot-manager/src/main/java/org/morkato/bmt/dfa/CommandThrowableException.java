@@ -12,7 +12,7 @@ public class CommandThrowableException implements CommandException<Throwable> {
   }
   Logger logger = LoggerFactory.getLogger(CommandThrowableException.class);
   @Override
-  public void doException(TextCommandContext<?> context,Throwable exception){
+  public void doException(TextCommandContext<?> context, Throwable exception){
     logger.warn("Command ID: {} has invoked a error: {}. Ignoring.", context.getCommand().getClass().getName(), exception.getClass());
     exception.printStackTrace();
   }

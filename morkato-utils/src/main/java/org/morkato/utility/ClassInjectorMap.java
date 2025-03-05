@@ -32,6 +32,11 @@ public class ClassInjectorMap {
   public void uninject(Class<?> clazz) {
     entries.remove(clazz);
   }
+  public void injectIfAbsent(Object object) {
+    try {
+      this.inject(object);
+    } catch (ValueAlreadyInjected exc) {}
+  }
   public void inject(Object object) throws ValueAlreadyInjected {
     Class<?> clazz = object.getClass();
     if (entries.containsKey(clazz))

@@ -1,6 +1,6 @@
 package org.morkato.bmt.errors;
 
-import org.morkato.bmt.components.Extension;
+import org.morkato.bmt.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
 
 public class ExtensionAlreadyRegistered extends MorkatoBotException {
