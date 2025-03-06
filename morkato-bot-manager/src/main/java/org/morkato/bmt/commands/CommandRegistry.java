@@ -3,7 +3,6 @@ package org.morkato.bmt.commands;
 import org.morkato.bmt.argument.NoArgs;
 import org.morkato.bmt.components.Command;
 import org.morkato.bmt.components.CommandException;
-import org.morkato.bmt.extensions.Extension;
 import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.context.ObjectParserContext;
 import org.morkato.bmt.context.TextCommandContext;

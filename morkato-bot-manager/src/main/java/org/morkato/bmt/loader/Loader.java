@@ -2,7 +2,6 @@ package org.morkato.bmt.loader;
 
 import org.morkato.bmt.extensions.Extension;
 import org.morkato.bmt.context.LoaderContext;
-import org.morkato.bmt.management.ComponentManager;
 import org.morkato.utility.ClassInjectorMap;
 import org.morkato.utility.exception.InjectionException;
 import org.morkato.utility.exception.ValueNotInjected;
@@ -44,7 +43,7 @@ public class Loader {
 
   public synchronized void flip() {
     LOGGER.info("Flipping component registration to finalize component registration.");
-    registration.flip(); /* Expected flipping registration for commands and bounders */
+    registration.flush(); /* Expected flipping registration for commands and bounders */
     LOGGER.info("All components have been initialized successfully.");
   }
 }

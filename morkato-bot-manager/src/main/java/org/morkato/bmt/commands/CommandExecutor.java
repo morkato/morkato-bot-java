@@ -56,7 +56,7 @@ public class CommandExecutor {
   }
   public void setReady() {
     logger.info("{} is ready to execute commands.", this.getClass().getSimpleName());
-    Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+    this.executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
     this.ready = true;
   }
 

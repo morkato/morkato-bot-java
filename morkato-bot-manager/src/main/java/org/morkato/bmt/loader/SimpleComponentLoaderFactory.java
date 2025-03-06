@@ -56,7 +56,7 @@ public class SimpleComponentLoaderFactory implements LoaderRegistrationFactory {
   }
 
   @Override
-  public void flip() {
+  public void flush() {
     /* Registro de todos os bounders, comandos e parsers. Chamado quando a aplicação está consolidada. */
     RegisterManagement.registerAll(arguments, flipperObjectParser);
     RegisterManagement.registerAll(exceptions, flipperCommandException);
@@ -69,5 +69,6 @@ public class SimpleComponentLoaderFactory implements LoaderRegistrationFactory {
     flipperObjectParser.clear();
     flipperCommandException.clear();
     flipperCommand.clear();
+    commandsNames.clear();
   }
 }

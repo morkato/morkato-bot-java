@@ -1,22 +1,21 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
-  application
+  id("com.github.johnrengelman.shadow") version "8.1.1"
+  id("application")
   kotlin("jvm")
 }
+
+val morkhome: String = System.getenv("MORKATO_HOME") ?: ".."
+val morkatoconf: String = "${morkhome}/morkato.conf"
 
 group = "org.morkato.bot"
 version = "1.0"
 
-application {
-  mainClass.set("com.morkato.bot.Client")
-}
-
-java {
-  toolchain.languageVersion.set(JavaLanguageVersion.of(21))
-}
-
-repositories {
-  mavenCentral()
-}
+application.mainClass.set("org.morkato.bot.Client")
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+kotlin.jvmToolchain(21)
+repositories.mavenCentral()
 
 dependencies {
   testImplementation(kotlin("test"))
@@ -29,38 +28,24 @@ dependencies {
   implementation(project(":morkato-api"))
 }
 
-
-
-tasks.register<JavaExec>("runClient") {
-  group = "application"
-  description = "Executa o cliente discord bot."
-  getMainClass().set("org.morkato.bot.Client")
-  classpath = sourceSets.main.get().getRuntimeClasspath()
-  jvmArgs = listOf("-Xmx1024m", "-Dmorkato.conf=../morkato.conf")
+tasks.named<JavaExec>("run") {
+  jvmArgs = listOf(
+    "-Xmx1024M", /* Máximo 1GB de RAM para consumo */
+    "-Xms64M", /* Mínimo 64MB de RAM para consumo */
+    "-Dmorkato.conf=${morkatoconf}" /* Arquivo de configuração */
+  )
 }
 
-tasks.register<Jar>("buildClient") {
-  dependsOn("build")
-  group = "build"
-  description = "Cria um Jar para o discord bot."
-  getArchiveFileName().set("morkato-bot-$version.jar")
-  getDestinationDirectory().set(file("."))
-  archiveClassifier = "all"
-  manifest {
-    attributes["Main-Class"] = "org.morkato.bot.Client"
-  }
-  val dependencies = configurations
-    .runtimeClasspath
-    .get()
-    .map(::zipTree)
+tasks.named<ShadowJar>("shadowJar") {
+  archiveFileName.set("morkato-bot-$version.jar")
+  destinationDirectory.set(file(morkhome))
+  archiveClassifier.set("all")
+  manifest.attributes.put("Main-Class", application.mainClass.get())
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-  from(dependencies)
-  from(sourceSets["main"].output)
+  mergeServiceFiles()
+  println("O build foi um sucesso. O jar está disponível em: ${destinationDirectory.get()}/${archiveFileName.get()}")
 }
 
 tasks.test {
   useJUnitPlatform()
-}
-kotlin {
-  jvmToolchain(21)
 }
