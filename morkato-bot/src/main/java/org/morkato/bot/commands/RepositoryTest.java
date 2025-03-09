@@ -21,12 +21,12 @@ public class RepositoryTest implements Command<NoArgs> {
   @Override
   public void invoke(TextCommandContext<NoArgs> ctx) throws Throwable {
     Guild guild = repository.guild().fetch(ctx.getGuild().getId());
-    ctx.send("" + guild).queue();
-    ctx.send("Memory Location: " + Integer.toHexString(guild.hashCode())).queue();
+    ctx.sendMessage("" + guild).queue();
+    ctx.sendMessage("Memory Location: " + Integer.toHexString(guild.hashCode())).queue();
     ObjectResolver<Art> arts = guild.getArtResolver();
     boolean loaded = arts.loaded();
     arts.resolve();
     Art[] resolved = StreamSupport.stream(arts.spliterator(), false).toArray(Art[]::new);
-    ctx.send((loaded ? "Cached: " : "Resolved: ") + Arrays.toString(resolved)).queue();
+    ctx.sendMessage((loaded ? "Cached: " : "Resolved: ") + Arrays.toString(resolved)).queue();
   }
 }

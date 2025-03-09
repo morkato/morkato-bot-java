@@ -8,6 +8,6 @@ import org.morkato.bmt.context.TextCommandContext;
 public class CommandMorkatoBotException implements CommandException<MorkatoBotException> {
   @Override
   public void doException(TextCommandContext<?> ctx, MorkatoBotException exception) {
-    ctx.send(exception.getMessage()).queue();
+    ctx.sendMessage(exception.getMessage()).queue();
   }
 }

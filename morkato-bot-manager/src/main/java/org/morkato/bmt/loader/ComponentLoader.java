@@ -1,5 +1,6 @@
 package org.morkato.bmt.loader;
 
+import org.morkato.bmt.registration.RegistrationFactory;
 import org.morkato.utility.ClassInjectorMap;
 import org.morkato.utility.exception.InjectionException;
 import org.morkato.utility.exception.ValueNotInjected;
@@ -14,9 +15,9 @@ import java.util.Map;
 public class ComponentLoader {
   private static final Logger LOGGER = LoggerFactory.getLogger(ComponentLoader.class);
   private final Map<Class<?>, Object> loaded = new HashMap<>();
-  private final LoaderRegistrationFactory factory;
+  private final RegistrationFactory factory;
   private final ClassInjectorMap injector;
-  public ComponentLoader(LoaderRegistrationFactory factory,ClassInjectorMap injector) {
+  public ComponentLoader(RegistrationFactory factory,ClassInjectorMap injector) {
     this.factory = factory;
     this.injector = injector;
   }

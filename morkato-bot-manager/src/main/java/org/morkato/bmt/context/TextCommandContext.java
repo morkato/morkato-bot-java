@@ -28,7 +28,9 @@ public interface TextCommandContext<Args> {
   @Nonnull
   Guild getGuild();
   @Nonnull
-  MessageCreateAction send(CharSequence content);
+  MessageCreateAction createMessage();
   @Nonnull
-  MessageCreateAction reply(CharSequence content);
+  MessageCreateAction sendMessage(CharSequence seq);
+  @Nonnull
+  MessageCreateAction replyMessage(CharSequence seq);
 }

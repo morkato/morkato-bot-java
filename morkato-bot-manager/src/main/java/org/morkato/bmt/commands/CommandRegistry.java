@@ -7,7 +7,7 @@ import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.context.ObjectParserContext;
 import org.morkato.bmt.context.TextCommandContext;
 import org.morkato.bmt.dfa.CommandThrowableException;
-import org.morkato.bmt.impl.ContextImpl;
+import org.morkato.bmt.impl.TextCommandContextImpl;
 import org.morkato.bmt.management.ArgumentManager;
 import org.morkato.bmt.management.CommandExceptionManager;
 import org.morkato.utility.StringView;
@@ -48,7 +48,7 @@ public class CommandRegistry<T> {
     return () -> this.invoke(message, arguments, view);
   }
   public void invoke(Message message, ArgumentManager arguments, StringView view) {
-    ContextImpl<T> context = new ContextImpl<>(command, message, null);
+    TextCommandContextImpl<T> context = new TextCommandContextImpl<>(command, message, null);
     try {
       if (args != NoArgs.class) {
         view.skipWhitespace();

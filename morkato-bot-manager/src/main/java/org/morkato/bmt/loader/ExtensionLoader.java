@@ -4,6 +4,7 @@ import org.morkato.bmt.hooks.NameCommandPointer;
 import org.morkato.bmt.components.Command;
 import org.morkato.bmt.context.LoaderContext;
 import org.morkato.bmt.impl.ExtensionSetupContextImpl;
+import org.morkato.bmt.registration.RegistrationFactory;
 import org.morkato.utility.ClassInjectorMap;
 import org.morkato.utility.exception.ValueAlreadyInjected;
 import org.morkato.utility.exception.InjectionException;
@@ -18,11 +19,11 @@ import java.util.function.Consumer;
 
 public class ExtensionLoader {
   private static final Logger logger = LoggerFactory.getLogger(ExtensionLoader.class);
-  private final LoaderRegistrationFactory registration;
+  private final RegistrationFactory registration;
   private final LoaderContext context;
   private final Set<Extension> loaded = new HashSet<>();
   private final ClassInjectorMap injector;
-  public ExtensionLoader(LoaderContext context, LoaderRegistrationFactory registration, ClassInjectorMap injector) {
+  public ExtensionLoader(LoaderContext context,RegistrationFactory registration,ClassInjectorMap injector) {
     Objects.requireNonNull(context);
     Objects.requireNonNull(registration);
     Objects.requireNonNull(injector);

@@ -13,6 +13,6 @@ public class ArtCommand implements Command<Art> {
   RepositoryCentral central;
   @Override
   public void invoke(TextCommandContext<Art> ctx) throws Throwable {
-    ctx.send("" + ctx.getArgs()).queue();
+    ctx.sendMessage("" + ctx.getArgs()).queue();
   }
 }

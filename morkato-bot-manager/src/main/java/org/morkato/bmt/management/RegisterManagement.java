@@ -5,5 +5,10 @@ public interface RegisterManagement<T> {
     for (T obj : objects)
       management.register(obj);
   }
+  @SafeVarargs
+  static <T> void registerAll(RegisterManagement<T> management, T... objects) {
+    for (T obj : objects)
+      management.register(obj);
+  }
   void register(T registry);
 }
