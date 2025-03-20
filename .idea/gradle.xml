@@ -13,7 +13,7 @@
             <option value="$PROJECT_DIR$/morkato-api-database" />
             <option value="$PROJECT_DIR$/morkato-bot" />
             <option value="$PROJECT_DIR$/morkato-bot-manager" />
-            <option value="$PROJECT_DIR$/morkato-bot-manager-starter" />
+            <option value="$PROJECT_DIR$/morkato-bot-manager/common" />
             <option value="$PROJECT_DIR$/morkato-utils" />
           </set>
         </option>

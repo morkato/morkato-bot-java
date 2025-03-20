@@ -1,0 +1,13 @@
+package org.morkato.bmt.bot.exceptions;
+
+import org.morkato.bmt.annotation.MorkatoComponent;
+import org.morkato.bmt.bmt.context.TextCommandContext;
+import org.morkato.bmt.bmt.components.CommandException;
+
+@MorkatoComponent
+public class CommandThrowableException implements CommandException<Throwable> {
+  @Override
+  public void doException(TextCommandContext<?> ctx,Throwable exception) {
+    ctx.sendMessage("Um erro inesperado ocorreu: **" + exception.getClass().getName() + "** -- \"" + exception.getMessage() + "\". Por favor, notifique a meu desenvolvedor.").queue();
+  }
+}
