@@ -1,6 +1,6 @@
 package org.morkato.bmt.annotation;
 
-import org.morkato.bmt.bmt.annotation.MorkatoBotManagerToolAnnotation;
+import org.morkato.bmt.annotation.MorkatoBotManagerToolAnnotation;
 
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.ElementType;

@@ -6,6 +6,7 @@ rootProject.name = "morkato-bot-kts"
 include("morkato-bot-manager:common")
 include("morkato-bot-manager")
 include("morkato-bot")
-include("morkato-api-database")
+include("morkato-api:database")
+include("morkato-api:tests")
 include("morkato-api")
 include("morkato-utils")

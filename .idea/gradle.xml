@@ -10,7 +10,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/morkato-api" />
-            <option value="$PROJECT_DIR$/morkato-api-database" />
+            <option value="$PROJECT_DIR$/morkato-api/database" />
+            <option value="$PROJECT_DIR$/morkato-api/tests" />
             <option value="$PROJECT_DIR$/morkato-bot" />
             <option value="$PROJECT_DIR$/morkato-bot-manager" />
             <option value="$PROJECT_DIR$/morkato-bot-manager/common" />

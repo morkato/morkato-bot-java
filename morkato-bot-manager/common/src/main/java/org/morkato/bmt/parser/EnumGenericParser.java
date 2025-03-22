@@ -1,9 +1,8 @@
 package org.morkato.bmt.parser;
 
-import org.morkato.bmt.bmt.registration.ArgumentRegistration;
-import org.morkato.bmt.bmt.context.TextCommandContext;
-import org.morkato.bmt.bmt.components.ObjectParser;
-
+import org.morkato.bmt.registration.ArgumentRegistration;
+import org.morkato.bmt.context.TextCommandContext;
+import org.morkato.bmt.components.ObjectParser;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;

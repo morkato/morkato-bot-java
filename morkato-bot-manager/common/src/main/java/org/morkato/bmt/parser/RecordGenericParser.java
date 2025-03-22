@@ -1,12 +1,12 @@
 package org.morkato.bmt.parser;
 
-import org.morkato.bmt.bmt.annotation.NotRequired;
-import org.morkato.bmt.bmt.registration.ArgumentRegistration;
-import org.morkato.bmt.bmt.context.TextCommandContext;
-import org.morkato.bmt.bmt.components.ObjectParser;
+import org.morkato.bmt.annotation.NotRequired;
+import org.morkato.bmt.registration.ArgumentRegistration;
+import org.morkato.bmt.context.TextCommandContext;
+import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.Field;
 import org.morkato.bmt.exception.RecordInternalParserNotFound;
-import org.morkato.bmt.utility.StringView;
+import org.morkato.utility.StringView;
 import java.lang.reflect.RecordComponent;
 import java.lang.reflect.Constructor;
 import java.util.Objects;
@@ -56,9 +56,14 @@ public class RecordGenericParser<T extends Record> implements ObjectParser<T> {
       }
       final String query = view.quotedWord();
       final Object value = field.parse(context, query);
-      if (Objects.isNull(value) && !field.isFieldAnnotatedWith(NotRequired.class))
+      if (Objects.isNull(value)) {
+        if (field.isFieldAnnotatedWith(NotRequired.class)) {
+          view.undo();
+          continue;
+        }
         /* TODO: Add custom error for this scenery */
         throw new RuntimeException("Value is invalid, and this field is required!");
+      }
       values[i] = value;
     }
     return constructor.newInstance(values);
