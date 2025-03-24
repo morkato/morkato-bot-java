@@ -1,6 +1,7 @@
 package org.morkato.api.entity.guild;
 
 import org.morkato.api.entity.ObjectResolver;
+import org.morkato.api.entity.attack.Attack;
 import org.morkato.api.entity.trainer.Trainer;
 import org.morkato.api.entity.ObjectId;
 import org.morkato.api.entity.art.Art;
@@ -27,6 +28,7 @@ public interface Guild extends GuildId, DeleteApiModel<Guild> {
   BigDecimal getAbilityRoll();
   @Nonnull
   BigDecimal getFamilyRoll();
+  ObjectResolver<Attack> getAttackResolver();
   ObjectResolver<Trainer> getTrainerResolver();
   ObjectResolver<Art> getArtResolver();
 }

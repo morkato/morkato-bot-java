@@ -36,4 +36,9 @@ public class ExtensionManager
   public Iterator<Class<? extends Extension>> iterator(){
     return this.extensions.iterator();
   }
+
+  @Override
+  public int size() {
+    return extensions.size();
+  }
 }

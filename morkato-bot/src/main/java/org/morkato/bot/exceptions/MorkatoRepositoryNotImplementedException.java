@@ -6,7 +6,6 @@ import org.morkato.bmt.annotation.Component;
 import org.morkato.bmt.components.CommandException;
 import org.morkato.bmt.context.TextCommandContext;
 
-@Component
 public class MorkatoRepositoryNotImplementedException implements CommandException<RepositoryNotImplementedException> {
   @Override
   public void doException(TextCommandContext<?> ctx, RepositoryNotImplementedException exception) {

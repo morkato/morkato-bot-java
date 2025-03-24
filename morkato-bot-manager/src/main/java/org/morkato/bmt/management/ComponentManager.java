@@ -40,4 +40,8 @@ public class ComponentManager
     return components.iterator();
   }
 
+  @Override
+  public int size() {
+    return components.size();
+  }
 }

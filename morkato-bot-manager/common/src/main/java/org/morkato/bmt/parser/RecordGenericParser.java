@@ -1,7 +1,7 @@
 package org.morkato.bmt.parser;
 
 import org.morkato.bmt.annotation.NotRequired;
-import org.morkato.bmt.registration.ArgumentRegistration;
+import org.morkato.bmt.registration.hooks.ArgumentRegistration;
 import org.morkato.bmt.context.TextCommandContext;
 import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.Field;
@@ -32,7 +32,7 @@ public class RecordGenericParser<T extends Record> implements ObjectParser<T> {
     Class<?>[] parameters = constructor.getParameterTypes();
     for (int i = 0; i < parameters.length; ++i) {
       final Class<?> parameter = parameters[i];
-      final ObjectParser<?> parser = registration.getParser(parameter);
+      final ObjectParser<?> parser = registration.get(parameter);
       if (Objects.isNull(parser))
         /* TODO: Adicionar um erro customizado. */
         throw new RecordInternalParserNotFound(parameter);

@@ -8,6 +8,7 @@ import org.morkato.bmt.annotation.RegistryExtension
 import org.morkato.bmt.context.ApplicationContextBuilder
 import org.morkato.bmt.extensions.BaseExtension
 import org.morkato.database.DatabaseProvider
+import org.morkato.database.repository.DatabaseArtRepository
 import org.morkato.database.repository.DatabaseGuildRepository
 
 @RegistryExtension
@@ -39,12 +40,14 @@ class MorkatoAPIExtension : BaseExtension() {
 
   override fun start(app: ApplicationContextBuilder) {
     val central = SimpleRepositoryCentral()
-    app.inject(central)
-    val validator = Validation.buildDefaultValidatorFactory().getValidator()
-    val datasource = DatabaseProvider.getDatasource(app.getProperties())
-    val flyway = DatabaseProvider.getFlyway(datasource)
-    flyway.migrate()
-    val database = Database.connect(datasource)
-    central.setGuildRepository(DatabaseGuildRepository(database, validator))
+    throw RuntimeException("Foda")
+//    app.inject(central)
+//    val validator = Validation.buildDefaultValidatorFactory().getValidator()
+////    val datasource = DatabaseProvider.getDatasource(app.getProperties())
+//    val flyway = DatabaseProvider.getFlyway(datasource)
+//    flyway.migrate()
+//    val database = Database.connect(datasource)
+//    central.setGuildRepository(DatabaseGuildRepository(database, validator))
+//    central.setArtRepository(DatabaseArtRepository(database, validator))
   }
 }

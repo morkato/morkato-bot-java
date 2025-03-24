@@ -1,5 +1,6 @@
 package org.morkato.bot.extension;
 
+import org.jetbrains.exposed.sql.Database;
 import org.morkato.bot.commands.ArtCommand;
 import org.morkato.bot.commands.RepositoryTest;
 import org.morkato.bot.commands.TestCommand;

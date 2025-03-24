@@ -22,6 +22,11 @@ public abstract class ObjectResolverImpl<T extends ObjectId>
   }
 
   @Override
+  public boolean isEmpty(){
+    return !isLoaded && items.isEmpty();
+  }
+
+  @Override
   public int size() {
     return length;
   }

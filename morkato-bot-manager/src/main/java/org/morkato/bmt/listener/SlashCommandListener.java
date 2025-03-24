@@ -2,7 +2,7 @@ package org.morkato.bmt.listener;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
-import org.morkato.bmt.registration.impl.MorkatoBotManagerRegistration;
+import org.morkato.bmt.registration.MorkatoBotManagerRegistration;
 
 public class SlashCommandListener extends MorkatoListenerAdapter {
   public SlashCommandListener(MorkatoBotManagerRegistration registration) {

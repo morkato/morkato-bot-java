@@ -2,7 +2,7 @@ package org.morkato.bmt.registration;
 
 import java.util.Objects;
 
-public interface RegisterManagement<T> {
+public interface RegisterManagement<T> extends Iterable<T> {
   static <T> void registerAll(RegisterManagement<T> management, Iterable<T> objects) {
     if (Objects.isNull(management))
       return;
@@ -12,4 +12,5 @@ public interface RegisterManagement<T> {
   default void flush() {}
   void register(T registry);
   void clear();
+  int size();
 }

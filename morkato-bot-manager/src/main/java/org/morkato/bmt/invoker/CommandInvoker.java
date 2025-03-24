@@ -1,20 +1,15 @@
 package org.morkato.bmt.invoker;
 
-import net.dv8tion.jda.api.entities.Message;
 import org.morkato.bmt.CommandRegistry;
-import org.morkato.bmt.components.Command;
 import org.morkato.bmt.context.invoker.CommandInvokerContext;
-
+import org.morkato.bmt.registration.MapRegistryManagement;
+import org.morkato.utility.StringView;
+import net.dv8tion.jda.api.entities.Message;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.Objects;
-
-import org.morkato.bmt.registration.NamePointerRegistration;
-import org.morkato.bmt.registration.TextCommandRegistration;
-import org.morkato.bmt.registration.impl.MorkatoBotManagerRegistration;
-import org.morkato.utility.StringView;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -22,22 +17,15 @@ import org.slf4j.Logger;
 public class CommandInvoker implements Invoker<CommandInvokerContext> {
   private static final Logger LOGGER = LoggerFactory.getLogger(CommandInvoker.class);
   private static final int MAX_THREAD_POOL_SIZE = 10;
-  private final MorkatoBotManagerRegistration registration;
-  private final TextCommandRegistration commands;
-  private final NamePointerRegistration pointers;
+  private MapRegistryManagement<String, CommandRegistry<?>> commands;
   private ExecutorService service = null;
   private boolean ready = false;
 
-  public CommandInvoker(MorkatoBotManagerRegistration registration) {
-    this.registration = registration;
-    this.commands = registration.getTextCommandRegistration();
-    this.pointers = registration.getNamePointerRegistration();
-  }
-
-  public synchronized void start() {
+  public synchronized void start(MapRegistryManagement<String, CommandRegistry<?>> commands) {
     if (ready)
       return;
     this.service = Executors.newFixedThreadPool(MAX_THREAD_POOL_SIZE);
+    this.commands = commands;
     this.ready = true;
   }
 
@@ -50,12 +38,11 @@ public class CommandInvoker implements Invoker<CommandInvokerContext> {
     return CompletableFuture.runAsync(runnable, service);
   }
 
-  @SuppressWarnings("unchecked")
   public CommandRegistry<?> spawn(StringView view) {
     final String commandname = view.word();
     if (Objects.isNull(commandname))
       return null;
-    return pointers.getCommandRegistry(commandname);
+    return commands.get(commandname);
   }
 
   @Override

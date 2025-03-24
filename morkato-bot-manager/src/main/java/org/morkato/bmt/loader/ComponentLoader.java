@@ -1,24 +1,20 @@
 package org.morkato.bmt.loader;
 
-import net.dv8tion.jda.api.events.guild.scheduledevent.update.ScheduledEventUpdateEndTimeEvent;
 import org.morkato.bmt.registration.RegistrationFactory;
-import org.morkato.utility.ClassInjectorMap;
 import org.morkato.utility.exception.InjectionException;
-import org.morkato.utility.exception.ValueNotInjected;
-import org.slf4j.Logger;
+import org.morkato.bmt.exception.ValueNotInjected;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.function.Consumer;
 
 public class ComponentLoader {
   private static final Logger LOGGER = LoggerFactory.getLogger(ComponentLoader.class);
-  private final Map<Class<?>, Object> loaded = new HashMap<>();
-  private final RegistrationFactory factory;
-  private final ClassInjectorMap injector;
-  public ComponentLoader(RegistrationFactory factory, ClassInjectorMap injector) {
+  private final RegistrationFactory<?> factory;
+
+  public ComponentLoader(RegistrationFactory<?> factory) {
     this.factory = factory;
-    this.injector = injector;
   }
 
   public void instance(Class<?> clazz)
@@ -31,12 +27,11 @@ public class ComponentLoader {
     for (Class<?> interfaceClazz : interfaces) {
       Consumer<Object> consumer = this.factory.create(interfaceClazz);
       if (consumer == null) {
-        LOGGER.warn("Interface: {} is not acknowledged in component: {}. Ignoring.", interfaceClazz.getName(), clazz.getName());
+        LOGGER.warn("Interface: {} is not acknowledged for component: {} in RegistrationFactory: {}. Ignoring.", interfaceClazz.getName(), clazz.getName(), factory.getClass().getName());
         continue;
       }
       consumer.accept(object);
     }
-    loaded.put(object.getClass(), object);
     LOGGER.debug("Component: {} has been initialized", clazz.getName());
   }
 

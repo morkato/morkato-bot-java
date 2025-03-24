@@ -6,6 +6,7 @@ import org.morkato.api.entity.ObjectResolver;
 import org.morkato.api.entity.art.Art;
 import org.morkato.api.entity.art.ArtType;
 import org.morkato.api.entity.art.ArtUpdateBuilder;
+import org.morkato.api.entity.art.AttackArtResolver;
 import org.morkato.api.entity.attack.Attack;
 import org.morkato.api.entity.guild.Guild;
 import org.morkato.api.repository.ArtRepository;
@@ -18,6 +19,7 @@ import java.util.*;
 
 public class ApiArtImpl implements Art {
   private final RepositoryCentral central;
+  private final AttackArtResolver attacks;
   private String guildId;
   private Guild guild;
   private String id;
@@ -41,6 +43,7 @@ public class ApiArtImpl implements Art {
       throw new RuntimeException("");
     this.fromDTO(dto);
     /* TODO: Add logic for attacks in art context >_< */
+    this.attacks = new AttackArtResolver(this);
   }
 
   @Override
@@ -74,7 +77,7 @@ public class ApiArtImpl implements Art {
   @Nonnull
   @Override
   public ObjectResolver<Attack> getAttackResolver() {
-    throw new RuntimeException("Art::getAttackResolver is not implemented.");
+    return this.attacks;
   }
 
   @Nonnull

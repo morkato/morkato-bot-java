@@ -1,5 +1,7 @@
 package org.morkato.api.entity.impl.guild;
 
+import org.morkato.api.entity.attack.Attack;
+import org.morkato.api.entity.guild.GuildAttackResolver;
 import org.morkato.api.entity.guild.GuildTrainerResolver;
 import org.morkato.api.entity.guild.GuildArtResolver;
 import org.morkato.api.repository.RepositoryCentral;
@@ -16,6 +18,7 @@ import java.util.Objects;
 public class ApiGuildImpl implements Guild {
   private final RepositoryCentral central;
   private final GuildTrainerResolver trainers;
+  private final GuildAttackResolver attacks;
   private final GuildArtResolver arts;
   private String id;
   private BigDecimal humanInitialLife;
@@ -32,6 +35,7 @@ public class ApiGuildImpl implements Guild {
     this.central = central;
     this.fromDTO(dto);
     this.trainers = new GuildTrainerResolver(this, central);
+    this.attacks = new GuildAttackResolver(this, central);
     this.arts = new GuildArtResolver(this, central);
   }
 
@@ -105,6 +109,11 @@ public class ApiGuildImpl implements Guild {
   public BigDecimal getFamilyRoll() {
     Objects.requireNonNull(this.familyRoll);
     return this.familyRoll;
+  }
+
+  @Override
+  public ObjectResolver<Attack> getAttackResolver() {
+    return this.attacks;
   }
 
   @Override

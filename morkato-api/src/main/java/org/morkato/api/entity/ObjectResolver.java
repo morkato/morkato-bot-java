@@ -2,6 +2,7 @@ package org.morkato.api.entity;
 
 public interface ObjectResolver<T extends ObjectId>
   extends Iterable<T> {
+  boolean isEmpty();
   int size();
   T[] order();
   boolean loaded();

@@ -1,6 +1,6 @@
 package org.morkato.bmt;
 
-import org.morkato.bmt.registration.TextCommandExceptionRegistration;
+import org.morkato.bmt.registration.MapRegistryManagement;
 import org.morkato.bmt.components.CommandException;
 import org.morkato.bmt.context.TextCommandContext;
 import org.morkato.bmt.components.ObjectParser;
@@ -18,18 +18,26 @@ import java.util.Objects;
 public class CommandRegistry<T> {
   private final Logger LOGGER = LoggerFactory.getLogger(CommandRegistry.class);
   private final Map<String, CommandRegistry<?>> subcommands = new HashMap<>();
-  private final TextCommandExceptionRegistration exceptions;
   private final Command<T> command;
   private final ObjectParser<T> parser;
   private final Class<T> args;
+  private MapRegistryManagement<Class<? extends Throwable>, CommandException<?>> exceptions;
+
   @SuppressWarnings("unchecked")
-  public CommandRegistry(TextCommandExceptionRegistration exceptions, Command<T> command, ObjectParser<T> parser) {
+  public CommandRegistry(
+    Command<T> command,
+    ObjectParser<T> parser
+  ) {
     Class<T> clazz = (Class<T>)Command.getArgument(command.getClass());
-    this.exceptions = exceptions;
     this.command = command;
     this.parser = parser;
     this.args = clazz;
   }
+
+  public void setExceptionManager(MapRegistryManagement<Class<? extends Throwable>, CommandException<?>> management) {
+    this.exceptions = management;
+  }
+
   @Nonnull
   @SuppressWarnings("unchecked")
   public Class<? extends Command<T>> getCommandClass() {
@@ -55,6 +63,10 @@ public class CommandRegistry<T> {
     return !this.subcommands.isEmpty();
   }
 
+  public Command<T> getCommand() {
+    return command;
+  }
+
   public CommandRegistry<?> getSubCommand(String pointer) {
     return this.subcommands.get(pointer);
   }
@@ -77,8 +89,13 @@ public class CommandRegistry<T> {
       this.onError(context, exc);
     }
   }
+
   @SuppressWarnings("unchecked")
   public <E extends Throwable> void onError(TextCommandContext<?> context, E exc) {
+    if (Objects.isNull(this.exceptions)) {
+      LOGGER.error("Command ID: {} has invoked a error: {}. Ignoring.", context.getCommand().getClass().getName(), exc.getClass(), exc);
+      return;
+    }
     CommandException<E> handler = (CommandException<E>)this.exceptions.get(exc.getClass());
     if (Objects.isNull(handler)) {
       LOGGER.error("Command ID: {} has invoked a error: {}. Ignoring.", context.getCommand().getClass().getName(), exc.getClass(), exc);

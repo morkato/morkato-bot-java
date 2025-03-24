@@ -1,27 +1,31 @@
 package org.morkato.bmt.registration;
 
-import org.morkato.utility.ClassInjectorMap;
+import org.morkato.bmt.DependenceInjection;
 import org.morkato.utility.exception.InjectionException;
-import org.morkato.utility.exception.ValueNotInjected;
-import org.slf4j.Logger;
+import org.morkato.bmt.exception.ValueNotInjected;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import javax.annotation.Nonnull;
+import java.util.*;
 
-public class RecordsRegistrationProxy<T, O extends RegisterManagement<T>> implements RegisterManagement<T> {
+public class RecordsRegistrationProxy<O extends RegisterManagement<T>, T> implements RegisterManagement<T> {
   private static final Logger LOGGER = LoggerFactory.getLogger(RecordsRegistrationProxy.class);
-  private final Set<T> records = new HashSet<>();
-  private boolean prepared = false;
   private final O management;
+  protected final Set<T> records = new HashSet<>();
+  private boolean prepared = false;
+  private boolean flushed = false;
 
   public RecordsRegistrationProxy(O management) {
     this.management = management;
   }
 
-  public O getOriginal() {
-    return management;
+  public O getManagement() {
+    return this.management;
+  }
+
+  public void retainsAll(Collection<T> records) {
+    this.records.retainAll(records);
   }
 
   @Override
@@ -35,11 +39,25 @@ public class RecordsRegistrationProxy<T, O extends RegisterManagement<T>> implem
     management.clear();
   }
 
+  @Override
+  @Nonnull
+  public Iterator<T> iterator() {
+    if (!this.flushed)
+      throw new IllegalStateException("Records are not flushed");
+    return this.management.iterator();
+  }
+
+  @Override
+  public int size() {
+    if (!this.flushed)
+      throw new IllegalStateException("Records are not flushed");
+    return this.management.size();
+  }
+
   @SuppressWarnings("unchecked")
-  public void prepare(ClassInjectorMap injector) {
+  public void prepare(DependenceInjection injector) {
     final Set<T> validatedRecords = new HashSet<>();
     if (Objects.nonNull(injector)) {
-      injector.injectAllIfAbsent((Set<Object>)records);
       for (T record : records) {
         try {
           injector.write(record);
@@ -50,12 +68,14 @@ public class RecordsRegistrationProxy<T, O extends RegisterManagement<T>> implem
           LOGGER.warn("Error to finalize record injection: {}. Value: {} is not injected.", record.getClass().getName(), exc.getType());
         }
       }
+      injector.injectAllIfAbsent((Set<Object>)validatedRecords);
     }
     records.retainAll(validatedRecords);
     validatedRecords.clear();
-    this.prepared= true;
+    this.prepared = true;
   }
 
+  @Override
   public void flush() {
     if (!prepared)
       LOGGER.warn("Records has not been finalized! This may generate unwanted behavior.");
@@ -64,5 +84,6 @@ public class RecordsRegistrationProxy<T, O extends RegisterManagement<T>> implem
     RegisterManagement.registerAll(management, records);
     management.flush();
     records.clear();
+    this.flushed = true;
   }
 }

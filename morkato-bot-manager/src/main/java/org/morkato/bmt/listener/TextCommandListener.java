@@ -1,6 +1,6 @@
 package org.morkato.bmt.listener;
 
-import org.morkato.bmt.registration.impl.MorkatoBotManagerRegistration;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.morkato.bmt.context.invoker.CommandInvokerContext;
 import org.morkato.bmt.invoker.Invoker;
@@ -10,13 +10,12 @@ import org.slf4j.Logger;
 
 import java.util.Objects;
 
-public abstract class TextCommandListener extends MorkatoListenerAdapter {
+public abstract class TextCommandListener extends ListenerAdapter {
   private static final Logger LOGGER = LoggerFactory.getLogger(TextCommandListener.class);
   private final Invoker<CommandInvokerContext> invoker;
   public abstract String getPrefix();
 
-  public TextCommandListener(MorkatoBotManagerRegistration registration, Invoker<CommandInvokerContext> invoker) {
-    super(registration);
+  public TextCommandListener(Invoker<CommandInvokerContext> invoker) {
     Objects.requireNonNull(invoker);
     this.invoker = invoker;
   }

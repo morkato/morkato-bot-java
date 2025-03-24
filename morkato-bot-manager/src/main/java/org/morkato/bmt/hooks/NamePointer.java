@@ -1,5 +1,6 @@
 package org.morkato.bmt.hooks;
 
+import org.morkato.bmt.CommandRegistry;
 import org.morkato.bmt.components.Command;
 
 public class NamePointer {

@@ -1,6 +1,8 @@
-package org.morkato.utility.exception;
+package org.morkato.bmt.exception;
 
-public class ValueNotInjected extends MorkatoUtilityException {
+import org.morkato.utility.exception.MorkatoUtilityException;
+
+public class ValueNotInjected extends MorkatoUtilityException{
   private final Class<?> type;
   public ValueNotInjected(Class<?> type) {
     super("Class: " + type.getName() + " is not injected.");
