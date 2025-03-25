@@ -1,5 +1,7 @@
 package org.morkato.bmt.registration;
 
+import org.morkato.bmt.registration.registries.ArgumentRegistry;
+import org.morkato.bmt.registration.registries.CommandRegistry;
 import org.morkato.bmt.DependenceInjection;
 import org.morkato.bmt.components.CommandException;
 import org.morkato.bmt.components.MessageEmbedBuilder;
@@ -8,6 +10,8 @@ import org.morkato.bmt.components.Command;
 import org.morkato.bmt.ApplicationRegistries;
 import org.morkato.bmt.extensions.Extension;
 import org.morkato.bmt.registration.hooks.*;
+import org.morkato.bmt.registration.registries.MessageEmbedBuilderRegistry;
+import org.morkato.bmt.registration.registries.TextCommandExceptionRegistry;
 
 import java.util.function.Consumer;
 import java.util.HashMap;
@@ -15,11 +19,11 @@ import java.util.Map;
 
 public class MorkatoBotManagerRegistration implements RegistrationFactory<ApplicationRegistries> {
   private final Map<Class<?>, Consumer<Object>> factories = new HashMap<>();
-  private final RecordsRegistrationProxy<ExtensionRegistration, Extension> extensions;
-  private final RecordsRegistrationProxy<TextCommandExceptionRegistration, CommandException<?>> textCommandExceptions;
-  private final RecordsRegistrationProxy<MessageEmbedBuilderRegistration, MessageEmbedBuilder<?>> embeds;
-  private final RecordsRegistrationProxy<ArgumentRegistration, ObjectParser<?>> arguments;
-  private final RecordsRegistrationProxy<TextCommandRegistration, Command<?>> textCommands;
+  private final ExtensionRegistrationProxy extensions;
+  private final RecordsRegistrationProxy<TextCommandExceptionRegistry, CommandException<?>> textCommandExceptions;
+  private final RecordsRegistrationProxy<MessageEmbedBuilderRegistry, MessageEmbedBuilder<?>> embeds;
+  private final RecordsRegistrationProxy<ArgumentRegistry, ObjectParser<?>> arguments;
+  private final RecordsRegistrationProxy<CommandRegistry<?>, Command<?>> textCommands;
   public MorkatoBotManagerRegistration() {
     final ArgumentRegistration arguments = ArgumentRegistration.get();
     this.extensions = new ExtensionRegistrationProxy(new ExtensionRegistration(this));
@@ -42,10 +46,11 @@ public class MorkatoBotManagerRegistration implements RegistrationFactory<Applic
   @Override
   public void prepare(DependenceInjection injector) {
     extensions.prepare(injector);
-    embeds.prepare(injector);
-    arguments.prepare(injector);
-    textCommandExceptions.prepare(injector);
-    textCommands.prepare(injector);
+    extensions.writeAll(injector);
+    embeds.writeAll(injector);
+    arguments.writeAll(injector);
+    textCommandExceptions.writeAll(injector);
+    textCommands.writeAll(injector);
   }
 
   @Override
@@ -57,10 +62,11 @@ public class MorkatoBotManagerRegistration implements RegistrationFactory<Applic
     textCommandExceptions.flush();
     textCommands.flush();
     return new ApplicationRegistries(
-      this.embeds.getManagement(),
-      this.arguments.getManagement(),
-      this.textCommandExceptions.getManagement(),
-      this.textCommands.getManagement()
+      this.extensions,
+      this.embeds,
+      this.arguments,
+      this.textCommandExceptions,
+      this.textCommands
     );
   }
 

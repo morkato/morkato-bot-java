@@ -18,6 +18,7 @@ public class Client extends ApplicationCommon {
 
   public Client(Properties properties, String token) {
     super(Client.class, token, properties);
+    invoker.setDebug(true);
   }
 
   public static void main(String[] args) throws Throwable {
@@ -53,8 +54,10 @@ public class Client extends ApplicationCommon {
   @Override
   protected void onReady(JDA jda, ApplicationRegistries registries) {
     super.onReady(jda, registries);
-    registries.setCommandExceptionManager(new CommandExceptionStaticRegistries(registries));
-    invoker.start(new CommandsStaticRegistries(registries));
+    invoker.start(
+      new CommandsStaticRegistries(registries),
+      new CommandExceptionStaticRegistries(registries)
+    );
   }
 
   @Override

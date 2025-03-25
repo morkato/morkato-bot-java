@@ -1,4 +1,4 @@
-package org.morkato.api;
+package org.morkato.api.entity;
 
 public interface DataBuilder<T> {
   T execute();

@@ -1,7 +1,7 @@
 package org.morkato.api.entity.attack;
 
-import org.morkato.api.DeleteApiModel;
-import org.morkato.api.UpdateApiModel;
+import org.morkato.api.entity.DeleteApiModel;
+import org.morkato.api.entity.UpdateApiModel;
 import org.morkato.api.entity.ApiObject;
 import org.morkato.api.entity.art.Art;
 import org.morkato.api.entity.guild.Guild;

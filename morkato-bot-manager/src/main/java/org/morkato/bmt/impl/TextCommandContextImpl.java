@@ -14,7 +14,7 @@ import org.morkato.bmt.exception.StupidArgumentException;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class TextCommandContextImpl<Args> implements TextCommandContext<Args>{
+public class TextCommandContextImpl<Args> implements TextCommandContext<Args> {
   protected boolean fromGuild;
   protected Args args;
   protected Guild guild;

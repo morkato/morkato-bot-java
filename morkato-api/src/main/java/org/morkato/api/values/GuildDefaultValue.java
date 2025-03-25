@@ -1,13 +1,11 @@
-package org.morkato.api.entity.values;
+package org.morkato.api.values;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-import org.morkato.api.dto.GuildDTO;
-import org.morkato.api.entity.guild.Guild;
 import org.morkato.api.repository.queries.guild.GuildCreationQuery;
-
+import org.morkato.api.dto.GuildDTO;
+import lombok.experimental.Accessors;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Data;
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -63,31 +61,31 @@ public final class GuildDefaultValue {
       .setFamilyRoll(this.getFamilyRoll());
   }
 
-  public boolean isHumanInitialLife(Guild guild) {
+  public boolean isHumanInitialLife(GuildDTO guild) {
     return guild.getHumanInitialLife().equals(this.getHumanInitialLife());
   }
 
-  public boolean isOniInitialLife(Guild guild) {
+  public boolean isOniInitialLife(GuildDTO guild) {
     return guild.getOniInitialLife().equals(this.getOniInitialLife());
   }
 
-  public boolean isHybridInitialLife(Guild guild) {
+  public boolean isHybridInitialLife(GuildDTO guild) {
     return guild.getHybridInitialLife().equals(this.getHybridInitialLife());
   }
 
-  public boolean isBreathInitial(Guild guild) {
+  public boolean isBreathInitial(GuildDTO guild) {
     return guild.getBreathInitial().equals(this.getBreathInitial());
   }
 
-  public boolean isBloodInitial(Guild guild) {
+  public boolean isBloodInitial(GuildDTO guild) {
     return guild.getBloodInitial().equals(this.getBloodInitial());
   }
 
-  public boolean isAbilityRoll(Guild guild) {
+  public boolean isAbilityRoll(GuildDTO guild) {
     return guild.getAbilityRoll().equals(this.getAbilityRoll());
   }
 
-  public boolean isFamilyRoll(Guild guild) {
+  public boolean isFamilyRoll(GuildDTO guild) {
     return guild.getFamilyRoll().equals(this.getFamilyRoll());
   }
 }

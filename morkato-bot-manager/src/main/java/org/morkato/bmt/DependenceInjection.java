@@ -129,7 +129,7 @@ public class DependenceInjection {
       Field[] fields = clazz.getDeclaredFields();
       for (Field field : fields) {
         if (!field.isAnnotationPresent(injectionClazz))
-          return;
+          continue;
         Class<?> type = field.getType();
         Object reference = this.get(type);
         if (Objects.isNull(reference)&& !field.isAnnotationPresent(notRequiredClazz))

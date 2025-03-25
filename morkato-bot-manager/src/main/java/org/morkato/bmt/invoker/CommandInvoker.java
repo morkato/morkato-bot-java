@@ -1,15 +1,18 @@
 package org.morkato.bmt.invoker;
 
-import org.morkato.bmt.CommandRegistry;
+import org.morkato.bmt.components.CommandException;
+import org.morkato.bmt.invoker.handle.CommandInvokeHandle;
+import org.morkato.bmt.invoker.handle.DebugCommandInvokeHandle;
+import org.morkato.bmt.registration.registries.CommandRegistry;
 import org.morkato.bmt.context.invoker.CommandInvokerContext;
 import org.morkato.bmt.registration.MapRegistryManagement;
 import org.morkato.utility.StringView;
 import net.dv8tion.jda.api.entities.Message;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+
+import java.util.concurrent.*;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -18,14 +21,26 @@ public class CommandInvoker implements Invoker<CommandInvokerContext> {
   private static final Logger LOGGER = LoggerFactory.getLogger(CommandInvoker.class);
   private static final int MAX_THREAD_POOL_SIZE = 10;
   private MapRegistryManagement<String, CommandRegistry<?>> commands;
+  private MapRegistryManagement<Class<? extends Throwable>, CommandException<?>> exceptions;
   private ExecutorService service = null;
+  private boolean debug = false;
   private boolean ready = false;
 
-  public synchronized void start(MapRegistryManagement<String, CommandRegistry<?>> commands) {
+  public synchronized void start(
+    MapRegistryManagement<String, CommandRegistry<?>> commands,
+    MapRegistryManagement<Class<? extends Throwable>, CommandException<?>> exceptions
+  ) {
     if (ready)
       return;
-    this.service = Executors.newFixedThreadPool(MAX_THREAD_POOL_SIZE);
+    Objects.requireNonNull(commands);
+    Objects.requireNonNull(exceptions);
+    this.service = Executors.newFixedThreadPool(MAX_THREAD_POOL_SIZE, runnable -> {
+      Thread thread = new Thread(runnable);
+      thread.setName("morkato-command-invoker");
+      return thread;
+    });
     this.commands = commands;
+    this.exceptions = exceptions;
     this.ready = true;
   }
 
@@ -34,7 +49,12 @@ public class CommandInvoker implements Invoker<CommandInvokerContext> {
     return ready;
   }
 
+  public void setDebug(boolean debug) {
+    this.debug = debug;
+  }
+
   public CompletableFuture<Void> runAsync(Runnable runnable) {
+    LOGGER.trace("Run in async runnable: {}", runnable);
     return CompletableFuture.runAsync(runnable, service);
   }
 
@@ -45,32 +65,38 @@ public class CommandInvoker implements Invoker<CommandInvokerContext> {
     return commands.get(commandname);
   }
 
+  public <T> Runnable spawnHandle(CommandRegistry<T> registry, StringView view, Message message) {
+    return !debug
+      ? new CommandInvokeHandle<>(exceptions, registry, message, view)
+      : new DebugCommandInvokeHandle<>(exceptions, registry, message, view);
+  }
+
   @Override
   public void invoke(CommandInvokerContext context) {
     /* LIMITAÇÃO a execução de subcomandos em uma árvore proposital. */
-    if (!isReady())
+    if (!isReady()) {
+      LOGGER.debug("CommandInvoker is invoked, but, is not ready to execute commands. Ignoring.");
       return;
+    }
     final Message message = context.getMessage();
     final StringView view = context.getView();
     final CommandRegistry<?> registry = this.spawn(view);
+    LOGGER.trace("Process command invoker for message: {}.  and view: {}", message, view);
     if (Objects.isNull(registry))
       return;
     if (!registry.hasSubCommands()) {
-      final Runnable runnable = registry.prepareRunnable(message, view);
-      this.runAsync(runnable);
+      this.runAsync(this.spawnHandle(registry, view, message));
       return;
     }
     view.skipWhitespace();
     final String supposedSubCommandName = view.quotedWord();
     final CommandRegistry<?> subregistry = registry.getSubCommand(supposedSubCommandName);
     if (Objects.isNull(subregistry)) {
-      final Runnable runnable = registry.prepareRunnable(message, view);
-      this.runAsync(runnable);
       view.undo();
+      this.runAsync(this.spawnHandle(registry, view, message));
       return;
     }
-    final Runnable runnable = subregistry.prepareRunnable(message, view);
-    this.runAsync(runnable);
+    this.runAsync(this.spawnHandle(subregistry, view, message));
   }
 
   public void shutdown() {

@@ -1,6 +1,6 @@
 package org.morkato.api.entity.attack;
 
-import org.morkato.api.DataBuilder;
+import org.morkato.api.entity.DataBuilder;
 import java.math.BigDecimal;
 
 public interface AttackUpdateBuilder extends DataBuilder<Attack> {

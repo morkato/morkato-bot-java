@@ -4,8 +4,8 @@ import org.morkato.api.entity.ApiObject;
 import org.morkato.api.entity.impl.trainer.TrainerImpl;
 import org.morkato.api.entity.guild.Guild;
 import org.morkato.api.dto.TrainerDTO;
-import org.morkato.api.DeleteApiModel;
-import org.morkato.api.UpdateApiModel;
+import org.morkato.api.entity.DeleteApiModel;
+import org.morkato.api.entity.UpdateApiModel;
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 

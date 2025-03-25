@@ -1,7 +1,7 @@
 package org.morkato.bot;
 
 import org.morkato.bmt.ApplicationRegistries;
-import org.morkato.bmt.CommandRegistry;
+import org.morkato.bmt.registration.registries.CommandRegistry;
 import org.morkato.bmt.registration.MapRegistryManagement;
 
 import java.util.HashMap;

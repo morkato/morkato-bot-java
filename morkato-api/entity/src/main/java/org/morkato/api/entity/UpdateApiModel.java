@@ -1,4 +1,4 @@
-package org.morkato.api;
+package org.morkato.api.entity;
 
 import org.morkato.api.repository.queries.attack.AttackUpdateQuery;
 

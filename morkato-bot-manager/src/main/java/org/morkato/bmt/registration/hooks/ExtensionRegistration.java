@@ -1,25 +1,24 @@
 package org.morkato.bmt.registration.hooks;
 
-import org.morkato.bmt.components.Command;
-import org.morkato.bmt.hooks.NamePointer;
+import org.morkato.bmt.registration.registries.ExtensionRegistry;
 import org.morkato.bmt.impl.ExtensionSetupContextImpl;
-import org.morkato.bmt.extensions.Extension;
-import org.morkato.bmt.registration.RegisterManagement;
+import org.morkato.bmt.hooks.NamePointer;
 import org.morkato.bmt.registration.RegistrationFactory;
+import org.morkato.bmt.extensions.Extension;
+import org.morkato.bmt.components.Command;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-import javax.annotation.Nonnull;
-import java.util.*;
 import java.util.function.Consumer;
+import java.util.*;
 
-public class ExtensionRegistration implements RegisterManagement<Extension>{
-  private static final Logger LOGGER = LoggerFactory.getLogger(ExtensionRegistration.class);
-  private final Set<Extension> items = new HashSet<>();
+public class ExtensionRegistration extends SetObjectRegistration<ExtensionRegistry, Extension> {
+  private final Logger LOGGER = LoggerFactory.getLogger(ExtensionRegistration.class);
   private final RegistrationFactory<?> factory;
 
   public ExtensionRegistration(RegistrationFactory<?> factory) {
     this.factory = factory;
   }
+
 
   @Override
   public void register(Extension registry) {
@@ -40,23 +39,7 @@ public class ExtensionRegistration implements RegisterManagement<Extension>{
     } catch (Throwable exc) {
       LOGGER.error("Failed to setup extension: {} above error occurred. Ignoring.", registry.getClass().getName(), exc);
     }
-    items.add(registry);
+    this.add(new ExtensionRegistry(registry));
     LOGGER.info("Extension: {} has been registered.", registry.getClass().getName());
-  }
-
-  @Override
-  public void clear() {
-    items.clear();
-  }
-
-  @Override
-  public int size() {
-    return items.size();
-  }
-
-  @Override
-  @Nonnull
-  public Iterator<Extension> iterator() {
-    return items.iterator();
   }
 }

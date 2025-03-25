@@ -1,6 +1,6 @@
 package org.morkato.api.entity.art;
 
-import org.morkato.api.DataBuilder;
+import org.morkato.api.entity.DataBuilder;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

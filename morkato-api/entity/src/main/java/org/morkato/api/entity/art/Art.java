@@ -2,14 +2,13 @@ package org.morkato.api.entity.art;
 
 import org.morkato.api.entity.ObjectResolver;
 import org.morkato.api.entity.impl.art.ApiArtImpl;
-import org.morkato.api.entity.ApiObjectResolver;
 import org.morkato.api.entity.attack.Attack;
 import org.morkato.api.entity.guild.Guild;
 import org.morkato.api.entity.ApiObject;
 import org.morkato.api.repository.RepositoryCentral;
 import org.morkato.api.dto.ArtDTO;
-import org.morkato.api.DeleteApiModel;
-import org.morkato.api.UpdateApiModel;
+import org.morkato.api.entity.DeleteApiModel;
+import org.morkato.api.entity.UpdateApiModel;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 

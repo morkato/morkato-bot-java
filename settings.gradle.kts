@@ -10,3 +10,5 @@ include("morkato-api:database")
 include("morkato-api:tests")
 include("morkato-api")
 include("morkato-utils")
+include("morkato-api:entity")
+findProject(":morkato-api:entity")?.name = "entity"

@@ -3,9 +3,8 @@ package org.morkato.api.entity.guild;
 import org.morkato.api.entity.ObjectResolver;
 import org.morkato.api.entity.attack.Attack;
 import org.morkato.api.entity.trainer.Trainer;
-import org.morkato.api.entity.ObjectId;
 import org.morkato.api.entity.art.Art;
-import org.morkato.api.DeleteApiModel;
+import org.morkato.api.entity.DeleteApiModel;
 
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;

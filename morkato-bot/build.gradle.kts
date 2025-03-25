@@ -30,7 +30,8 @@ tasks.named<JavaExec>("run") {
   jvmArgs = listOf(
     "-Xmx1024M", /* Máximo 1GB de RAM para consumo */
     "-Xms64M", /* Mínimo 64MB de RAM para consumo */
-    "-Dmorkato.conf=${morkatoconf}" /* Arquivo de configuração */
+    "-Dmorkato.conf=${morkatoconf}", /* Arquivo de configuração */
+    "-DMORKATO_LOG_LEVEL=TRACE"
   )
 }
 
