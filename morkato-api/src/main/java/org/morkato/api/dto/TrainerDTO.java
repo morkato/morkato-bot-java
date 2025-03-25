@@ -1,17 +1,17 @@
 package org.morkato.api.dto;
 
-import org.morkato.api.repository.queries.TrainerCreationQuery;
+import org.morkato.api.repository.trainer.TrainerCreationQuery;
 import org.morkato.api.validation.constraints.MorkatoModelAttribute;
+import org.morkato.api.validation.constraints.MorkatoSnowflakeId;
 import org.morkato.api.validation.constraints.MorkatoModelBanner;
 import org.morkato.api.validation.constraints.MorkatoModelName;
-import org.morkato.api.validation.constraints.MorkatoSnowflakeId;
 import org.morkato.api.validation.groups.OnCreate;
 import org.morkato.api.validation.groups.OnUpdate;
 import org.morkato.api.validation.groups.OnId;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import jakarta.validation.groups.Default;
+import jakarta.validation.Validator;
 import lombok.experimental.Accessors;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

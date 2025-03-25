@@ -8,8 +8,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.morkato.api.dto.ArtDTO
 import org.morkato.api.entity.art.ArtId
 import org.morkato.api.repository.ArtRepository
-import org.morkato.api.repository.queries.ArtCreationQuery
-import org.morkato.api.repository.queries.ArtUpdateQuery
+import org.morkato.api.repository.art.ArtCreationQuery
+import org.morkato.api.repository.art.ArtUpdateQuery
 import org.morkato.database.infra.tables.arts
 
 class DatabaseArtRepository(

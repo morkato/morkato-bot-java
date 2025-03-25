@@ -1,23 +1,22 @@
 package org.morkato.api.dto;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import jakarta.validation.groups.Default;
+import jakarta.validation.Validator;
+import lombok.experimental.Accessors;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-import org.morkato.api.entity.art.Art;
-import org.morkato.api.repository.queries.ArtCreationQuery;
-import jakarta.validation.constraints.NotNull;
-import org.morkato.api.entity.art.ArtType;
+import lombok.Data;
 import org.morkato.api.validation.constraints.MorkatoModelBanner;
 import org.morkato.api.validation.constraints.MorkatoModelDescription;
 import org.morkato.api.validation.constraints.MorkatoModelName;
 import org.morkato.api.validation.constraints.MorkatoSnowflakeId;
 import org.morkato.api.validation.groups.OnCreate;
+import org.morkato.api.repository.art.ArtCreationQuery;
 import org.morkato.api.validation.groups.OnUpdate;
+import org.morkato.api.entity.art.ArtType;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = false, of = {"guildId","id"})
@@ -41,17 +40,6 @@ public final class ArtDTO extends DefaultDTO<ArtDTO> {
   private String description;
   @MorkatoModelBanner(groups = {Default.class, OnCreate.class, OnUpdate.class})
   private String banner;
-
-  public static ArtDTO fromArt(Art art) {
-    return new ArtDTO(
-      art.getGuildId(),
-      art.getId(),
-      art.getName(),
-      art.getType(),
-      art.getDescription(),
-      art.getBanner()
-    );
-  }
 
   public static ArtDTO from(ArtCreationQuery query) {
     return new ArtDTO(

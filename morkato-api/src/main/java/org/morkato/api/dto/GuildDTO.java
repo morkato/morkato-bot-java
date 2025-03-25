@@ -1,23 +1,21 @@
 package org.morkato.api.dto;
 
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.groups.Default;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.groups.Default;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-import org.morkato.api.entity.guild.GuildId;
-import org.morkato.api.repository.queries.guild.GuildCreationQuery;
-import org.morkato.api.repository.queries.guild.GuildIdQuery;
+import org.morkato.api.repository.guilld.GuildCreationQuery;
 import org.morkato.api.validation.constraints.MorkatoModelAttribute;
-import org.morkato.api.validation.constraints.MorkatoModelRoll;
 import org.morkato.api.validation.constraints.MorkatoSnowflakeId;
+import org.morkato.api.validation.constraints.MorkatoModelRoll;
 import org.morkato.api.validation.groups.OnCreate;
 import org.morkato.api.validation.groups.OnId;
-
+import org.morkato.api.entity.guild.GuildId;
+import lombok.experimental.Accessors;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Data;
 import java.math.BigDecimal;
 import java.util.Set;
 

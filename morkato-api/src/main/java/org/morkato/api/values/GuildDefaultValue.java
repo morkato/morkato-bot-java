@@ -1,6 +1,6 @@
 package org.morkato.api.values;
 
-import org.morkato.api.repository.queries.guild.GuildCreationQuery;
+import org.morkato.api.repository.guilld.GuildCreationQuery;
 import org.morkato.api.dto.GuildDTO;
 import lombok.experimental.Accessors;
 import lombok.AllArgsConstructor;

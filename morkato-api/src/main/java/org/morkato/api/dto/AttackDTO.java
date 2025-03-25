@@ -2,20 +2,18 @@ package org.morkato.api.dto;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.groups.Default;
+import lombok.experimental.Accessors;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-import org.morkato.api.repository.queries.attack.AttackUpdateQuery;
+import lombok.Data;
+import org.morkato.api.repository.attack.AttackUpdateQuery;
 import org.morkato.api.validation.constraints.*;
 import org.morkato.api.validation.groups.OnCreate;
-import org.morkato.api.validation.groups.OnId;
 import org.morkato.api.validation.groups.OnUpdate;
-
+import org.morkato.api.validation.groups.OnId;
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -54,7 +52,6 @@ public final class AttackDTO extends DefaultDTO<AttackDTO> {
   private BigDecimal breath;
   @MorkatoModelAttribute(groups = {Default.class, OnCreate.class, OnUpdate.class})
   private BigDecimal blood;
-  @Min(0)
   private int flags;
 
   public static AttackDTO from(AttackUpdateQuery query) {

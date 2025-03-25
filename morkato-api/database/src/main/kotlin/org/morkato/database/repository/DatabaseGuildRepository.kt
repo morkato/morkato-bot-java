@@ -6,17 +6,14 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.morkato.api.dto.GuildDTO
-import org.morkato.api.entity.guild.Guild
 import org.morkato.api.entity.guild.GuildId
-import org.morkato.api.entity.impl.guild.ApiGuildImpl
 import org.morkato.api.entity.values.GuildDefaultValue
 import org.morkato.api.exception.guild.GuildIdInvalidError
 import org.morkato.api.exception.guild.GuildNotFoundError
 import org.morkato.api.exception.repository.RepositoryInternalError
 import org.morkato.api.repository.GuildRepository
-import org.morkato.api.repository.RepositoryCentral
-import org.morkato.api.repository.queries.guild.GuildCreationQuery
-import org.morkato.api.repository.queries.guild.GuildIdQuery
+import org.morkato.api.repository.guilld.GuildCreationQuery
+import org.morkato.api.repository.guilld.GuildIdQuery
 import org.morkato.database.infra.tables.guilds
 
 class DatabaseGuildRepository(
