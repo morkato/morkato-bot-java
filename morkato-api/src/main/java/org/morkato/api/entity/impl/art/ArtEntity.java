@@ -1,5 +1,6 @@
 package org.morkato.api.entity.impl.art;
 
+import org.morkato.api.repository.art.ArtRepository;
 import org.morkato.api.repository.attack.AttackUpdateQuery;
 import org.morkato.api.entity.art.AttackArtResolver;
 import org.morkato.api.entity.art.ArtType;

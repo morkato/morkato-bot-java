@@ -6,7 +6,7 @@ import org.morkato.api.entity.attack.AttackFlags;
 import org.morkato.api.entity.attack.AttackUpdateBuilder;
 import org.morkato.api.entity.guild.Guild;
 import org.morkato.api.entity.art.Art;
-import org.morkato.api.repository.AttackRepository;
+import org.morkato.api.repository.attack.AttackRepository;
 import org.morkato.api.repository.RepositoryCentral;
 import org.morkato.api.repository.attack.AttackUpdateQuery;
 

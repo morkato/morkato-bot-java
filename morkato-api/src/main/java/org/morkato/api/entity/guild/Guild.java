@@ -9,24 +9,13 @@ import org.morkato.api.entity.DeleteApiModel;
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 
-public interface Guild extends GuildId, DeleteApiModel<Guild> {
+public interface Guild
+  extends DeleteApiModel<Guild>,
+          GuildPayload,
+          GuildId {
   static String representation(Guild guild) {
     return "Guild[id = " + guild.getId() + "]";
   }
-  @Nonnull
-  BigDecimal getHumanInitialLife();
-  @Nonnull
-  BigDecimal getOniInitialLife();
-  @Nonnull
-  BigDecimal getHybridInitialLife();
-  @Nonnull
-  BigDecimal getBreathInitial();
-  @Nonnull
-  BigDecimal getBloodInitial();
-  @Nonnull
-  BigDecimal getAbilityRoll();
-  @Nonnull
-  BigDecimal getFamilyRoll();
   ObjectResolver<Attack> getAttackResolver();
   ObjectResolver<Trainer> getTrainerResolver();
   ObjectResolver<Art> getArtResolver();

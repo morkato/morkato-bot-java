@@ -1,7 +1,13 @@
 package org.morkato.api.repository;
 
-import org.morkato.api.entity.guild.GuildId;
-import org.morkato.api.entity.guild.Guild;
+import org.morkato.api.repository.ability.AbilityRepository;
+import org.morkato.api.repository.family.FamilyRepository;
+import org.morkato.api.repository.trainer.TrainerRepository;
+import org.morkato.api.repository.attack.AttackRepository;
+import org.morkato.api.repository.guild.GuildRepository;
+import org.morkato.api.repository.art.ArtRepository;
+import org.morkato.api.repository.user.UserRepository;
+
 import javax.annotation.Nonnull;
 
 public interface RepositoryCentral {
@@ -14,6 +20,9 @@ public interface RepositoryCentral {
   @Nonnull
   ArtRepository art();
   @Nonnull
-  Guild fetchGuild(GuildId id);
-  Guild getCachedGuild(GuildId id);
+  AbilityRepository ability();
+  @Nonnull
+  FamilyRepository family();
+  @Nonnull
+  UserRepository user();
 }

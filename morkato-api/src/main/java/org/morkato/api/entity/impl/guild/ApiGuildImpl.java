@@ -5,7 +5,7 @@ import org.morkato.api.entity.guild.GuildAttackResolver;
 import org.morkato.api.entity.guild.GuildTrainerResolver;
 import org.morkato.api.entity.guild.GuildArtResolver;
 import org.morkato.api.repository.RepositoryCentral;
-import org.morkato.api.repository.GuildRepository;
+import org.morkato.api.repository.guild.GuildRepository;
 import org.morkato.api.entity.trainer.Trainer;
 import org.morkato.api.entity.ObjectResolver;
 import org.morkato.api.entity.guild.Guild;

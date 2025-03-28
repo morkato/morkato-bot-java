@@ -14,6 +14,6 @@ public interface ArtRepository extends Repository{
   @Nonnull
   ArtDTO create(ArtCreationQuery query) throws RepositoryException;
   @Nonnull
-  ArtDTO update(ArtUpdateQuery query) throws RepositoryException;
+  void update(ArtUpdateQuery query) throws RepositoryException;
   void delete(ArtId art) throws RepositoryException;
 }

@@ -1,4 +1,4 @@
-package org.morkato.api.repository.guilld;
+package org.morkato.api.repository.guild;
 
 import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.morkato.api.dto.GuildDTO;
+import org.morkato.api.entity.guild.GuildId;
 
 import java.math.BigDecimal;
 
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class GuildCreationQuery{
+public class GuildCreationQuery implements GuildId {
   private String id;
   private BigDecimal humanInitialLife;
   private BigDecimal oniInitialLife;

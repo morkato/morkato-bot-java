@@ -4,7 +4,7 @@ import org.morkato.api.entity.ObjectResolver;
 import org.morkato.api.entity.art.Art;
 import org.morkato.api.entity.guild.Guild;
 import org.morkato.api.repository.RepositoryCentral;
-import org.morkato.api.repository.guilld.GuildIdQuery;
+import org.morkato.api.repository.guild.GuildIdQuery;
 import org.morkato.bmt.context.TextCommandContext;
 import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.annotation.Component;

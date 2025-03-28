@@ -4,7 +4,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.groups.Default;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotNull;
-import org.morkato.api.repository.guilld.GuildCreationQuery;
+import org.morkato.api.repository.guild.GuildCreationQuery;
 import org.morkato.api.validation.constraints.MorkatoModelAttribute;
 import org.morkato.api.validation.constraints.MorkatoSnowflakeId;
 import org.morkato.api.validation.constraints.MorkatoModelRoll;

@@ -1,6 +1,6 @@
 package org.morkato.api.values;
 
-import org.morkato.api.repository.guilld.GuildCreationQuery;
+import org.morkato.api.repository.guild.GuildCreationQuery;
 import org.morkato.api.dto.GuildDTO;
 import lombok.experimental.Accessors;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public final class GuildDefaultValue {
   private static final GuildDefaultValue values = new GuildDefaultValue();
   private BigDecimal humanInitialLife = new BigDecimal(1000).setScale(0, RoundingMode.HALF_UP);
   private BigDecimal oniInitialLife = new BigDecimal(500).setScale(0, RoundingMode.HALF_UP);
-  private BigDecimal hybridInitialLife = new BigDecimal(1500 ).setScale(0, RoundingMode.HALF_UP);
+  private BigDecimal hybridInitialLife = new BigDecimal(1500).setScale(0, RoundingMode.HALF_UP);
   private BigDecimal breathInitial = new BigDecimal(500).setScale(0, RoundingMode.HALF_UP);
   private BigDecimal bloodInitial = new BigDecimal(1000).setScale(0, RoundingMode.HALF_UP);
   private BigDecimal abilityRoll = new BigDecimal(3).setScale(0, RoundingMode.HALF_UP);
@@ -53,7 +53,7 @@ public final class GuildDefaultValue {
   public GuildDTO getDTO() {
     return new GuildDTO()
       .setHumanInitialLife(this.getHumanInitialLife())
-      .setOniInitialLife(this.getHumanInitialLife())
+      .setOniInitialLife(this.getOniInitialLife())
       .setHybridInitialLife(this.getHybridInitialLife())
       .setBreathInitial(this.getBreathInitial())
       .setBloodInitial(this.getBloodInitial())

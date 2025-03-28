@@ -3,6 +3,7 @@ package org.morkato.database
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
+import org.flywaydb.core.api.configuration.FluentConfiguration
 import org.jetbrains.exposed.sql.Database
 import org.slf4j.LoggerFactory
 import java.util.Properties
@@ -21,12 +22,11 @@ class DatabaseProvider {
       hikari.setMaximumPoolSize(10)
       return HikariDataSource(hikari)
     }
-    fun getFlyway(datasource: DataSource): Flyway {
+    fun getFlyway(datasource: DataSource): FluentConfiguration {
       return Flyway.configure()
         .dataSource(datasource)
         .locations("classpath:migration")
         .baselineOnMigrate(true)
-        .load()
     }
     fun getDatabase(datasource: DataSource): Database {
       return Database.connect(datasource)

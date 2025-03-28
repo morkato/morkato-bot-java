@@ -1,55 +1,74 @@
 package org.morkato.database.repository
 
-import jakarta.validation.Validator
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.morkato.api.dto.ArtDTO
-import org.morkato.api.entity.art.ArtId
-import org.morkato.api.repository.ArtRepository
+import org.morkato.api.exception.art.ArtNotFoundException
 import org.morkato.api.repository.art.ArtCreationQuery
 import org.morkato.api.repository.art.ArtUpdateQuery
+import org.morkato.api.repository.art.ArtRepository
+import org.morkato.api.entity.art.ArtId
+import org.morkato.api.dto.ArtDTO
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.*
 import org.morkato.database.infra.tables.arts
+import jakarta.validation.Validator
+import java.util.Objects
 
 class DatabaseArtRepository(
   private val database: Database,
   private val validator: Validator
 ) : ArtRepository {
-  private fun getDTOFromRow(row: ResultRow): ArtDTO {
-    val dto: ArtDTO = ArtDTO()
-      .setGuildId(row[arts.guild_id])
-      .setId(row[arts.id].toString())
-      .setName(row[arts.name])
-      .setType(row[arts.type])
-      .setDescription(row[arts.description])
-      .setBanner(row[arts.banner])
-    dto.validate(validator)
-    return dto
+  private fun fetchAllRequest(guildId: String): Array<ArtDTO> {
+    val builder = arts.select { arts.byGuildId(guildId) }
+    val rows = builder.map(ResultRow::getArtDTO)
+    return rows.toTypedArray()
   }
 
-  override fun fetchAll(guildId: String): Array<ArtDTO> {
-//    TODO("Not yet implemented ArtRepository::fetchAll in DatabaseArtRepository (Not proxied)")
-    return transaction(database) {
-      return@transaction arts.select { arts.guild_id eq guildId }
-        .map(this@DatabaseArtRepository::getDTOFromRow)
-        .toTypedArray()
+  private fun fetchRequest(query: ArtId): ArtDTO {
+    try {
+      val builder = arts.select { arts.byId(query) }
+        .limit(1)
+      val row = builder.single()
+      return row.getArtDTO()
+    } catch (exc: NoSuchElementException) {
+      throw ArtNotFoundException(query)
     }
   }
 
-  override fun fetch(query: ArtId): ArtDTO {
-    TODO("Not yet implemented ArtRepository::fetch in DatabaseArtRepository (Not proxied)")
+  private fun createRequest(query: ArtCreationQuery): ArtDTO {
+    query.validate(validator)
+    val statement = arts.insert {
+      it[this.guild_id] = query.guildId()
+      it[this.name] = query.name()
+      it[this.type] = query.type()
+      if (Objects.nonNull(query.description()))
+        it[this.description] = query.description()
+      if (Objects.nonNull(query.banner()))
+        it[this.banner] = query.banner()
+    }
+    return ArtDTO.from(query)
+      .setId((statement get arts.id).toString())
   }
 
-  override fun create(query: ArtCreationQuery): ArtDTO {
-    TODO("Not yet implemented ArtRepository::create in DatabaseArtRepository (Not proxied)")
+  private fun updateRequest(query: ArtUpdateQuery) {
+    query.validate(validator)
+    arts.update({ arts.byId(query) }) {
+      if (Objects.nonNull(query.name()))
+        it[this.name] = query.name()
+      if (Objects.nonNull(query.type()))
+        it[this.type] = query.type()
+      if (Objects.nonNull(query.description()))
+        it[this.description] = query.description()
+      if (Objects.nonNull(query.banner()))
+        it[this.banner] = query.banner()
+    }
   }
 
-  override fun update(query: ArtUpdateQuery): ArtDTO {
-    TODO("Not yet implemented ArtRepository::update in DatabaseArtRepository (Not proxied)")
+  private fun deleteRequest(query: ArtId) {
+    arts.deleteWhere(1) { this.byId(query) }
   }
 
-  override fun delete(art: ArtId) {
-    TODO("Not yet implemented ArtRepository::delete in DatabaseArtRepository (Not proxied)")
-  }
+  override fun fetchAll(guildId: String): Array<ArtDTO> = transaction(database) { fetchAllRequest(guildId) }
+  override fun fetch(query: ArtId): ArtDTO = transaction(database) { fetchRequest(query) }
+  override fun create(query: ArtCreationQuery): ArtDTO = transaction(database) { createRequest(query) }
+  override fun update(query: ArtUpdateQuery) = transaction(database) { updateRequest(query) }
+  override fun delete(art: ArtId) = transaction(database) { deleteRequest(art) }
 }

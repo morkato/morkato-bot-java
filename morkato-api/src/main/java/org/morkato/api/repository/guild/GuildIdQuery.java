@@ -1,4 +1,4 @@
-package org.morkato.api.repository.guilld;
+package org.morkato.api.repository.guild;
 
 import org.morkato.api.entity.guild.GuildId;
 import lombok.experimental.Accessors;

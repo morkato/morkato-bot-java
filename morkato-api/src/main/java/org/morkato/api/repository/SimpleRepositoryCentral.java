@@ -5,9 +5,17 @@ import org.morkato.api.entity.guild.Guild;
 import org.morkato.api.entity.guild.GuildId;
 import org.morkato.api.entity.impl.guild.ApiGuildImpl;
 import org.morkato.api.exception.repository.RepositoryNotImplementedException;
+import org.morkato.api.repository.ability.AbilityRepository;
+import org.morkato.api.repository.family.FamilyRepository;
+import org.morkato.api.repository.trainer.TrainerRepository;
+import org.morkato.api.repository.attack.AttackRepository;
+import org.morkato.api.repository.guild.GuildRepository;
+import org.morkato.api.repository.art.ArtRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.morkato.api.repository.user.UserRepository;
+
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
@@ -15,9 +23,12 @@ import java.util.Objects;
 @NoArgsConstructor
 @Setter
 public class SimpleRepositoryCentral implements RepositoryCentral {
+  private AbilityRepository abilityRepository;
+  private FamilyRepository familyRepository;
   private AttackRepository attackRepository;
   private TrainerRepository trainerRepository;
   private GuildRepository guildRepository;
+  private UserRepository userRepository;
   private ArtRepository artRepository;
 
   @Override
@@ -52,15 +63,27 @@ public class SimpleRepositoryCentral implements RepositoryCentral {
     return artRepository;
   }
 
-  @Override
   @Nonnull
-  public Guild fetchGuild(GuildId id) {
-    final GuildDTO dto = guild().fetch(id);
-    return new ApiGuildImpl(this, dto);
+  @Override
+  public AbilityRepository ability() {
+    if (Objects.isNull(abilityRepository))
+      throw new RepositoryNotImplementedException(AbilityRepository.class);
+    return abilityRepository;
   }
 
+  @Nonnull
   @Override
-  public Guild getCachedGuild(GuildId id) {
-    throw new RuntimeException("SimpleRepositorySimple::getCachedGuild is not yet implemented.");
+  public FamilyRepository family() {
+    if (Objects.isNull(familyRepository))
+      throw new RepositoryNotImplementedException(FamilyRepository.class);
+    return familyRepository;
+  }
+
+  @Nonnull
+  @Override
+  public UserRepository user() {
+    if (Objects.isNull(userRepository))
+      throw new RepositoryNotImplementedException(UserRepository.class);
+    return userRepository;
   }
 }

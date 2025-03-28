@@ -11,7 +11,7 @@ import java.util.Set;
 public abstract class DefaultDTO<T> {
   public abstract Set<ConstraintViolation<T>> safeValidate(Validator validator, Class<?>... classes);
 
-  public void validate(Validator validator,Class<?>... classes) throws ConstraintViolationException {
+  public void validate(Validator validator, Class<?>... classes) throws ConstraintViolationException {
     Set<ConstraintViolation<T>> violations = this.safeValidate(validator, classes);
     if (!violations.isEmpty())
       throw new ConstraintViolationException(violations);

@@ -6,6 +6,7 @@ import org.morkato.api.entity.UpdateApiModel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.math.BigDecimal;
 
 public interface Ability
   extends DeleteApiModel<Ability>,
@@ -13,7 +14,7 @@ public interface Ability
           ApiObject,
           AbilityId {
   @Nonnull
-  String getPercent();
+  BigDecimal getPercent();
   int getUserType();
   @Nullable
   String getDescription();

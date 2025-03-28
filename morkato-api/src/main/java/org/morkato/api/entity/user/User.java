@@ -2,6 +2,7 @@ package org.morkato.api.entity.user;
 
 import org.morkato.api.entity.ApiObject;
 import org.morkato.api.entity.DeleteApiModel;
+import org.morkato.api.entity.ObjectId;
 import org.morkato.api.entity.UpdateApiModel;
 
 import javax.annotation.Nonnull;
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 public interface User
   extends DeleteApiModel<User>,
           UpdateApiModel<User, UserUpdateBuilder>,
-          ApiObject,
+          ObjectId,
           UserId {
   @Nonnull
   UserType getType();

@@ -1,7 +1,6 @@
 package org.morkato.api.entity.guild;
 
 import org.morkato.api.dto.TrainerDTO;
-import org.morkato.api.entity.ApiObjectResolver;
 import org.morkato.api.entity.ObjectResolver;
 import org.morkato.api.entity.impl.ObjectResolverImpl;
 import org.morkato.api.entity.impl.trainer.TrainerImpl;
