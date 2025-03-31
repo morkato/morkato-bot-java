@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define MCISIDV1_MAX_SEQUENCE 0b111111111111111111111111
 #define MCISIDV1_SIZE 12
 #define MCISIDV1_SUCCESS 0
 #define MCISIDV1_OVERFLOW 1
@@ -11,6 +12,7 @@
 #define MCISIDV1_LOCKED 3
 #define MCISIDV1_NOT_INITIALIZED 3
 #define MCISIDV1_START_SEQUENCE 1024
+#define MCISIDV1_IDENTIFER_MASK 0b111111
 #define MCISID_NO_RESPONSE 63
 #define MCISID_INVALID_CHARACTER 65
 
@@ -24,6 +26,7 @@ void mcisidInit(void);
 void mcisidv1SetGenerators(mcisidv1gen* generators);
 void mcisidv1SetSafeGeneration(bool generation);
 int mcisidv1SetEpoch(int64_t epoch);
+time_t mcisidv1GetEpoch();
 void mcisidCreate(mcisidv1gen* generator);
 void mcisidv1Lock(uint8_t model);
 void mcisidv1Unlock(uint8_t model);

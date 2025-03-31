@@ -1,22 +1,25 @@
-#include <postgresql/17/server/postgres.h>
-#include <postgresql/17/server/access/relation.h>
-#include <postgresql/17/server/access/tableam.h>
-#include <postgresql/17/server/access/htup.h>
-#include <postgresql/17/server/utils/rel.h>
-#include <postgresql/17/server/utils/relcache.h>
-#include <postgresql/17/server/executor/executor.h>
-#include <postgresql/17/server/storage/lockdefs.h>
-#include <postgresql/17/server/storage/lock.h>
-#include <postgresql/17/server/storage/proc.h>
-#include <postgresql/17/server/storage/lmgr.h>
-#include <postgresql/17/server/funcapi.h>
-#include <postgresql/17/server/fmgr.h>
-#include <postgresql/17/server/catalog/pg_sequence.h>
-#include <postgresql/17/server/commands/sequence.h>
-#include <postgresql/17/server/utils/builtins.h>
-#include <postgresql/17/server/utils/guc.h>
-#include <postgresql/17/server/port.h>
-#include <postgresql/17/server/miscadmin.h>
+#define UNIX_TO_POSTGRES -946684800
+
+#include "postgres.h"
+#include "access/relation.h"
+#include "access/tableam.h"
+#include "access/htup.h"
+#include "utils/rel.h"
+#include "utils/relcache.h"
+#include "executor/executor.h"
+#include "storage/lockdefs.h"
+#include "storage/lock.h"
+#include "storage/proc.h"
+#include "storage/lmgr.h"
+#include "funcapi.h"
+#include "fmgr.h"
+#include "catalog/pg_sequence.h"
+#include "commands/sequence.h"
+#include "utils/timestamp.h"
+#include "utils/builtins.h"
+#include "utils/guc.h"
+#include "port.h"
+#include "miscadmin.h"
 #include "mcisid.h"
 PG_MODULE_MAGIC;
 
@@ -24,25 +27,34 @@ extern void _PG_init(void);
 extern void _PG_fini(void);
 
 static mcisidv1gen gens[64];
-static uint64_t initializationTimeSeconds;
-static int epochInDays;
+static time_t initializationTimeSeconds;
+static int epochInSeconds = -1;
 
 typedef struct __attribute__((packed)) {
   char data[MCISIDV1_SIZE];
 } pgmcisidv1;
+
+static bool check_epoch(int* newval, void **extra, GucSource source) {
+  if (mcisidv1SetEpoch((time_t)(*newval)) == MCISIDV1_OVERFLOW) {
+    ereport(ERROR,
+            (errmsg("O valor não é válido.")));
+    return false;
+  }
+  return true;
+}
 
 void _PG_init(void) {
   DefineCustomIntVariable(
     "mcisidv1.epoch",
     "Epoch variable defined quantity of days to initilaze.",
     NULL,
-    &epochInDays,
+    &epochInSeconds,
     -1,
     0,
-    0xFFFF,
+    __INT32_MAX__,
     PGC_SUSET,
     0,
-    NULL,
+    check_epoch,
     NULL,
     NULL
   );
@@ -56,14 +68,13 @@ void _PG_init(void) {
 }
 
 PG_FUNCTION_INFO_V1(mcisidv1pGenerate);
-Datum mcisidv1pGenerate(PG_FUNCTION_ARGS) {
-  if (epochInDays == -1)
+Datum pgmcisidv1pGenerate(PG_FUNCTION_ARGS) {
+  if (mcisidv1GetEpoch() == -1)
     ereport(ERROR,
             (errmsg("Epoch is not initialized")));
-  mcisidv1SetEpoch(epochInDays * 24 * 60 * 60);
   int16 model = PG_GETARG_INT16(0);
   char id[MCISIDV1_SIZE];
-  if (model < 0 || model > 0b111111) 
+  if (model < 0 || model > MCISIDV1_IDENTIFER_MASK) 
     ereport(ERROR,
             (errmsg("Model repr is 6bits and positive.")));
   if (initializationTimeSeconds == time(NULL))
@@ -104,7 +115,7 @@ Datum mcisidv1pGenerate(PG_FUNCTION_ARGS) {
 }
 
 PG_FUNCTION_INFO_V1(mcisidTypeInput);
-Datum mcisidTypeInput(PG_FUNCTION_ARGS) {
+Datum pgmcisidTypeInput(PG_FUNCTION_ARGS) {
   const char* internal = PG_GETARG_CSTRING(0);
   pgmcisidv1* pgid = (pgmcisidv1*)palloc(sizeof(pgmcisidv1));
   for (uint8_t i = 0; i < MCISIDV1_SIZE; ++i) {
@@ -128,7 +139,7 @@ Datum mcisidTypeInput(PG_FUNCTION_ARGS) {
 }
 
 PG_FUNCTION_INFO_V1(mcisidTypeOutput);
-Datum mcisidTypeOutput(PG_FUNCTION_ARGS) {
+Datum pgmcisidTypeOutput(PG_FUNCTION_ARGS) {
   pgmcisidv1* pgid = (pgmcisidv1*)PG_GETARG_POINTER(0);
   char* id = (char*)palloc(MCISIDV1_SIZE + 1);
   memcpy(id, pgid->data, MCISIDV1_SIZE);
@@ -137,37 +148,40 @@ Datum mcisidTypeOutput(PG_FUNCTION_ARGS) {
 }
 
 PG_FUNCTION_INFO_V1(mcisidv1GetInstant);
-Datum mcisidv1GetInstant(PG_FUNCTION_ARGS) {
+Datum pgmcisidv1GetInstant(PG_FUNCTION_ARGS) {
   pgmcisidv1* pgid = (pgmcisidv1*)PG_GETARG_POINTER(0);
   PG_RETURN_INT64((int64)mcisidv1GetTimeSeconds(pgid->data));
 }
 
 PG_FUNCTION_INFO_V1(mcisidv1CreatedAt);
-Datum mcisidv1CreatedAt(PG_FUNCTION_ARGS) {
-  if (epochInDays == -1)
+Datum pgmcisidv1CreatedAt(PG_FUNCTION_ARGS) {
+  if (mcisidv1GetEpoch() == -1)
     ereport(ERROR,
             (errmsg("Epoch is not initialized")));
   pgmcisidv1* pgid = (pgmcisidv1*)PG_GETARG_POINTER(0);
-  Timestamp timestamp = (epochInDays * 24 * 60 * 60 + mcisidv1GetTimeSeconds(pgid->data)) * 1000000;
+  time_t epoch = mcisidv1GetEpoch();
+  time_t at = mcisidv1GetTimeSeconds(pgid->data);
+  Timestamp timestamp = (epoch + at + UNIX_TO_POSTGRES) * 1000000;
   PG_RETURN_TIMESTAMP(timestamp);
 }
 
 PG_FUNCTION_INFO_V1(mcisidv1OriginModel);
-Datum mcisidv1OriginModel(PG_FUNCTION_ARGS) {
+Datum pgmcisidv1OriginModel(PG_FUNCTION_ARGS) {
   pgmcisidv1* pgid = (pgmcisidv1*)PG_GETARG_POINTER(0);
   PG_RETURN_INT16((int16)mcisidv1GetOriginModel(pgid->data));
 }
 
 PG_FUNCTION_INFO_V1(mcisidv1InstantSequence);
-Datum mcisidv1InstantSequence(PG_FUNCTION_ARGS) {
+Datum pgmcisidv1InstantSequence(PG_FUNCTION_ARGS) {
   pgmcisidv1* pgid = (pgmcisidv1*)PG_GETARG_POINTER(0);
   PG_RETURN_INT64((int64)mcisidv1GetSequence(pgid->data));
 }
 
-PG_FUNCTION_INFO_V1(mcisidv1GetEpoch);
-Datum mcisidv1GetEpoch(PG_FUNCTION_ARGS) {
-  if (epochInDays == -1)
+PG_FUNCTION_INFO_V1(pgmcisidv1GetEpoch);
+Datum pgmcisidv1GetEpoch(PG_FUNCTION_ARGS) {
+  if (mcisidv1GetEpoch() == -1)
     ereport(ERROR,
             (errmsg("Epoch is not initialized")));
-  PG_RETURN_TIMESTAMP(epochInDays * 24 * 60 * 60 * 1000000);
+  time_t epoch = mcisidv1GetEpoch();
+  PG_RETURN_TIMESTAMP(((int64)epoch+UNIX_TO_POSTGRES) * 1000000);
 }

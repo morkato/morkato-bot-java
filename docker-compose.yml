@@ -1,6 +1,8 @@
 services:
   database:
-    image: postgres:alpine
+    build:
+      context: .
+      dockerfile: postgresql.dockerfile
     restart: no
     container_name: morkato-database
     environment:
