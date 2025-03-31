@@ -109,11 +109,9 @@ Datum mcisidTypeInput(PG_FUNCTION_ARGS) {
   pgmcisidv1* pgid = (pgmcisidv1*)palloc(sizeof(pgmcisidv1));
   for (uint8_t i = 0; i < MCISIDV1_SIZE; ++i) {
     if (i < MCISIDV1_SIZE && internal[i] == '\0') {
-      if (internal[i] == '\0') {
-        pfree(pgid);
-        ereport(ERROR,
-              (errmsg("O ID deve conter exatamente 12 caracteres.")));
-      }
+      pfree(pgid);
+      ereport(ERROR,
+            (errmsg("O ID deve conter exatamente 12 caracteres.")));
     } else if (mcisidGetLookup(internal[i]) == MCISID_INVALID_CHARACTER) {
       pfree(pgid);
       ereport(ERROR,
