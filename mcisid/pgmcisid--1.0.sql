@@ -1,0 +1,18 @@
+CREATE TYPE mcisidv1;
+
+CREATE FUNCTION mcisidv1_type_in(CSTRING) RETURNS mcisidv1 AS 'MODULE_PATHNAME', 'mcisidTypeInput' LANGUAGE C STRICT;
+CREATE FUNCTION mcisidv1_type_out(mcisidv1) RETURNS CSTRING AS 'MODULE_PATHNAME', 'mcisidTypeOutput' LANGUAGE C STRICT;
+CREATE FUNCTION mcisidv1_gen(SMALLINT) RETURNS mcisidv1 AS 'MODULE_PATHNAME', 'mcisidv1pGenerate' LANGUAGE C STRICT;
+CREATE FUNCTION mcisidv1_get_instant(mcisidv1) RETURNS BIGINT AS 'MODULE_PATHNAME', 'mcisidv1GetInstant' LANGUAGE C STRICT;
+CREATE FUNCTION mcisidv1_created_at(mcisidv1) RETURNS TIMESTAMP AS 'MODULE_PATHNAME', 'mcisidv1CreatedAt' LANGUAGE C STRICT;
+CREATE FUNCTION mcisidv1_origin_model(mcisidv1) RETURNS SMALLINT AS 'MODULE_PATHNAME', 'mcisidv1OriginModel' LANGUAGE C STRICT;
+CREATE FUNCTION mcisidv1_instant_sequence(mcisidv1) RETURNS BIGINT AS 'MODULE_PATHNAME', 'mcisidv1InstantSequence' LANGUAGE C STRICT;
+CREATE FUNCTION mcisidv1_get_epoch() RETURNS TIMESTAMP AS 'MODULE_PATHNAME', 'mcisidv1GetEpoch' LANGUAGE C STRICT;
+
+CREATE TYPE mcisidv1 (
+  INPUT = mcisidv1_type_in,
+  OUTPUT = mcisidv1_type_out,
+  INTERNALLENGTH = 12,
+  ALIGNMENT = char,
+  STORAGE = plain
+)

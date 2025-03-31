@@ -1,0 +1,127 @@
+#define MCISID_GETIDENTIFIER(idx) IDENTIFIERS[(uint8_t)(idx & 0b111111)]
+#define MCISID_GETLOOKUP(character) LOOKUP[(uint8_t)character]
+#define MCISIDV1_RESET_SEQUENCE(generator) generator->sequence = 0
+#define MCISIDV1_NEXT_VALUE(generator) ++generator->sequence;
+#define MCISIDV1_INSTANT time(NULL) - EPOCH
+#define MCISIDV1_MAX_SEQUENCE 0b111111111111111111111111
+
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include <time.h>
+#include "mcisid.h"
+
+static const char IDENTIFIERS[65] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.-";
+static char LOOKUP[128];
+static int64_t EPOCH = -1;
+static bool SAFE_GENERATION = false;
+static mcisidv1gen* generators = NULL;
+
+__attribute__((constructor))
+void mcisidInit() {
+  memset(LOOKUP, MCISID_INVALID_CHARACTER, 128);
+  for (char i = 0; i < 64; ++i) {
+    LOOKUP[IDENTIFIERS[i]] = i;
+  }
+}
+
+void mcisidv1SetGenerators(mcisidv1gen* _generators) {
+  generators = _generators;
+}
+
+void mcisidv1SetSafeGeneration(bool generation) {
+  SAFE_GENERATION = generation;
+}
+
+int mcisidv1SetEpoch(int64_t epoch) {
+  if (epoch >= time(NULL))
+    return MCISIDV1_OVERFLOW;
+  EPOCH = epoch;
+  return MCISIDV1_SUCCESS;
+}
+
+void mcisidCreate(mcisidv1gen* generator) {
+  generator->sequence = 1024;
+  generator->lastime = 0;
+  generator->locked = false;
+}
+
+void mcisidv1Lock(uint8_t model) {
+  mcisidv1gen* gen = generators + model;
+  gen->locked = true;
+}
+
+void mcisidv1Unlock(uint8_t model) {
+  mcisidv1gen* gen = generators + model;
+  gen->locked = false;
+}
+
+uint8_t mcisidGetVersionStrategy(char* input) {
+  return MCISID_GETLOOKUP(input[0]);
+}
+
+void mcisidv1ResetSequence(uint8_t model) {
+  (generators + model)->sequence = 1024;
+}
+
+uint8_t mcisidGetLookup(const char character) {
+  return MCISID_GETLOOKUP(character);
+}
+
+/* [IDENTIFIER: 6bits][MODEL: 6bits][SEQUENCE: 24bits][TIMESTAMP(S): 36bits] */
+int mcisidv1Generate(char* output, uint8_t model) {
+  if (generators == NULL)
+    return MCISIDV1_NOT_INITIALIZED;
+  mcisidv1gen* gen = generators + model;
+  if (gen->locked && SAFE_GENERATION)
+    return MCISIDV1_LOCKED;
+  uint32_t instant = MCISIDV1_INSTANT;
+  uint32_t seqnext = MCISIDV1_NEXT_VALUE(gen);
+  if (seqnext >= MCISIDV1_MAX_SEQUENCE) {
+    if (gen->lastime == instant)
+      return MCISIDV1_OVERFLOW;
+    return MCISIDV1_RESET;
+  }
+  gen->lastime = instant;
+  
+  // [IDENTIFIER: 6bits]
+  output[0] = MCISID_GETIDENTIFIER(0);
+  // [MODEL: 6bits]
+  output[1] = MCISID_GETIDENTIFIER(model & 0b111111);
+  // [SEQUENCE: 24bits]
+  output[2] = MCISID_GETIDENTIFIER(seqnext & 0b111111);
+  output[3] = MCISID_GETIDENTIFIER((seqnext >> 6) & 0b111111);
+  output[4] = MCISID_GETIDENTIFIER((seqnext >> 12) & 0b111111);
+  output[5] = MCISID_GETIDENTIFIER((seqnext >> 18) & 0b111111);
+  // [TIMESTAMP: 36bits]
+  output[6] = MCISID_GETIDENTIFIER(instant & 0b111111);
+  output[7] = MCISID_GETIDENTIFIER((instant >> 6) & 0b111111);
+  output[8] = MCISID_GETIDENTIFIER((instant >> 12) & 0b111111);
+  output[9] = MCISID_GETIDENTIFIER((instant >> 18) & 0b111111);
+  output[10] = MCISID_GETIDENTIFIER((instant >> 24) & 0b111111);
+  output[11] = MCISID_GETIDENTIFIER((instant >> 30) & 0b111111);
+
+  return MCISIDV1_SUCCESS;
+}
+
+uint8_t mcisidv1GetOriginModel(char* input) {
+  return MCISID_GETLOOKUP(input[1]);
+}
+
+uint32_t mcisidv1GetSequence(char* input) {
+  uint32_t s0 = MCISID_GETLOOKUP(input[2]);
+  uint32_t s1 = MCISID_GETLOOKUP(input[3]);
+  uint32_t s2 = MCISID_GETLOOKUP(input[4]);
+  uint32_t s3 = MCISID_GETLOOKUP(input[5]);
+  return (s3 << 18) | (s2 << 12) | (s1 << 6) | s0;
+}
+
+uint32_t mcisidv1GetTimeSeconds(char* input) {
+  uint32_t t0 = MCISID_GETLOOKUP(input[6]);
+  uint32_t t1 = MCISID_GETLOOKUP(input[7]);
+  uint32_t t2 = MCISID_GETLOOKUP(input[8]);
+  uint32_t t3 = MCISID_GETLOOKUP(input[9]);
+  uint32_t t4 = MCISID_GETLOOKUP(input[10]);
+  uint32_t t5 = MCISID_GETLOOKUP(input[11]);
+  return (t5 << 30) | (t4 << 24) | (t3 << 18) | (t2 << 12) | (t1 << 6) | t0;
+}

@@ -10,8 +10,6 @@ import org.morkato.api.repository.guild.GuildCreationQuery;
 import org.morkato.api.repository.guild.GuildRepository;
 import org.morkato.api.values.GuildDefaultValue;
 
-import javax.swing.*;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class GuildRepositoryTest {
   protected abstract GuildRepository getRepository();

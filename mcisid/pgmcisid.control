@@ -1,0 +1,4 @@
+comment = 'MCIS ID V1 generator'
+default_version = '1.0'
+module_pathname = '$libdir/libpgmcisid.so'
+relocatable = true

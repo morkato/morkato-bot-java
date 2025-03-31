@@ -1,8 +1,7 @@
 package org.morkato.api.entity.guild;
 
-import org.morkato.api.dto.GuildDTO;
 import org.morkato.api.entity.impl.guild.GuildPayloadImpl;
-
+import org.morkato.api.dto.GuildDTO;
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 
