@@ -107,16 +107,25 @@ PG_FUNCTION_INFO_V1(mcisidTypeInput);
 Datum mcisidTypeInput(PG_FUNCTION_ARGS) {
   const char* internal = PG_GETARG_CSTRING(0);
   pgmcisidv1* pgid = (pgmcisidv1*)palloc(sizeof(pgmcisidv1));
-  const uint64_t length = strlen(internal);
-  if (length != MCISIDV1_SIZE)
-    ereport(ERROR,
-            (errmsg("O ID deve conter exatamente 12 caracteres.")));
   for (uint8_t i = 0; i < MCISIDV1_SIZE; ++i) {
-    if (mcisidGetLookup(internal[i]) == MCISID_INVALID_CHARACTER)
+    if (i < MCISIDV1_SIZE && internal[i] == '\0') {
+      if (internal[i] == '\0') {
+        pfree(pgid);
+        ereport(ERROR,
+              (errmsg("O ID deve conter exatamente 12 caracteres.")));
+      }
+    } else if (mcisidGetLookup(internal[i]) == MCISID_INVALID_CHARACTER) {
+      pfree(pgid);
       ereport(ERROR,
-            (errmsg("O caractere: %c é invalido para o ID.", internal[i])));
+            (errmsg("O caractere: %c é inválido para o ID.", internal[i])));
+    }
+    pgid->data[i] = internal[i];
   }
-  memcpy(pgid->data, internal, MCISIDV1_SIZE);
+  if (internal[MCISIDV1_SIZE] != '\0') {
+    pfree(pgid);
+    ereport(ERROR,
+          (errmsg("O ID deve conter exatamente 12 caracteres.")));
+  }
   PG_RETURN_POINTER(pgid);
 }
 
