@@ -1,15 +1,15 @@
-#define MCISID_GETIDENTIFIER(idx) IDENTIFIERS[(uint8_t)(idx & 0b111111)]
-#define MCISID_GETLOOKUP(character) LOOKUP[(uint8_t)character]
-#define MCISIDV1_RESET_SEQUENCE(generator) generator->sequence = 0
-#define MCISIDV1_NEXT_VALUE(generator) ++generator->sequence;
-#define MCISIDV1_INSTANT time(NULL) - EPOCH
-#define MCISIDV1_MAX_SEQUENCE 0b111111111111111111111111
-
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include <time.h>
 #include "mcisid.h"
+
+#define MCISID_GETIDENTIFIER(idx) IDENTIFIERS[(uint8_t)(idx & 0b111111)]
+#define MCISID_GETLOOKUP(character) LOOKUP[(uint8_t)character]
+#define MCISIDV1_RESET_SEQUENCE(generator) generator->sequence = MCISIDV1_START_SEQUENCE
+#define MCISIDV1_NEXT_VALUE(generator) ++generator->sequence;
+#define MCISIDV1_INSTANT time(NULL) - EPOCH
+#define MCISIDV1_MAX_SEQUENCE 0b111111111111111111111111
 
 static const char IDENTIFIERS[65] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.-";
 static char LOOKUP[128];
@@ -41,7 +41,7 @@ int mcisidv1SetEpoch(int64_t epoch) {
 }
 
 void mcisidCreate(mcisidv1gen* generator) {
-  generator->sequence = 1024;
+  generator->sequence = MCISIDV1_START_SEQUENCE;
   generator->lastime = 0;
   generator->locked = false;
 }
@@ -61,7 +61,7 @@ uint8_t mcisidGetVersionStrategy(char* input) {
 }
 
 void mcisidv1ResetSequence(uint8_t model) {
-  (generators + model)->sequence = 1024;
+  (generators + model)->sequence = MCISIDV1_START_SEQUENCE;
 }
 
 uint8_t mcisidGetLookup(const char character) {
