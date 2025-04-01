@@ -40,7 +40,19 @@ void mcisidv1ResetSequence(mcisidv1gen* generator, uint8_t model) {
   MCISIDV1_RESET_SEQUENCE((generator->sequences + model));
 }
 
-/* [IDENTIFIER: 6bits][MODEL: 6bits][SEQUENCE: 24bits][TIMESTAMP(S): 36bits] */
+/*
+ * ESTRUTURA DO MCISIDV1 (VERSÃO 1)
+ *
+ * IDENTIFIER (6 bits)  -> Sempre 0 para a versão V1.
+ * MODEL      (6 bits)  -> Indica o tipo/origem do objeto no banco. Não representa um nó.
+ * SEQUENCE   (24 bits) -> Incrementado para garantir unicidade dentro do mesmo segundo.
+ *                         Reservado: 0 - 1024 (usado internamente).
+ * TIMESTAMP  (36 bits) -> Tempo em segundos desde um User Defined Epoch (UDE).
+ *                         Duração máxima estimada: ~2000 anos a partir do UDE.
+ *
+ * TAMANHO FIXO: 12 BYTES (72 BITS BRUTO)
+ * ESTRUTURA BINÁRIA: [IDENTIFIER: 6b] [MODEL: 6b] [SEQUENCE: 24b] [TIMESTAMP: 36b]
+ */
 int mcisidv1Generate(char* output, mcisidv1gen* gen, uint8_t model) {
   if (gen->epoch == MCISIDV1_EPOCH_INVALID_VALUE)
     return MCISIDV1_NOT_INITIALIZED_EPOCH;
