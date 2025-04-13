@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#define MCISID_NULL_POINTER_ERROR 0x7F
-#define MCISID_NO_RESPONSE        63
+#define MCISID_NULL_POINTER_ERROR 34
+#define MCISID_NO_RESPONSE        33
 
 #define MCISID_INVALID_CHARACTER 65
 
@@ -15,18 +15,9 @@
  */
 typedef int mcisidstate;
 
-static const char* MCISID_IDENTIFIERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.-";
-
-
-inline uint8_t mcisidGetVersionStrategy(const char* input) {
-  return mcisidGetLookup(input[0]);
-}
-inline char mcisidGetIdentifier(uint8_t idx) {
-  if (idx > 63)
-    return '\0';
-  return MCISID_IDENTIFIERS[idx];
-}
 void mcisidInit();
+char mcisidGetIdentifier(uint8_t idx);
+uint8_t mcisidGetVersionStrategy(const char* input);
 uint8_t mcisidGetLookup(const char character);
 
 #endif // MCISID_H

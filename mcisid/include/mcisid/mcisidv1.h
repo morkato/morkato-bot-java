@@ -1,10 +1,10 @@
-#ifndef MCISID_V1_H
-#define MCISID_V1_H
-
 #include <stdbool.h>
 #include <stdint.h>
 #include <time.h>
 #include "./mcisid.h"
+
+#ifndef MCISID_V1_H
+#define MCISID_V1_H
 
 #define MCISIDV1_RESERVED_SEQ_LIMIT  1024
 #define MCISIDV1_MAX_SEQUENCE        0x3FFFF
@@ -22,7 +22,7 @@
 /*
  * Estado de retorno da função mcisidv1Generate e mcisidv1NextValue:
  * A sequência atingiu o valor máximo permitido para o instante atual. 
- * É necessário aguardar o próximo milissegundo.
+ * É necessário aguardar o próximo milisegundo.
  */
 #define MCISIDV1_OVERFLOW 1
 /*
@@ -34,12 +34,13 @@
 /*
  * Estado de retorno da função mcisidv1Generate e mcisidv1NextValue:
  * O instante de tempo atual é anterior ao último instante registrado.
- * Isso pode ocorrer devido à alteração no relógio do sistema (NIT), do Epoch definido pelo usuário (UDE) ou imprecisão (regressão) do tempo.
+ * Isso pode ocorrer devido à alteração no relógio do sistema (NIT), do Epoch definido pelo usuário (UDE) ou imprecisão (retrocesso) do relógio.
  */
 #define MCISIDV1_INSTANT_CORRUPTED 4
 /*
  * Estado de retorno da função mcisidv1Generate e mcisidv1NextValue:
- * O icremento da sequência é inválido. Esse erro nunca pode ocorrer caso a aplicação cumpra as regras.
+ * O icremento da sequência é inválido. Esse erro nunca irá ocorrer caso a aplicação cumpra as regras.
+ * Provavelmente, você esqueceu de resetar a sequência de forma segura.
  */
 #define MCISIDV1_STUPID_IMPOSSIBLE_SCENARY 5
 
@@ -85,24 +86,24 @@ typedef struct mcisidv1snapshot {
 typedef int mcisidv1cmp;
 
 /* Deprecated */
-typedef struct mcisidv1gen {
-  mcisidv1seq* sequences;
-  time_t epoch;
-} mcisidv1gen;
+// typedef struct mcisidv1gen {
+//   mcisidv1seq* sequences;
+//   time_t epoch;
+// } mcisidv1gen;
 
-void mcisidv1BootGenerator(mcisidv1gen* generator, mcisidv1seq* sequences);
-time_t mcisidv1CreatedAt(mcisidv1gen* generator, mcisidv1* input);
+// void mcisidv1BootGenerator(mcisidv1gen* generator, mcisidv1seq* sequences);
+// time_t mcisidv1CreatedAt(mcisidv1gen* generator, mcisidv1* input);
 /* End Deprecatetion */
 
 mcisidstate mcisidv1NextValue(mcisidv1seq* sequence, time_t instant);
-void mcisidv1ResetSequence(mcisidv1seq* sequence, time_t instant);
+void mcisidv1ResetSequence(mcisidv1seq* sequence);
 mcisidv1snapshot mcisidv1TakeSnapshot(const mcisidv1seq* seq, int8_t model);
-mcisidstate mcisidv1Generate(mcisidv1seq* sequence, time_t instant, mcisidv1* output);
+mcisidstate mcisidv1Generate(mcisidv1seq* sequence, int8_t model, time_t instant, mcisidv1* output);
 void mcisidv1WriteOutput(const mcisidv1snapshot* snapshot, mcisidv1* output);
 bool mcisidv1IsInvalid(const mcisidv1* mcisid);
-uint8_t mcisidv1GetOriginModel(mcisidv1* input);
-uint32_t mcisidv1GetSequence(mcisidv1* input);
-time_t mcisidv1GetTimeMilis(mcisidv1* input);
-mcisidv1cmp mcisidv1Compare(mcisidv1* a, mcisidv1* b);
+int8_t mcisidv1GetOriginModel(const mcisidv1* input);
+int32_t mcisidv1GetSequence(const mcisidv1* input);
+time_t mcisidv1GetTimeInstantMilis(const mcisidv1* input);
+mcisidv1cmp mcisidv1Compare(const mcisidv1* a, const mcisidv1* b);
 
 #endif // MCISID_V1_H

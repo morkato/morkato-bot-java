@@ -1,6 +1,6 @@
-project('mcisid', 'c',
+project('mcisid', 'C',
   version : '1.0.0',
-  default_options : ['warning_level=3', 'c_std=11'])
+  default_options : ['warning_level=3', 'c_std=c11'])
 
 pg_config = find_program('pg_config', required: true)
 pg_includedir = run_command(pg_config, '--includedir-server').stdout().strip()
@@ -11,7 +11,8 @@ inc = include_directories('include', pg_includedir)
 
 lib = shared_module('pgmcisid',
   sources: [
-    'src/mcisid.c',
+    'src/mcisid/mcisidv1.c',
+    'src/mcisid/mcisid.c',
     'src/pgmcisid.c'
   ],
   include_directories: inc,
