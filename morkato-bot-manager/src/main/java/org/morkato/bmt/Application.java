@@ -22,7 +22,7 @@ public abstract class Application<T extends Shutdownable> {
 
   public void run() throws Throwable {
     try {
-      jda = Objects.requireNonNull(this.  getJDA());
+      jda = Objects.requireNonNull(this.getJDA());
       managment = Objects.requireNonNull(this.bootstrap(jda));
       jda.awaitReady();
       this.onReady(jda, managment);

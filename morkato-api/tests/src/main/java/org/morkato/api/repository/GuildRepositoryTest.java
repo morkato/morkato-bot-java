@@ -5,7 +5,7 @@ import org.junit.jupiter.api.*;
 import org.morkato.api.entity.guild.GuildId;
 import org.morkato.api.entity.guild.GuildPayload;
 import org.morkato.api.exception.guild.GuildAlreadyExistsError;
-import org.morkato.api.exception.guild.GuildNotFoundError;
+import org.morkato.api.exception.guild.GuildNotFoundException;
 import org.morkato.api.repository.guild.GuildCreationQuery;
 import org.morkato.api.repository.guild.GuildRepository;
 import org.morkato.api.values.GuildDefaultValue;
@@ -37,12 +37,12 @@ public abstract class GuildRepositoryTest {
   @DisplayName("Test Get Guild Not Found")
   public void testGetGuildNotFound() {
     final String GUILD_ID = "111111111111111";
-    assertThatExceptionOfType(GuildNotFoundError.class)
+    assertThatExceptionOfType(GuildNotFoundException.class)
       .as("Uma guilda ausente não deveria ser encontrada, certo? ID testado: %s", GUILD_ID)
       .isThrownBy(() -> repository.fetch(GUILD_ID))
       .withNoCause()
       .isNotNull()
-      .extracting(GuildNotFoundError::getId)
+      .extracting(GuildNotFoundException::getId)
       .as("Verificar ID da GuildNotFoundError")
       .isEqualTo(GUILD_ID)
     ;
@@ -119,12 +119,12 @@ public abstract class GuildRepositoryTest {
     final GuildPayload created = repository.create(query);
     repository.delete(created);
 
-    assertThatExceptionOfType(GuildNotFoundError.class)
+    assertThatExceptionOfType(GuildNotFoundException.class)
       .as("Uma guilda criada e deletada deveria não persistir no banco, correto?")
       .isThrownBy(() -> repository.fetch(created))
       .isNotNull()
       .withNoCause()
-      .extracting(GuildNotFoundError::getId)
+      .extracting(GuildNotFoundException::getId)
       .isEqualTo(created.getId())
     ;
   }

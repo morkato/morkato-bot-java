@@ -21,6 +21,7 @@ CREATE FUNCTION mcisidv1_created_at(mcisidv1) RETURNS TIMESTAMP AS 'MODULE_PATHN
 CREATE FUNCTION mcisidv1_origin_model(mcisidv1) RETURNS SMALLINT AS 'MODULE_PATHNAME', 'pgmcisidv1OriginModel' LANGUAGE C STRICT;
 CREATE FUNCTION mcisidv1_instant_sequence(mcisidv1) RETURNS BIGINT AS 'MODULE_PATHNAME', 'pgmcisidv1InstantSequence' LANGUAGE C STRICT;
 CREATE FUNCTION mcisidv1_get_epoch() RETURNS TIMESTAMP AS 'MODULE_PATHNAME', 'pgmcisidv1GetEpoch' LANGUAGE C STRICT;
+CREATE FUNCTION text_to_mcisidv1(TEXT) RETURNS mcisidv1 AS 'MODULE_PATHNAME', 'pgmcisidv1TextToMcisidv1' LANGUAGE C STRICT;
 
 CREATE TYPE mcisidv1 (
   INPUT = mcisidv1_type_in,
@@ -47,6 +48,10 @@ CREATE OPERATOR > (
   RIGHTARG = mcisidv1,
   PROCEDURE = mcisidv1_type_gt
 );
+
+CREATE CAST (text AS mcisidv1)
+  WITH FUNCTION text_to_mcisidv1
+  AS IMPLICIT;
 
 CREATE OPERATOR CLASS mcisidv1_ops
   DEFAULT FOR TYPE mcisidv1 USING BTREE AS

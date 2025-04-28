@@ -3,15 +3,13 @@ package org.morkato.bmt.invoker;
 import org.morkato.bmt.components.CommandException;
 import org.morkato.bmt.invoker.handle.CommandInvokeHandle;
 import org.morkato.bmt.invoker.handle.DebugCommandInvokeHandle;
-import org.morkato.bmt.registration.registries.CommandRegistry;
+import org.morkato.bmt.registration.CommandRegistry;
 import org.morkato.bmt.context.invoker.CommandInvokerContext;
 import org.morkato.bmt.registration.MapRegistryManagement;
 import org.morkato.utility.StringView;
 import net.dv8tion.jda.api.entities.Message;
-
 import java.util.concurrent.*;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -84,19 +82,19 @@ public class CommandInvoker implements Invoker<CommandInvokerContext> {
     LOGGER.trace("Process command invoker for message: {}.  and view: {}", message, view);
     if (Objects.isNull(registry))
       return;
-    if (!registry.hasSubCommands()) {
+    if (true) {
       this.runAsync(this.spawnHandle(registry, view, message));
       return;
     }
-    view.skipWhitespace();
-    final String supposedSubCommandName = view.quotedWord();
-    final CommandRegistry<?> subregistry = registry.getSubCommand(supposedSubCommandName);
-    if (Objects.isNull(subregistry)) {
-      view.undo();
-      this.runAsync(this.spawnHandle(registry, view, message));
-      return;
-    }
-    this.runAsync(this.spawnHandle(subregistry, view, message));
+//    view.skipWhitespace();
+//    final String supposedSubCommandName = view.quotedWord();
+//    final CommandRegistry<?> subregistry = registry.getSubCommand(supposedSubCommandName);
+//    if (Objects.isNull(subregistry)) {
+//      view.undo();
+//      this.runAsync(this.spawnHandle(registry, view, message));
+//      return;
+//    }
+//    this.runAsync(this.spawnHandle(subregistry, view, message));
   }
 
   public void shutdown() {

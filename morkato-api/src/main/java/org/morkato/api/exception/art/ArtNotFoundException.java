@@ -7,7 +7,7 @@ public class ArtNotFoundException extends RepositoryException {
   private final ArtId artId;
 
   public ArtNotFoundException(ArtId query) {
-    super("Art with id: " + );
+    super("Art with id: " + query);
     this.artId = query;
   }
 }

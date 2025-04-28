@@ -3,11 +3,15 @@ package org.morkato.bot;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import org.morkato.bmt.ApplicationRegistries;
+import org.morkato.bmt.ApplicationCommon;
+import org.morkato.bmt.ApplicationStaticRegistries;
+import org.morkato.bmt.context.BotContext;
+import org.morkato.boot.Extension;
 import org.morkato.bmt.invoker.CommandInvoker;
 import org.morkato.bmt.listener.TextCommandListener;
+import org.morkato.bot.extension.RPGBaseExtension;
+import org.morkato.bot.extension.MorkatoAPIExtension;
 import org.morkato.utility.MorkatoConfigLoader;
-import org.morkato.bmt.ApplicationCommon;
 import java.util.Collection;
 import java.util.Properties;
 import java.util.Objects;
@@ -33,6 +37,14 @@ public class Client extends ApplicationCommon {
   }
 
   @Override
+  protected Collection<Extension<BotContext>> createExtensions() {
+    return Set.of(
+      new MorkatoAPIExtension(),
+      new RPGBaseExtension()
+    );
+  }
+
+  @Override
   protected Collection<ListenerAdapter> createListeners() {
     return Set.of(
       new TextCommandListener(invoker) {
@@ -52,7 +64,7 @@ public class Client extends ApplicationCommon {
   }
 
   @Override
-  protected void onReady(JDA jda, ApplicationRegistries registries) {
+  protected void onReady(JDA jda, ApplicationStaticRegistries registries) {
     super.onReady(jda, registries);
     invoker.start(
       new CommandsStaticRegistries(registries),

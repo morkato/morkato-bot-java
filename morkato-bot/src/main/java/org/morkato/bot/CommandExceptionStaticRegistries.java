@@ -1,9 +1,9 @@
 package org.morkato.bot;
 
-import org.morkato.bmt.registration.registries.TextCommandExceptionRegistry;
+import org.morkato.bmt.registration.CommandExceptionRegistry;
 import org.morkato.bmt.registration.MapRegistryManagement;
 import org.morkato.bmt.components.CommandException;
-import org.morkato.bmt.ApplicationRegistries;
+import org.morkato.bmt.ApplicationStaticRegistries;
 import java.util.Objects;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +11,8 @@ import java.util.Map;
 public class CommandExceptionStaticRegistries implements MapRegistryManagement<Class<? extends Throwable>, CommandException<?>> {
   private final Map<Class<? extends Throwable>, CommandException<?>> registries = new HashMap<>();
 
-  public CommandExceptionStaticRegistries(ApplicationRegistries registries) {
-    for (TextCommandExceptionRegistry registry : registries.getRegisteredExceptions()) {
+  public CommandExceptionStaticRegistries(ApplicationStaticRegistries registries) {
+    for (CommandExceptionRegistry<?> registry : registries.getRegisteredExceptions()) {
       this.registries.put(registry.getExceptionClass(), registry.getRegistry());
     }
   }

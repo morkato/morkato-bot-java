@@ -1,10 +1,8 @@
 package org.morkato.bmt.context;
 
-import org.morkato.bmt.extensions.Extension;
-
-import java.util.Properties;
+import org.morkato.boot.Extension;
 
 public interface ApplicationContextBuilder {
-  Extension getRunningExtension();
+  Extension<?> getRunningExtension();
   <P> void inject(P value);
 }

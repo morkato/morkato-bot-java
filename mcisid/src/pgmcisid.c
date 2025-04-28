@@ -140,6 +140,26 @@ Datum pgmcisidTypeOutput(PG_FUNCTION_ARGS) {
   PG_RETURN_CSTRING(id);
 }
 
+PG_FUNCTION_INFO_V1(pgmcisidv1TextToMcisidv1);
+Datum pgmcisidv1TextToMcisidv1(PG_FUNCTION_ARGS) {
+  text* ptr = PG_GETARG_TEXT_P(0);
+  char* content = VARDATA_ANY(ptr);
+  uint64_t length = VARSIZE(ptr) - VARHDRSZ;
+  if (length != MCISIDV1_IOSIZE)
+    ereport(ERROR,
+            (errmsg("O ID deve conter exatamente 12 caracteres.")));
+  char* pgid = (char*)palloc(sizeof(mcisidv1));
+  for (uint8_t i = 0; i < MCISIDV1_IOSIZE; ++i) {
+    if (mcisidGetLookup(content[i]) == MCISID_INVALID_CHARACTER) {
+      pfree(pgid);
+      ereport(ERROR,
+            (errmsg("O caractere: %c é inválido para o ID.", content[i])));
+    }
+    pgid[i] = content[i];
+  }
+  PG_RETURN_POINTER((mcisidv1*)pgid);
+}
+
 PG_FUNCTION_INFO_V1(pgmcisidv1cmp);
 Datum pgmcisidv1cmp(PG_FUNCTION_ARGS) {
   mcisidv1* a = (mcisidv1*)PG_GETARG_POINTER(0);

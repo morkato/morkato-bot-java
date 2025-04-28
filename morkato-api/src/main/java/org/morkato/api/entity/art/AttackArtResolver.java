@@ -3,12 +3,12 @@ package org.morkato.api.entity.art;
 import org.morkato.api.entity.ObjectResolver;
 import org.morkato.api.entity.attack.Attack;
 import org.morkato.api.entity.guild.Guild;
-import org.morkato.api.entity.impl.ObjectResolverImpl;
+import org.morkato.api.internal.ObjectResolverInternal;
 
 import java.util.Objects;
 
 public class AttackArtResolver
-  extends ObjectResolverImpl<Attack>
+  extends ObjectResolverInternal<Attack>
   implements ObjectResolver<Attack> {
   private final Art art;
   public AttackArtResolver(Art art) {

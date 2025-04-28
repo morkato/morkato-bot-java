@@ -5,7 +5,7 @@ import org.morkato.bmt.components.CommandException;
 import org.morkato.bmt.context.TextCommandContext;
 import org.morkato.bmt.impl.TextCommandContextImpl;
 import org.morkato.bmt.registration.MapRegistryManagement;
-import org.morkato.bmt.registration.registries.CommandRegistry;
+import org.morkato.bmt.registration.CommandRegistry;
 import org.morkato.utility.StringView;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;

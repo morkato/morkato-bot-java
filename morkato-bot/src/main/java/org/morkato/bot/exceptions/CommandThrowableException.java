@@ -1,10 +1,8 @@
 package org.morkato.bot.exceptions;
 
-import org.morkato.bmt.annotation.Component;
 import org.morkato.bmt.context.TextCommandContext;
 import org.morkato.bmt.components.CommandException;
 
-@Component
 public class CommandThrowableException implements CommandException<Throwable> {
   @Override
   public void doException(TextCommandContext<?> ctx,Throwable exception) {

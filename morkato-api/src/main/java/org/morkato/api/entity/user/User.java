@@ -1,6 +1,5 @@
 package org.morkato.api.entity.user;
 
-import org.morkato.api.entity.ApiObject;
 import org.morkato.api.entity.DeleteApiModel;
 import org.morkato.api.entity.ObjectId;
 import org.morkato.api.entity.UpdateApiModel;

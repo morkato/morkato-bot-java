@@ -1,0 +1,1 @@
+DELETE FROM mcrpgs WHERE "id" = CAST(? AS mcisidv1);

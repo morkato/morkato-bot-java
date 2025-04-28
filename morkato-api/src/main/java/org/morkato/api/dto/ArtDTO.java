@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Data;
+import org.morkato.api.entity.art.ArtPayload;
 import org.morkato.api.repository.art.ArtUpdateQuery;
 import org.morkato.api.validation.constraints.MorkatoModelBanner;
 import org.morkato.api.validation.constraints.MorkatoModelDescription;
@@ -26,7 +27,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public final class ArtDTO extends DefaultDTO<ArtDTO> {
+public final class ArtDTO extends DefaultDTO<ArtDTO> implements ArtPayload {
   @NotNull(groups = {Default.class, OnId.class, OnCreate.class, OnUpdate.class})
   @MorkatoSnowflakeId(groups = {Default.class, OnId.class, OnCreate.class, OnUpdate.class})
   private String guildId;

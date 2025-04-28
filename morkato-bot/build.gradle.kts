@@ -20,10 +20,11 @@ repositories.mavenCentral()
 dependencies {
   testImplementation(kotlin("test"))
   implementation("jakarta.validation:jakarta.validation-api:3.0.2")
-  implementation("ch.qos.logback:logback-classic:1.4.14")
-  implementation(project(":morkato-bot-manager:common"))
-  implementation(project(":morkato-api:database"))
+  implementation("ch.qos.logback:logback-classic:1.5.13")
+  implementation(project(":morkato-bot-manager"))
+  implementation(project(":morkato-boot"))
   implementation(project(":morkato-utils"))
+  implementation(project(":morkato-api:database"))
 }
 
 tasks.named<JavaExec>("run") {

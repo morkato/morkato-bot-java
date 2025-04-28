@@ -1,6 +1,6 @@
 package org.morkato.bmt.exception;
 
-import org.morkato.bmt.registration.registries.CommandRegistry;
+import org.morkato.bmt.registration.CommandRegistry;
 
 public class CommandAlreadyRegisteredException extends CommandRegistrationException {
   private final CommandRegistry<?> registry;

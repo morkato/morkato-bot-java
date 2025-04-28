@@ -1,6 +1,6 @@
 package org.morkato.api.entity.family;
 
-import org.morkato.api.entity.ApiObject;
+import org.morkato.api.entity.EntityNamed;
 import org.morkato.api.entity.DeleteApiModel;
 import org.morkato.api.entity.UpdateApiModel;
 
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public interface Family
   extends DeleteApiModel<Family>,
           UpdateApiModel<Family, FamilyUpdateBuilder>,
-          ApiObject,
+  EntityNamed,
           FamilyId {
   @Nonnull
   BigDecimal getPercent();
