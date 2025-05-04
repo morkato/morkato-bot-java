@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.JDA;
+import org.morkato.bmt.generated.ApplicationStaticRegistries;
 import org.morkato.bmt.internal.registration.BotRegistrationFactory;
 import org.morkato.boot.DependenceInjection;
 import org.morkato.boot.Extension;
@@ -14,7 +15,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 public abstract class ApplicationBot extends Application<ApplicationStaticRegistries> {
-  protected abstract BotRegistrationFactory createFactory(DependenceInjection injector) throws Throwable;
+  protected abstract BotRegistrationFactory createFactory(JDA jda, DependenceInjection injector) throws Throwable;
   protected abstract Collection<Extension<BotContext>> createExtensions();
   protected abstract DependenceInjection createDependenceInjection();
   protected abstract Collection<ListenerAdapter> createListeners();
@@ -42,7 +43,7 @@ public abstract class ApplicationBot extends Application<ApplicationStaticRegist
     Objects.requireNonNull(jda);
     final DependenceInjection injector = this.createDependenceInjection();
     final ExtensionManager<BotContext> extensions = new ExtensionManager<>(injector);
-    final BotRegistrationFactory factory = this.createFactory(injector);
+    final BotRegistrationFactory factory = this.createFactory(jda, injector);
     final BotContextFactory ctxfactory = new BotContextFactory(factory);
     for (Extension<BotContext> extension : this.createExtensions())
       extensions.instance(extension);

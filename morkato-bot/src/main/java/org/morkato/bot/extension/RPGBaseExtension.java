@@ -1,28 +1,42 @@
 package org.morkato.bot.extension;
 
 import org.morkato.bmt.context.BotContext;
+import org.morkato.bmt.registration.AppCommandTree;
 import org.morkato.boot.BaseExtension;
 import org.morkato.bot.commands.GuildRpgTest;
 import org.morkato.bot.commands.McisidInspect;
 import org.morkato.bot.exceptions.CommandThrowableException;
 import org.morkato.bot.parsers.ArtCommandDataParser;
 import org.morkato.bot.parsers.ArtOptionParser;
+import org.morkato.bot.slashcommands.TestSlash;
+import org.morkato.bot.slashmapper.TestMapper;
 
 public class RPGBaseExtension extends BaseExtension<BotContext> {
   @Override
   public void setup(BotContext ctx) throws Throwable {
+    final AppCommandTree apc = ctx.getAppCommandsTree();
     /* Comandos padrões */
-    ctx.registerCommand(new McisidInspect())
-      .addName("mcisid")
-      .addName("mcis")
+    apc.text(new McisidInspect())
+      .setName("mcisid")
+      .addAlias("mcis")
       .queue();
-    ctx.registerCommand(new GuildRpgTest())
-      .addName("test-guild")
+    apc.text(new GuildRpgTest())
+      .setName("test-guild")
       .queue();
     /* Parsers para argumentos */
-    ctx.registerArgument(new ArtCommandDataParser());
-    ctx.registerArgument(new ArtOptionParser());
+    apc.objectParser(new ArtCommandDataParser())
+      .queue();
+    apc.objectParser(new ArtOptionParser())
+      .queue();
     /* Tratamento de erros nos comandos */
-    ctx.registerCommandException(new CommandThrowableException());
+    apc.textExceptionHandler(new CommandThrowableException())
+      .queue();
+    /* Slash Commands */
+    apc.slashMapper(new TestMapper())
+        .queue();
+    apc.slash(new TestSlash())
+      .setName("test-slash")
+      .setDescription("[Teste] Uma descrição foda")
+      .queue();
   }
 }

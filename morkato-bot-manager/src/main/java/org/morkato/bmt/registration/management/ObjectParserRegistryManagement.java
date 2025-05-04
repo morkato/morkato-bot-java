@@ -6,7 +6,7 @@ import org.morkato.bmt.parser.IntegerParser;
 import org.morkato.bmt.parser.StringParser;
 import org.morkato.bmt.registration.MapObjectRegisterInfo;
 import org.morkato.bmt.registration.MapRegistryManagement;
-import org.morkato.bmt.registration.ObjectParserRegistry;
+import org.morkato.bmt.generated.registries.ObjectParserRegistry;
 import org.morkato.bmt.registration.RegisterManagement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

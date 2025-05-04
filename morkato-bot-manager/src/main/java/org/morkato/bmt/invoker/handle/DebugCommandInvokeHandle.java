@@ -1,7 +1,7 @@
 package org.morkato.bmt.invoker.handle;
 
 import org.morkato.bmt.impl.TextCommandContextImpl;
-import org.morkato.bmt.registration.CommandRegistry;
+import org.morkato.bmt.generated.registries.CommandRegistry;
 import org.morkato.bmt.registration.MapRegistryManagement;
 import org.morkato.bmt.components.CommandException;
 import net.dv8tion.jda.api.entities.Message;

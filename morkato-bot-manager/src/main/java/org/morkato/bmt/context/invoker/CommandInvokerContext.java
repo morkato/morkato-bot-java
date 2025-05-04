@@ -9,7 +9,7 @@ public class CommandInvokerContext {
   private final Message message;
   private final StringView view;
 
-  public static CommandInvokerContext from(Message message,StringView view) {
+  public static CommandInvokerContext from(Message message, StringView view) {
     return new CommandInvokerContext(message, view);
   }
 

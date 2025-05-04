@@ -2,7 +2,7 @@ package org.morkato.bmt.registration.management;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.morkato.bmt.components.CommandException;
-import org.morkato.bmt.registration.CommandExceptionRegistry;
+import org.morkato.bmt.generated.registries.CommandExceptionRegistry;
 import org.morkato.bmt.registration.MapObjectRegisterInfo;
 import org.morkato.bmt.registration.RegisterManagement;
 import org.slf4j.Logger;

@@ -17,6 +17,7 @@ dependencies {
   implementation("com.google.code.findbugs:jsr305:3.0.2")
   implementation("org.reflections:reflections:0.10.2")
   implementation(project(":morkato-utils"))
+  implementation(project(":morkato-boot"))
   api(project(":morkato-bot-manager"))
 }
 

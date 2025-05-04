@@ -2,8 +2,7 @@ package org.morkato.bmt.invoker;
 
 import org.morkato.bmt.components.CommandException;
 import org.morkato.bmt.invoker.handle.CommandInvokeHandle;
-import org.morkato.bmt.invoker.handle.DebugCommandInvokeHandle;
-import org.morkato.bmt.registration.CommandRegistry;
+import org.morkato.bmt.generated.registries.CommandRegistry;
 import org.morkato.bmt.context.invoker.CommandInvokerContext;
 import org.morkato.bmt.registration.MapRegistryManagement;
 import org.morkato.utility.StringView;
@@ -21,7 +20,6 @@ public class CommandInvoker implements Invoker<CommandInvokerContext> {
   private MapRegistryManagement<String, CommandRegistry<?>> commands;
   private MapRegistryManagement<Class<? extends Throwable>, CommandException<?>> exceptions;
   private ExecutorService service = null;
-  private boolean debug = false;
   private boolean ready = false;
 
   public synchronized void start(
@@ -47,10 +45,6 @@ public class CommandInvoker implements Invoker<CommandInvokerContext> {
     return ready;
   }
 
-  public void setDebug(boolean debug) {
-    this.debug = debug;
-  }
-
   public CompletableFuture<Void> runAsync(Runnable runnable) {
     LOGGER.trace("Run in async runnable: {}", runnable);
     return CompletableFuture.runAsync(runnable, service);
@@ -64,9 +58,7 @@ public class CommandInvoker implements Invoker<CommandInvokerContext> {
   }
 
   public <T> Runnable spawnHandle(CommandRegistry<T> registry, StringView view, Message message) {
-    return !debug
-      ? new CommandInvokeHandle<>(exceptions, registry, message, view)
-      : new DebugCommandInvokeHandle<>(exceptions, registry, message, view);
+    return new CommandInvokeHandle<>(exceptions, registry, message, view);
   }
 
   @Override
@@ -82,19 +74,7 @@ public class CommandInvoker implements Invoker<CommandInvokerContext> {
     LOGGER.trace("Process command invoker for message: {}.  and view: {}", message, view);
     if (Objects.isNull(registry))
       return;
-    if (true) {
-      this.runAsync(this.spawnHandle(registry, view, message));
-      return;
-    }
-//    view.skipWhitespace();
-//    final String supposedSubCommandName = view.quotedWord();
-//    final CommandRegistry<?> subregistry = registry.getSubCommand(supposedSubCommandName);
-//    if (Objects.isNull(subregistry)) {
-//      view.undo();
-//      this.runAsync(this.spawnHandle(registry, view, message));
-//      return;
-//    }
-//    this.runAsync(this.spawnHandle(subregistry, view, message));
+    this.runAsync(this.spawnHandle(registry, view, message));
   }
 
   public void shutdown() {

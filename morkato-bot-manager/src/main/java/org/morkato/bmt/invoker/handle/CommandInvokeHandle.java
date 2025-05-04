@@ -2,10 +2,10 @@ package org.morkato.bmt.invoker.handle;
 
 import net.dv8tion.jda.api.entities.Message;
 import org.morkato.bmt.components.CommandException;
-import org.morkato.bmt.context.TextCommandContext;
+import org.morkato.bmt.context.CommandContext;
 import org.morkato.bmt.impl.TextCommandContextImpl;
 import org.morkato.bmt.registration.MapRegistryManagement;
-import org.morkato.bmt.registration.CommandRegistry;
+import org.morkato.bmt.generated.registries.CommandRegistry;
 import org.morkato.utility.StringView;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class CommandInvokeHandle<T> implements Runnable {
   }
 
   @SuppressWarnings("unchecked")
-  public <E extends Throwable> void onException(TextCommandContext<T> context, E exception) {
+  public <E extends Throwable> void onException(CommandContext<T> context,E exception) {
     CommandException<E> handler = (CommandException<E>)exceptions.get(exception.getClass());
     if (Objects.isNull(handler)) {
       LOGGER.error("Command ID: {} has invoked a error: {}. Ignoring.", context.getCommand().getClass().getName(), exceptions.getClass(), exception);

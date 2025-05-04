@@ -6,13 +6,13 @@ import org.morkato.api.repository.guild.GuildRepository;
 import org.morkato.boot.annotation.AutoInject;
 import org.morkato.bmt.components.Command;
 import org.morkato.bmt.NoArgs;
-import org.morkato.bmt.context.TextCommandContext;
+import org.morkato.bmt.context.CommandContext;
 
 public class GuildRpgTest implements Command<NoArgs> {
   @AutoInject
   private GuildRepository repository;
   @Override
-  public void invoke(TextCommandContext<NoArgs> context) {
+  public void invoke(CommandContext<NoArgs> context) {
     final GuildPayload guild = repository.create(new GuildCreationQuery());
     context.sendMessage("Guild: " + guild).queue();
   }

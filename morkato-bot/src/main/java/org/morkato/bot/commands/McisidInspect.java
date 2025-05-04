@@ -1,7 +1,7 @@
 package org.morkato.bot.commands;
 
 import org.morkato.bmt.components.Command;
-import org.morkato.bmt.context.TextCommandContext;
+import org.morkato.bmt.context.CommandContext;
 import org.morkato.utility.mcisid.McisidUtil;
 
 import java.time.Instant;
@@ -23,7 +23,7 @@ public class McisidInspect implements Command<String> {
     };
   }
   @Override
-  public void invoke(TextCommandContext<String> ctx) {
+  public void invoke(CommandContext<String> ctx) {
     final String mcisid = ctx.getDefinedArguments();
     final int identifier = McisidUtil.getIdentifier(mcisid);
     if (identifier != 0)

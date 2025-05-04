@@ -1,9 +1,10 @@
 package org.morkato.bmt.registration.management;
 
 import org.morkato.bmt.exception.CommandArgumentParserNotFound;
+import org.morkato.bmt.generated.registries.CommandRegistry;
+import org.morkato.bmt.generated.registries.ObjectParserRegistry;
 import org.morkato.bmt.registration.*;
 import org.morkato.bmt.components.Command;
-import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.registration.payload.CommandPayload;
 import org.morkato.bmt.NoArgs;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,7 @@ public class CommandRegistryManagement
   public void register(CommandPayload<?> payload) {
     try {
       CommandRegistry<?> registry = this.registerWithExceptions(payload);
-      LOGGER.info("Command ID: {} has been registered.", registry.getCommandClassName());
+      LOGGER.info("Command ID: {} ({}) has been registered.", registry.getCommandClassName(), registry.getName());
     } catch (CommandArgumentParserNotFound exc) {
       LOGGER.warn("Failed to register command: {}. Object parser: {} is not found.", payload.command().getClass().getName(), exc.getParserClassName());
     } catch (Throwable exc) {

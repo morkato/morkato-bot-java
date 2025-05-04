@@ -4,8 +4,13 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.morkato.bmt.ApplicationCommon;
-import org.morkato.bmt.ApplicationStaticRegistries;
+import org.morkato.bmt.generated.ApplicationStaticRegistries;
 import org.morkato.bmt.context.BotContext;
+import org.morkato.bmt.generated.CommandExceptionStaticRegistries;
+import org.morkato.bmt.generated.CommandsStaticRegistries;
+import org.morkato.bmt.generated.SlashCommandStaticRegistries;
+import org.morkato.bmt.invoker.SlashCommandInvoker;
+import org.morkato.bmt.listener.SlashCommandListener;
 import org.morkato.boot.Extension;
 import org.morkato.bmt.invoker.CommandInvoker;
 import org.morkato.bmt.listener.TextCommandListener;
@@ -19,10 +24,10 @@ import java.util.Set;
 
 public class Client extends ApplicationCommon {
   private final CommandInvoker invoker = new CommandInvoker();
+  private final SlashCommandInvoker slashinvoker = new SlashCommandInvoker();
 
   public Client(Properties properties, String token) {
     super(Client.class, token, properties);
-    invoker.setDebug(true);
   }
 
   public static void main(String[] args) throws Throwable {
@@ -52,7 +57,8 @@ public class Client extends ApplicationCommon {
         public String getPrefix(){
           return "!!";
         }
-      }
+      },
+      new SlashCommandListener(slashinvoker)
     );
   }
 
@@ -69,6 +75,9 @@ public class Client extends ApplicationCommon {
     invoker.start(
       new CommandsStaticRegistries(registries),
       new CommandExceptionStaticRegistries(registries)
+    );
+    slashinvoker.start(
+      new SlashCommandStaticRegistries(registries)
     );
   }
 

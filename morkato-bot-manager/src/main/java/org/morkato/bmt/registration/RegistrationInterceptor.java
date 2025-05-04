@@ -35,7 +35,6 @@ public class RegistrationInterceptor<P, T> {
         injector.writeProperties(record);
         injector.write(record);
         management.register(record);
-        injector.injectIfAbsent(record);
       } catch (ValueNotInjected exc) {
         LOGGER.warn("Error to finalize record injection: {}. Value: {} is not injected. Extension has been dropped.", record.getClass().getName(), exc.getType());
       } catch (InjectionException exc) {

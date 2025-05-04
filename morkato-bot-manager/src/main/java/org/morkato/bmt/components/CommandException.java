@@ -1,7 +1,7 @@
 package org.morkato.bmt.components;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
-import org.morkato.bmt.context.TextCommandContext;
+import org.morkato.bmt.context.CommandContext;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -13,5 +13,5 @@ public interface CommandException<T extends Throwable> {
     Map<TypeVariable<?>,Type> typeArguments = TypeUtils.getTypeArguments(object.getClass(), CommandException.class);
     return (Class<? extends Throwable>)typeArguments.values().iterator().next();
   }
-  void doException(TextCommandContext<?> context,T exception);
+  void doException(CommandContext<?> context,T exception);
 }
