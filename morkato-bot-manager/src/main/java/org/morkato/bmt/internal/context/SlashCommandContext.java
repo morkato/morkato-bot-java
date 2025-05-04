@@ -1,47 +1,38 @@
 package org.morkato.bmt.internal.context;
 
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
-import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 import org.morkato.bmt.components.CommandHandler;
 import org.morkato.bmt.context.CommandContext;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class TextCommandContext<Args> implements CommandContext<Args> {
-  protected boolean fromGuild;
-  protected Args args;
+public class SlashCommandContext<Args> implements CommandContext<Args> {
+  protected final boolean fromGuild;
+  protected final CommandInteraction interaction;
+  protected final Args args;
   protected Guild guild;
   protected CommandHandler<Args> command;
-  protected Message message;
   protected MessageChannel channel;
   protected Member member;
   protected User author;
 
-  public TextCommandContext(
-    @Nonnull CommandHandler<Args> command,
-    @Nonnull Message message,
-    Args args
-  ){
-    this.fromGuild = message.isFromGuild();
-    this.args = args;
+  public SlashCommandContext(CommandInteraction interaction, CommandHandler<Args> command, Args result) {
+    this.fromGuild = interaction.isFromGuild();
+    this.interaction = interaction;
     this.command = command;
-    this.message = message;
-    this.channel = message.getChannel();
-    this.author = message.getAuthor();
+    this.args = result;
+    this.channel = interaction.getMessageChannel();
+    this.author = interaction.getUser();
     if (this.fromGuild) {
-      this.guild = message.getGuild();
-      this.channel = message.getGuildChannel();
-      this.member = message.getMember();
+      this.guild = interaction.getGuild();
+      this.member = interaction.getMember();
     }
-  }
-
-  public void setArgs(Args args) {
-    this.args = args;
   }
 
   @Override
@@ -56,12 +47,12 @@ public class TextCommandContext<Args> implements CommandContext<Args> {
 
   @Override
   public boolean isInvokedInteractionCommand() {
-    return false;
+    return true;
   }
 
   @Override
   public boolean isInvokedTextCommand() {
-    return true;
+    return false;
   }
 
   @Override
@@ -73,7 +64,7 @@ public class TextCommandContext<Args> implements CommandContext<Args> {
   @Override
   @Nonnull
   public CommandInteraction getInteraction() {
-    throw new IllegalStateException("Interaction command are not invoked.");
+    return interaction;
   }
 
   @Override
@@ -85,7 +76,7 @@ public class TextCommandContext<Args> implements CommandContext<Args> {
   @Override
   @Nonnull
   public Message getMessage() {
-    return message;
+    throw new IllegalStateException("This context is a interaction response!");
   }
 
   @Override
@@ -110,5 +101,15 @@ public class TextCommandContext<Args> implements CommandContext<Args> {
   @Nonnull
   public Guild getGuild() {
     return Objects.requireNonNull(guild);
+  }
+
+  @Override
+  public void deferReplyIfInteraction(boolean ep){
+    this.getInteraction().deferReply(ep).queue();
+  }
+
+  @Override
+  public void deferReplyIfInteraction() {
+    this.deferReplyIfInteraction(false);
   }
 }

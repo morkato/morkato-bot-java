@@ -8,10 +8,10 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-public interface Command<Args> {
+public interface CommandHandler<Args> {
   @Nonnull
-  static Class<?> getArgument(Class<? extends Command> clazz) {
-    Map<TypeVariable<?>, Type> args = TypeUtils.getTypeArguments(clazz, Command.class);
+  static Class<?> getArgument(Class<? extends CommandHandler> clazz) {
+    Map<TypeVariable<?>, Type> args = TypeUtils.getTypeArguments(clazz, CommandHandler.class);
     if (args.isEmpty())
       return NoArgs.class;
     Type type = args.values().iterator().next();

@@ -12,12 +12,13 @@ public class TestMapper implements SlashMapper<String> {
   @Override
   public Collection<OptionData> createOptions() {
     return List.of(
-      new OptionData(OptionType.STRING, "test", "...")
+      new OptionData(OptionType.STRING, "text", "...")
+        .setRequired(true)
     );
   }
 
   @Override
   public String mapInteraction(CommandInteraction interaction) {
-    return Objects.requireNonNull(interaction.getOption("test")).getAsString();
+    return Objects.requireNonNull(interaction.getOption("text")).getAsString();
   }
 }

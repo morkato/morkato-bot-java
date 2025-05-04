@@ -30,12 +30,12 @@ public class AppCommandTreeInternal implements AppCommandTree {
   }
 
   @Override
-  public <T> TextCommandBuilder<T> text(Command<T> command) {
+  public <T> TextCommandBuilder<T> text(CommandHandler<T> command) {
     return new TextCommandBuilderInternal<>(this, extension, command);
   }
 
   @Override
-  public <T> SlashCommandBuilder<T> slash(Command<T> slashcommand) {
+  public <T> SlashCommandBuilder<T> slash(CommandHandler<T> slashcommand) {
     return new SlashCommandBuilderInternal<>(this, null, slashcommand);
   }
 

@@ -1,7 +1,6 @@
 package org.morkato.bmt.internal.registration.builder;
 
-import org.morkato.bmt.components.Command;
-import org.morkato.bmt.components.SlashCommand;
+import org.morkato.bmt.components.CommandHandler;
 import org.morkato.bmt.internal.registration.AppCommandTreeInternal;
 import org.morkato.bmt.registration.builder.SlashCommandBuilder;
 import org.morkato.bmt.registration.attributes.SlashCommandAttributes;
@@ -11,12 +10,12 @@ import java.util.Objects;
 
 public class SlashCommandBuilderInternal<T> implements SlashCommandBuilder<T> {
   private final AppCommandTreeInternal tree;
-  private final Command<T> slashcommand;
+  private final CommandHandler<T> slashcommand;
   private boolean isQueue = false;
   private String name;
   private String description;
 
-  public SlashCommandBuilderInternal(AppCommandTreeInternal tree, String name, Command<T> slashcommand) {
+  public SlashCommandBuilderInternal(AppCommandTreeInternal tree, String name, CommandHandler<T> slashcommand) {
     this.slashcommand = Objects.requireNonNull(slashcommand);
     this.tree = Objects.requireNonNull(tree);
     this.name = name;

@@ -4,7 +4,7 @@ import org.morkato.bmt.exception.CommandArgumentParserNotFound;
 import org.morkato.bmt.generated.registries.CommandRegistry;
 import org.morkato.bmt.generated.registries.ObjectParserRegistry;
 import org.morkato.bmt.registration.*;
-import org.morkato.bmt.components.Command;
+import org.morkato.bmt.components.CommandHandler;
 import org.morkato.bmt.registration.payload.CommandPayload;
 import org.morkato.bmt.NoArgs;
 import org.slf4j.LoggerFactory;
@@ -25,8 +25,8 @@ public class CommandRegistryManagement
   @SuppressWarnings("unchecked")
   private <T> CommandRegistry<T> registerWithExceptions(CommandPayload<T> payload)
     throws CommandArgumentParserNotFound {
-    Command<T> command = payload.command();
-    Class<?> args = Command.getArgument(command.getClass());
+    CommandHandler<T> command = payload.command();
+    Class<?> args = CommandHandler.getArgument(command.getClass());
     ObjectParserRegistry<T> parser = args != NoArgs.class ? (ObjectParserRegistry<T>)arguments.get(args) : null;
     if (Objects.isNull(parser) && args != NoArgs.class)
       throw new CommandArgumentParserNotFound(args);

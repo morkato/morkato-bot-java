@@ -3,7 +3,7 @@ package org.morkato.bmt.invoker.handle;
 import net.dv8tion.jda.api.entities.Message;
 import org.morkato.bmt.components.CommandException;
 import org.morkato.bmt.context.CommandContext;
-import org.morkato.bmt.impl.TextCommandContextImpl;
+import org.morkato.bmt.internal.context.TextCommandContext;
 import org.morkato.bmt.registration.MapRegistryManagement;
 import org.morkato.bmt.generated.registries.CommandRegistry;
 import org.morkato.utility.StringView;
@@ -32,17 +32,17 @@ public class CommandInvokeHandle<T> implements Runnable {
 
   @Override
   public void run() {
-    final TextCommandContextImpl<T> impl = registry.spawnContext(message);
+    final TextCommandContext<T> ctx = registry.spawnContext(message);
     try {
-      registry.prepareContext(impl, view);
-      registry.invoke(impl);
+      registry.prepareContext(ctx, view);
+      registry.invoke(ctx);
     } catch (Throwable exc) {
-      this.onException(impl, exc);
+      this.onException(ctx, exc);
     }
   }
 
   @SuppressWarnings("unchecked")
-  public <E extends Throwable> void onException(CommandContext<T> context,E exception) {
+  public <E extends Throwable> void onException(CommandContext<T> context, E exception) {
     CommandException<E> handler = (CommandException<E>)exceptions.get(exception.getClass());
     if (Objects.isNull(handler)) {
       LOGGER.error("Command ID: {} has invoked a error: {}. Ignoring.", context.getCommand().getClass().getName(), exceptions.getClass(), exception);

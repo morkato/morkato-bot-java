@@ -1,7 +1,7 @@
 package org.morkato.bmt.registration.management;
 
 import org.morkato.bmt.NoArgs;
-import org.morkato.bmt.components.Command;
+import org.morkato.bmt.components.CommandHandler;
 import org.morkato.bmt.exception.CommandArgumentParserNotFound;
 import org.morkato.bmt.generated.registries.SlashMapperRegistry;
 import org.morkato.bmt.generated.registries.SlashCommandRegistry;
@@ -24,8 +24,8 @@ public class SlashCommandRegistryManagement
   @SuppressWarnings("unchecked")
   private <T> SlashCommandRegistry<T> registerWithExceptions(SlashCommandPayload<T> payload)
     throws CommandArgumentParserNotFound{
-    Command<T> command = payload.slashcommand();
-    Class<?> args = Command.getArgument(command.getClass());
+    CommandHandler<T> command = payload.slashcommand();
+    Class<?> args = CommandHandler.getArgument(command.getClass());
     SlashMapperRegistry<T> mapper = (SlashMapperRegistry<T>)mappers.get(args);
     if (Objects.isNull(mapper) && args != NoArgs.class)
       throw new CommandArgumentParserNotFound(args);

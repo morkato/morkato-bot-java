@@ -34,9 +34,10 @@ public class RPGBaseExtension extends BaseExtension<BotContext> {
     /* Slash Commands */
     apc.slashMapper(new TestMapper())
         .queue();
-    apc.slash(new TestSlash())
-      .setName("test-slash")
-      .setDescription("[Teste] Uma descrição foda")
+    apc.slash(new McisidInspect())
+      .setName("mcisid")
+      .setDescription("[Utilitários] Impeciona o ID.")
+      .deferReply()
       .queue();
   }
 }

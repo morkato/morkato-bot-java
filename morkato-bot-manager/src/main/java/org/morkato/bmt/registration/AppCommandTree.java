@@ -7,8 +7,8 @@ import org.morkato.bmt.components.*;
 import java.util.Set;
 
 public interface AppCommandTree {
-  <T> TextCommandBuilder<T> text(Command<T> command);
-  <T> SlashCommandBuilder<T> slash(Command<T> slashcommand);
+  <T> TextCommandBuilder<T> text(CommandHandler<T> command);
+  <T> SlashCommandBuilder<T> slash(CommandHandler<T> slashcommand);
   <T> SlashMapperBuilder<T> slashMapper(SlashMapper<T> mapper);
   <T> ObjectParserBuilder<T> objectParser(ObjectParser<T> objectparser);
   <T extends Throwable> CommandExceptionBuilder<T> textExceptionHandler(CommandException<T> exceptionhandler);

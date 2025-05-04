@@ -1,15 +1,12 @@
 package org.morkato.bmt.internal.registration.builder;
 
-import org.morkato.bmt.components.Command;
 import org.morkato.bmt.components.SlashMapper;
 import org.morkato.bmt.context.BotContext;
 import org.morkato.bmt.internal.registration.AppCommandTreeInternal;
 import org.morkato.bmt.registration.builder.SlashMapperBuilder;
 import org.morkato.boot.Extension;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 public class SlashMapperBuilderInternal<T> implements SlashMapperBuilder<T> {
   private final AppCommandTreeInternal tree;

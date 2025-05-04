@@ -1,7 +1,7 @@
 package org.morkato.bmt.internal.registration;
 
 import org.morkato.bmt.generated.ApplicationStaticRegistries;
-import org.morkato.bmt.components.Command;
+import org.morkato.bmt.components.CommandHandler;
 import org.morkato.bmt.components.CommandException;
 import org.morkato.bmt.components.SlashMapper;
 import org.morkato.bmt.components.ObjectParser;
@@ -38,7 +38,7 @@ public class BotRegistrationFactory implements RegistrationFactory<ApplicationSt
     parsers.register(parser);
   }
 
-  public <T> void registerCommand(Command<T> command, CommandAttributes attributes) {
+  public <T> void registerCommand(CommandHandler<T> command,CommandAttributes attributes) {
     commands.register(new CommandPayload<>(command, attributes));
   }
 

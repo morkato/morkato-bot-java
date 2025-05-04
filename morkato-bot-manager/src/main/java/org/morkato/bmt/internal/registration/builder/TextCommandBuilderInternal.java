@@ -5,7 +5,7 @@ import org.morkato.bmt.internal.registration.AppCommandTreeInternal;
 import org.morkato.bmt.registration.attributes.CommandAttributes;
 import org.morkato.bmt.registration.payload.CommandPayload;
 import org.morkato.bmt.registration.builder.TextCommandBuilder;
-import org.morkato.bmt.components.Command;
+import org.morkato.bmt.components.CommandHandler;
 import org.morkato.boot.Extension;
 
 import java.util.HashSet;
@@ -16,12 +16,12 @@ public class TextCommandBuilderInternal<T> implements TextCommandBuilder<T> {
   private final Set<String> alias = new HashSet<>();
   private final AppCommandTreeInternal builder;
   private final Extension<BotContext> extension;
-  private final Command<T> command;
+  private final CommandHandler<T> command;
   private String name;
   private String description;
   private boolean isQueue = false;
 
-  public TextCommandBuilderInternal(AppCommandTreeInternal builder, Extension<BotContext> extension, Command<T> command) {
+  public TextCommandBuilderInternal(AppCommandTreeInternal builder, Extension<BotContext> extension, CommandHandler<T> command) {
     this.builder = Objects.requireNonNull(builder);
     this.extension = Objects.requireNonNull(extension);
     this.command = Objects.requireNonNull(command);
@@ -52,7 +52,7 @@ public class TextCommandBuilderInternal<T> implements TextCommandBuilder<T> {
   }
 
   @Override
-  public <S> TextCommandBuilder<T> subcommand(String name, Command<S> subcommand) {
+  public <S> TextCommandBuilder<T> subcommand(String name, CommandHandler<S> subcommand) {
     return this;
   }
 
