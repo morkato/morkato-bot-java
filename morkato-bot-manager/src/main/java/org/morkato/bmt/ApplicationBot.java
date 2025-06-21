@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.JDA;
 import org.morkato.bmt.generated.ApplicationStaticRegistries;
-import org.morkato.bmt.internal.registration.BotRegistrationFactory;
+import org.morkato.bmt.startup.BotRegistrationFactory;
 import org.morkato.boot.DependenceInjection;
 import org.morkato.boot.Extension;
 import org.morkato.boot.ExtensionManager;

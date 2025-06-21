@@ -1,9 +1,7 @@
 package org.morkato.bmt.action;
 
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.requests.RestAction;
-
+import net.dv8tion.jda.api.entities.Message;
 import java.util.Collection;
 import java.util.List;
 

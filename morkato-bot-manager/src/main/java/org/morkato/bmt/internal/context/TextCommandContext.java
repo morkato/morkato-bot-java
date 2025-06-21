@@ -1,14 +1,14 @@
 package org.morkato.bmt.internal.context;
 
+import org.morkato.bmt.exception.StupidArgumentException;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
 import org.morkato.bmt.components.CommandHandler;
 import org.morkato.bmt.context.CommandContext;
-
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
@@ -67,7 +67,9 @@ public class TextCommandContext<Args> implements CommandContext<Args> {
   @Override
   @Nonnull
   public Args getDefinedArguments() {
-    return Objects.requireNonNull(args);
+    if (Objects.isNull(args))
+      throw new StupidArgumentException();
+    return args;
   }
 
   @Override

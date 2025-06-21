@@ -1,14 +1,12 @@
 package org.morkato.bmt.internal.action;
 
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.internal.requests.restaction.MessageCreateActionImpl;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
-import net.dv8tion.jda.internal.requests.restaction.MessageCreateActionImpl;
-import org.morkato.bmt.action.MessageCreation;
+import net.dv8tion.jda.api.entities.Message;
 import org.morkato.bmt.context.CommandContext;
-
+import org.morkato.bmt.action.MessageCreation;
 import java.util.Collection;
-import java.util.List;
 
 public class TextMessageCreationInternal implements MessageCreation {
   private final MessageCreateAction action;

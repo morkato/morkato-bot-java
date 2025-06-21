@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import org.morkato.bmt.context.BotContext;
 import org.morkato.bmt.generated.ApplicationStaticRegistries;
-import org.morkato.bmt.internal.registration.BotRegistrationFactory;
+import org.morkato.bmt.startup.BotRegistrationFactory;
 import org.morkato.bmt.generated.registries.SlashCommandRegistry;
 import org.morkato.boot.DependenceInjection;
 import org.morkato.boot.Extension;
@@ -66,7 +66,7 @@ public class ApplicationCommon extends ApplicationBot {
   protected void syncSlashCommands(JDA jda, ApplicationStaticRegistries registries) {
     LOGGER.info("Preparing to sync slashcommands with discord app.");
     CommandListUpdateAction action = jda.updateCommands();
-    SlashCommandRegistry<?>[] slashcommands = registries.getRegisteredSlashCommands();
+    SlashCommandRegistry<?>[] slashcommands = registries.getCommands().getRegisteredSlashCommands();
     for (SlashCommandRegistry<?> slash : slashcommands) {
       LOGGER.debug("Prepare to slashcommand named: {}", slash.getName());
       action = action.addCommands(
@@ -81,9 +81,7 @@ public class ApplicationCommon extends ApplicationBot {
   protected void onReady(JDA jda, ApplicationStaticRegistries registries) {
     this.syncSlashCommands(jda, registries);
     LOGGER.info("All components have been initialized successfully.");
-    LOGGER.info("Totally components initialized: {} (Including JDA).", registries.totally());
     LOGGER.info("Estou conectado, como: {} (id={})", jda.getSelfUser().getAsTag(), jda.getSelfUser().getId());
-    LOGGER.trace("Generated application registries: {}", ApplicationStaticRegistries.representation(registries));
   }
 
   @Override

@@ -46,8 +46,8 @@ public final class ArtDTO extends DefaultDTO<ArtDTO> implements ArtPayload {
 
   public static ArtDTO from(ArtCreationQuery query) {
     return new ArtDTO(
-      query.guildId(), null, query.name(),
-      query.type(), query.description(), query.banner()
+      query.getGuildId(), null, query.getName(),
+      query.getType(), query.getDescription(), query.getBanner()
     );
   }
 

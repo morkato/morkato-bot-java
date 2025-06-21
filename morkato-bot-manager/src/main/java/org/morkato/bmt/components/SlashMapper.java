@@ -1,12 +1,10 @@
 package org.morkato.bmt.components;
 
-import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.apache.commons.lang3.reflect.TypeUtils;
-
-import java.lang.reflect.Type;
+import org.morkato.bmt.context.SlashMappingInteraction;
+import org.morkato.bmt.context.SlashMapperData;
 import java.lang.reflect.TypeVariable;
-import java.util.Collection;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 public interface SlashMapper<T> {
@@ -18,6 +16,6 @@ public interface SlashMapper<T> {
       throw new RuntimeException("Impossible stupid error.");
     return (Class<?>)type;
   }
-  Collection<OptionData> createOptions();
-  T mapInteraction(CommandInteraction interaction);
+  void createOptions(SlashMappingInteraction interaction);
+  T mapInteraction(SlashMapperData payload);
 }

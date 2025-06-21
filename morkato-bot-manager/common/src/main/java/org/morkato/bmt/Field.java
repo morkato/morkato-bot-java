@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class Field<T> implements ObjectParser<T> {
   private final Annotation[] annotations;
-  private ObjectParserRegistry<T> parser;
+  private ObjectParser<T> parser;
   public Field(
     @Nonnull Annotation[] annotations
   ) {
@@ -18,17 +18,17 @@ public class Field<T> implements ObjectParser<T> {
     this.annotations = annotations;
   }
 
-  public void setObjectParser(ObjectParserRegistry<T> parser) {
+  public void setObjectParser(ObjectParser<T> parser) {
     this.parser = parser;
   }
 
   @SuppressWarnings("unchecked")
-  public void setObjectParserAndCast(ObjectParserRegistry<?> parser) {
-    this.setObjectParser((ObjectParserRegistry<T>)parser);
+  public void setObjectParserAndCast(ObjectParser<?> parser) {
+    this.setObjectParser((ObjectParser<T>)parser);
   }
 
   @Override
-  public T parse(CommandContext<?> context,String text) throws Throwable {
+  public T parse(CommandContext<?> context,String text) throws Exception {
     return parser.parse(context, text);
   }
 

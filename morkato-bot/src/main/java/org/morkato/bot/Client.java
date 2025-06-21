@@ -6,16 +6,14 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.morkato.bmt.ApplicationCommon;
 import org.morkato.bmt.generated.ApplicationStaticRegistries;
 import org.morkato.bmt.context.BotContext;
-import org.morkato.bmt.generated.CommandExceptionStaticRegistries;
 import org.morkato.bmt.generated.CommandsStaticRegistries;
-import org.morkato.bmt.generated.SlashCommandStaticRegistries;
 import org.morkato.bmt.invoker.SlashCommandInvoker;
 import org.morkato.bmt.listener.SlashCommandListener;
 import org.morkato.boot.Extension;
 import org.morkato.bmt.invoker.CommandInvoker;
 import org.morkato.bmt.listener.TextCommandListener;
-import org.morkato.bot.extension.RPGBaseExtension;
 import org.morkato.bot.extension.MorkatoAPIExtension;
+import org.morkato.bot.extension.RPGBaseExtension;
 import org.morkato.utility.MorkatoConfigLoader;
 import java.util.Collection;
 import java.util.Properties;
@@ -73,11 +71,12 @@ public class Client extends ApplicationCommon {
   protected void onReady(JDA jda, ApplicationStaticRegistries registries) {
     super.onReady(jda, registries);
     invoker.start(
-      new CommandsStaticRegistries(registries),
-      new CommandExceptionStaticRegistries(registries)
+      registries.getCommands(),
+      registries.getExceptions()
     );
     slashinvoker.start(
-      new SlashCommandStaticRegistries(registries)
+      registries.getCommands(),
+      registries.getExceptions()
     );
   }
 

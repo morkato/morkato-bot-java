@@ -1,14 +1,15 @@
 package org.morkato.bmt.invoker;
 
-import org.morkato.bmt.components.CommandException;
+import org.morkato.bmt.generated.CommandsStaticRegistries;
+import org.morkato.bmt.generated.ExceptionsHandleStaticRegistries;
 import org.morkato.bmt.invoker.handle.CommandInvokeHandle;
 import org.morkato.bmt.generated.registries.CommandRegistry;
 import org.morkato.bmt.context.invoker.CommandInvokerContext;
-import org.morkato.bmt.registration.MapRegistryManagement;
 import org.morkato.utility.StringView;
 import net.dv8tion.jda.api.entities.Message;
 import java.util.concurrent.*;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -17,22 +18,23 @@ import org.slf4j.Logger;
 public class CommandInvoker implements Invoker<CommandInvokerContext> {
   private static final Logger LOGGER = LoggerFactory.getLogger(CommandInvoker.class);
   private static final int MAX_THREAD_POOL_SIZE = 10;
-  private MapRegistryManagement<String, CommandRegistry<?>> commands;
-  private MapRegistryManagement<Class<? extends Throwable>, CommandException<?>> exceptions;
+  private CommandsStaticRegistries commands;
+  private ExceptionsHandleStaticRegistries exceptions;
   private ExecutorService service = null;
   private boolean ready = false;
 
   public synchronized void start(
-    MapRegistryManagement<String, CommandRegistry<?>> commands,
-    MapRegistryManagement<Class<? extends Throwable>, CommandException<?>> exceptions
+    CommandsStaticRegistries commands,
+    ExceptionsHandleStaticRegistries exceptions
   ) {
     if (ready)
       return;
     Objects.requireNonNull(commands);
     Objects.requireNonNull(exceptions);
+    final AtomicInteger atomic = new AtomicInteger();
     this.service = Executors.newFixedThreadPool(MAX_THREAD_POOL_SIZE, runnable -> {
       Thread thread = new Thread(runnable);
-      thread.setName("morkato-command-invoker");
+      thread.setName("morkato-command-invoker-" + atomic.getAndIncrement());
       return thread;
     });
     this.commands = commands;
@@ -54,7 +56,7 @@ public class CommandInvoker implements Invoker<CommandInvokerContext> {
     final String commandname = view.word();
     if (Objects.isNull(commandname))
       return null;
-    return commands.get(commandname);
+    return commands.getTextCommand(commandname);
   }
 
   public <T> Runnable spawnHandle(CommandRegistry<T> registry, StringView view, Message message) {

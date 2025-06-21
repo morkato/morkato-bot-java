@@ -1,13 +1,16 @@
 package org.morkato.bmt;
 
-import org.morkato.bmt.components.CommandException;
+import org.morkato.bmt.startup.management.StartupCommandsManagement;
+import org.morkato.bmt.startup.management.StartupExceptionHandlerManagement;
+import org.morkato.bmt.startup.management.StartupParsersManagement;
+import org.morkato.bmt.components.CommandExceptionHandler;
 import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.components.SlashMapper;
-import org.morkato.bmt.registration.AppCommandTree;
-import org.morkato.bmt.registration.payload.CommandPayload;
+import org.morkato.bmt.startup.AppCommandTree;
+import org.morkato.bmt.startup.payload.CommandPayload;
 import org.morkato.bmt.internal.context.BotContextInternal;
-import org.morkato.bmt.internal.registration.BotRegistrationFactory;
-import org.morkato.bmt.registration.payload.SlashCommandPayload;
+import org.morkato.bmt.startup.BotRegistrationFactory;
+import org.morkato.bmt.startup.payload.SlashCommandPayload;
 import org.morkato.boot.ExtensionContextFactory;
 import org.morkato.bmt.context.BotContext;
 import org.morkato.boot.Extension;
@@ -29,15 +32,18 @@ public class BotContextFactory implements ExtensionContextFactory<BotContext> {
   @Override
   public void commit(Extension<BotContext> extension, BotContext context) {
     final AppCommandTree tree = context.getAppCommandsTree();
+    final StartupParsersManagement parsers = factory.getStartupParsersManagement();
+    final StartupExceptionHandlerManagement exceptions = factory.getStartupExceptionHandlerManagement();
+    final StartupCommandsManagement commands = factory.getStartupCommandsManagement();
     for (ObjectParser<?> parser : tree.getPendingArguments())
-      factory.registerObjectParser(parser);
-    for (CommandPayload<?> payload : tree.getPendingCommands())
-      factory.registerCommand(payload.command(), payload.attrs());
-    for (CommandException<?> bounder : tree.getPendingCommandExceptions())
-      factory.registerCommandException(bounder);
+      parsers.registerObjectParser(ObjectParser.getArgument(parser.getClass()), parser);
     for (SlashMapper<?> mapper : tree.getSlashCommandMappers())
-      factory.registerSlashMapper(mapper);
+      parsers.registerSlashMapper(SlashMapper.getArgument(mapper.getClass()), mapper);
+    for (CommandExceptionHandler<?> bounder : tree.getPendingCommandExceptions())
+      exceptions.registerCommandExceptionHandler(CommandExceptionHandler.getArgument(bounder), bounder);
+    for (CommandPayload<?> payload : tree.getPendingCommands())
+      commands.registerTextCommand(payload);
     for (SlashCommandPayload<?> slashcommand : tree.getPendingSlashCommands())
-      factory.registerSlashCommand(slashcommand);
+      commands.registerSlashCommand(slashcommand);
   }
 }

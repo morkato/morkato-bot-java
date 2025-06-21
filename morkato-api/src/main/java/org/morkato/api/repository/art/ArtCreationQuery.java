@@ -1,31 +1,24 @@
 package org.morkato.api.repository.art;
 
 import jakarta.validation.ConstraintViolationException;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.morkato.api.entity.art.ArtType;
 import jakarta.validation.Validator;
 import org.morkato.api.dto.ArtDTO;
 
-import javax.annotation.Nonnull;
-import java.util.Objects;
-
-public record ArtCreationQuery(
-  String guildId,
-  String name,
-  ArtType type,
-  String description,
-  String banner
-) {
-  public static ArtCreationQuery from(@Nonnull ArtDTO dto, @Nonnull Validator validator) {
-    Objects.requireNonNull(dto);
-    Objects.requireNonNull(validator);
-    return new ArtCreationQuery(
-      dto.getGuildId(),
-      dto.getName(),
-      dto.getType(),
-      dto.getDescription(),
-      dto.getBanner()
-    ).validate(validator);
-  }
+@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
+@Data
+public class ArtCreationQuery {
+  private String guildId;
+  private String name;
+  private ArtType type;
+  private String description;
+  private String banner;
 
   public ArtCreationQuery validate(Validator validator) throws ConstraintViolationException {
     ArtDTO dto = ArtDTO.from(this);

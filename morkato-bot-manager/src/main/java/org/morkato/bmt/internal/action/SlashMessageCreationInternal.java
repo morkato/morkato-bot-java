@@ -1,12 +1,12 @@
 package org.morkato.bmt.internal.action;
 
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
-import org.morkato.bmt.action.MessageCreation;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 import org.morkato.bmt.context.CommandContext;
+import org.morkato.bmt.action.MessageCreation;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.util.Collection;
 

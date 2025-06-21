@@ -1,6 +1,6 @@
 package org.morkato.bmt.parser;
 
-import org.morkato.bmt.registration.management.ObjectParserRegistryManagement;
+import org.morkato.bmt.startup.management.ReferenceGetter;
 import org.morkato.bmt.context.CommandContext;
 import org.morkato.bmt.components.ObjectParser;
 import java.util.EnumSet;
@@ -17,12 +17,12 @@ public class EnumGenericParser<T extends Enum<T>> implements ObjectParser<T> {
   }
 
   @Override
-  public void flush(ObjectParserRegistryManagement registration) {
+  public void flush(ReferenceGetter references) {
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public T parse(CommandContext<?> context,String text) {
+  public T parse(CommandContext<?> context, String text) {
     return (T)values.get(text.toUpperCase());
   }
 }

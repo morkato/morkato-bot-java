@@ -3,12 +3,14 @@ package org.morkato.bot.extension;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.flywaydb.core.Flyway;
+import org.morkato.api.ApiConnectionStatement;
 import org.morkato.api.repository.guild.GuildRepository;
 import org.morkato.boot.annotation.ApplicationProperty;
 import org.morkato.boot.annotation.DefaultValue;
 import org.morkato.boot.ApplicationContext;
 import org.morkato.bmt.context.BotContext;
 import org.morkato.boot.BaseExtension;
+import org.morkato.database.PsqlConnectionStatement;
 import org.morkato.database.PsqlRepositoryStatement;
 import org.morkato.database.repository.guild.PsqlGuildRepository;
 import org.morkato.jdbc.QueryLoader;
@@ -55,8 +57,8 @@ public class MorkatoAPIExtension extends BaseExtension<BotContext> {
       .locations(migrationPath)
       .load();
     flyway.migrate();
-    GuildRepository repository = new PsqlGuildRepository(statement);
-    reflection.writeAll(repository);
-    application.inject(repository);
+    PsqlConnectionStatement conn = new PsqlConnectionStatement(statement);
+    conn.prepare(reflection);
+    application.inject(conn);
   }
 }

@@ -1,11 +1,11 @@
 package org.morkato.bot.exceptions;
 
-import org.morkato.bmt.components.CommandException;
+import org.morkato.bmt.components.CommandExceptionHandler;
 import org.morkato.bmt.context.CommandContext;
 
-public class CommandMorkatoBotException implements CommandException<MorkatoBotException> {
+public class CommandMorkatoBotException implements CommandExceptionHandler<MorkatoBotException>{
   @Override
-  public void doException(CommandContext<?> ctx,MorkatoBotException exception) {
+  public void doException(CommandContext<?> ctx, MorkatoBotException exception) {
     ctx.reply()
       .setContent(exception.getMessage())
       .queue();

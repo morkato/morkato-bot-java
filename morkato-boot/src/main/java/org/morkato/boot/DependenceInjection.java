@@ -104,7 +104,7 @@ public class DependenceInjection {
     }
   }
 
-  public void writeProperties(Object object) throws Throwable {
+  public void writeProperties(Object object) throws Exception {
     Class<?> clazz = object.getClass();
     Field[] fields = clazz.getDeclaredFields();
     for (Field field : fields) {

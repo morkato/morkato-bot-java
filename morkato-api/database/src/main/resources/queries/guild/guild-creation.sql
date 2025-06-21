@@ -3,4 +3,4 @@ INSERT INTO "guilds" (
   "rpg_id",
   "roll_category_id",
   "off_category_id"
-) VALUES (?, ?, ?, ?);
+) VALUES (?, CAST(? AS mcisidv1), ?, ?);

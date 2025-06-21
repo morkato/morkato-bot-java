@@ -20,5 +20,5 @@ public interface CommandHandler<Args> {
       return NoArgs.class;
     return (Class<?>) type;
   }
-  void invoke(CommandContext<Args> context) throws Throwable;
+  void invoke(CommandContext<Args> context) throws Exception;
 }

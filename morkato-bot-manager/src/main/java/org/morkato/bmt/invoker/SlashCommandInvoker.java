@@ -1,20 +1,30 @@
 package org.morkato.bmt.invoker;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import org.morkato.bmt.generated.CommandsStaticRegistries;
+import org.morkato.bmt.generated.ExceptionsHandleStaticRegistries;
 import org.morkato.bmt.generated.registries.SlashCommandRegistry;
-import org.morkato.bmt.registration.MapRegistryManagement;
-import org.slf4j.Logger;
+import org.morkato.bmt.internal.context.SlashCommandContext;
+import org.morkato.bmt.components.CommandExceptionHandler;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import java.util.Objects;
+
 
 public class SlashCommandInvoker implements Invoker<SlashCommandInteractionEvent> {
   private static final Logger LOGGER = LoggerFactory.getLogger(SlashCommandInvoker.class);
-  private MapRegistryManagement<String, SlashCommandRegistry<?>> registries;
+  private CommandsStaticRegistries registries;
+  private ExceptionsHandleStaticRegistries exceptions;
   private boolean ready = false;
 
-  public synchronized void start(MapRegistryManagement<String, SlashCommandRegistry<?>> registries) {
+  public synchronized void start(
+    CommandsStaticRegistries registries,
+    ExceptionsHandleStaticRegistries exceptions
+  ) {
     if (ready)
       return;
-    this.registries = registries;
+    this.registries = Objects.requireNonNull(registries);
+    this.exceptions = Objects.requireNonNull(exceptions);
     ready = true;
   }
 
@@ -29,11 +39,47 @@ public class SlashCommandInvoker implements Invoker<SlashCommandInteractionEvent
       LOGGER.debug("SlashCommandInvoker is invoked, but, is not ready to execute slashcommands. Ignoring.");
       return;
     }
-    SlashCommandRegistry<?> registry = registries.get(event.getName());
+    this.ambientInvoke(event);
+  }
+
+  @SuppressWarnings("unchecked")
+  private <T> void ambientInvoke(SlashCommandInteractionEvent event) {
     try {
-      registry.invoke(event);
-    } catch (Throwable exc) {
-      event.reply("An unexpected error occurred!\nCommandRegistry: **" + registry + "**\nChain with (raw): ** " + registry.getCommandClassName() + "\nWith invoked name: **" + registry.getName() + "**").queue();
+      final SlashCommandRegistry<T> registry = (SlashCommandRegistry<T>)registries.getSlashCommand(event.getName());
+      final SlashCommandContext<T> ctx = registry.bindContext(event);
+      this.invokeRegistry(registry, ctx);
+    } catch (Exception exc) {
+      LOGGER.error("An unexpected error occurred.", exc);
     }
+  }
+
+  private <T> void invokeRegistry(
+    SlashCommandRegistry<T> registry,
+    SlashCommandContext<T> context
+  ) {
+    try {
+      registry.invoke(context);
+    } catch (Exception exc) {
+      this.handleException(registry, context, exc);
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private <T, E extends Exception> void handleException(
+    SlashCommandRegistry<T> registry,
+    SlashCommandContext<T> context,
+    E exception
+  ) {
+    LOGGER.debug("Command: {} ({}) has invoked an unexpected error: {}. Handling...",
+      registry.getName(), registry.getCommandClassName(), exception.getClass().getName());
+    final CommandExceptionHandler<E> handler = (CommandExceptionHandler<E>)exceptions.getCommandExceptionHandler(exception.getClass());
+    if (Objects.nonNull(handler)) {
+      handler.doException(context, exception);
+      return;
+    }
+    LOGGER.error("An unexpected error occurred. Not available command exception handler for exception: {}. Show into the display.", exception.getClass().getName(), exception);
+    context.respond()
+      .setContent("An unexpected error occurred: **" + exception.getClass().getName() + "**. Sorry.")
+      .queue();
   }
 }

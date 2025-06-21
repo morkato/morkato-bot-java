@@ -1,24 +1,19 @@
 package org.morkato.bot.slashmapper;
 
-import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.morkato.bmt.components.SlashMapper;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.List;
+import org.morkato.bmt.context.SlashMapperData;
+import org.morkato.bmt.context.SlashMappingInteraction;
 
 public class TestMapper implements SlashMapper<String> {
   @Override
-  public Collection<OptionData> createOptions() {
-    return List.of(
-      new OptionData(OptionType.STRING, "text", "...")
-        .setRequired(true)
-    );
+  public void createOptions(SlashMappingInteraction interaction) {
+    interaction.asString("text")
+      .setRequired()
+      .queue();
   }
 
   @Override
-  public String mapInteraction(CommandInteraction interaction) {
-    return Objects.requireNonNull(interaction.getOption("text")).getAsString();
+  public String mapInteraction(SlashMapperData payload) {
+    return payload.getAsString("text");
   }
 }

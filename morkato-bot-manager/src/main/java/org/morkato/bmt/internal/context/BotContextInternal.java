@@ -1,8 +1,8 @@
 package org.morkato.bmt.internal.context;
 
-import org.morkato.bmt.internal.registration.AppCommandTreeInternal;
+import org.morkato.bmt.internal.startup.AppCommandTreeInternal;
 import org.morkato.bmt.context.BotContext;
-import org.morkato.bmt.registration.AppCommandTree;
+import org.morkato.bmt.startup.AppCommandTree;
 import org.morkato.boot.Extension;
 
 public class BotContextInternal implements BotContext {

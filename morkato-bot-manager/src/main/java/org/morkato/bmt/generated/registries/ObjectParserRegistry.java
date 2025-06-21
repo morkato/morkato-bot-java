@@ -1,8 +1,8 @@
 package org.morkato.bmt.generated.registries;
 
+import org.morkato.bmt.startup.management.ReferenceGetter;
 import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.context.CommandContext;
-import org.morkato.bmt.registration.management.ObjectParserRegistryManagement;
 
 public class ObjectParserRegistry<T> {
   private final ObjectParser<?> parser;
@@ -14,11 +14,11 @@ public class ObjectParserRegistry<T> {
   }
 
   @SuppressWarnings("unchecked")
-  public T parse(CommandContext<?> context,String rest) throws Throwable {
+  public T parse(CommandContext<?> context,String rest) throws Exception {
     return (T)parser.parse(context, rest);
   }
 
-  public void flush(ObjectParserRegistryManagement management) throws Throwable {
-    parser.flush(management);
+  public void flush(ReferenceGetter references) throws Exception {
+    parser.flush(references);
   }
 }

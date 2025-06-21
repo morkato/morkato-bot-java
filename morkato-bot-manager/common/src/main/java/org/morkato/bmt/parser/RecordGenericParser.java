@@ -1,12 +1,11 @@
 package org.morkato.bmt.parser;
 
-import org.morkato.bmt.generated.registries.ObjectParserRegistry;
+import org.morkato.bmt.startup.management.ReferenceGetter;
 import org.morkato.boot.annotation.NotRequired;
 import org.morkato.bmt.context.CommandContext;
 import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.Field;
 import org.morkato.bmt.exception.RecordInternalParserNotFound;
-import org.morkato.bmt.registration.management.ObjectParserRegistryManagement;
 import org.morkato.utility.StringView;
 import java.lang.reflect.RecordComponent;
 import java.lang.reflect.Constructor;
@@ -28,12 +27,12 @@ public class RecordGenericParser<T extends Record> implements ObjectParser<T> {
   }
 
   @Override
-  public void flush(ObjectParserRegistryManagement registration) throws RecordInternalParserNotFound {
+  public void flush(ReferenceGetter references) throws RecordInternalParserNotFound {
     /* Pré-carrega os parsers. Garantindo que todos estejam disponíveis para execução. */
     Class<?>[] parameters = constructor.getParameterTypes();
     for (int i = 0; i < parameters.length; ++i) {
       final Class<?> parameter = parameters[i];
-      final ObjectParserRegistry<?> parser = registration.get(parameter);
+      final ObjectParser<?> parser = references.importref(parameter);
       if (Objects.isNull(parser))
         /* TODO: Adicionar um erro customizado. */
         throw new RecordInternalParserNotFound(parameter);
@@ -43,7 +42,7 @@ public class RecordGenericParser<T extends Record> implements ObjectParser<T> {
   }
 
   @Override
-  public T parse(CommandContext<?> context,String text) throws Throwable {
+  public T parse(CommandContext<?> context,String text) throws Exception {
     final StringView view = new StringView(text);
     final Object[] values = new Object[fields.length];
     for (int i = 0; i < values.length; ++i) {

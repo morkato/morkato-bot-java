@@ -52,7 +52,7 @@ public class PsqlGuildRepository
     statement.assertTransactionActive();
     final GuildDTO normalized = GuildDTO.normalizeDefault(query);
     statement.validateForCreate(normalized);
-    findGuildByIdQuery.update(statement.getJdbc(), query.getId());
+    createGuildQuery.update(statement.getJdbc(), query.getId(), query.getRpgId(), query.getRollCategoryId(), query.getOffCategoryId());
     return normalized;
   }
 

@@ -18,6 +18,7 @@ import org.morkato.api.repository.rpg.RpgCreationQuery;
 import org.morkato.api.repository.rpg.RpgRepository;
 import org.morkato.database.repository.guild.PsqlGuildRepository;
 import org.morkato.database.repository.rpg.PsqlRpgRepository;
+import org.morkato.jdbc.ReflectionQueryLoader;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
@@ -36,6 +37,11 @@ public class PsqlConnectionStatement implements ApiConnectionStatement {
     this.repository = Objects.requireNonNull(repository);
     this.guildRepository = new PsqlGuildRepository(repository);
     this.rpgRepository = new PsqlRpgRepository(repository);
+  }
+
+  public void prepare(ReflectionQueryLoader loader) {
+    loader.writeAll(guildRepository);
+    loader.writeAll(rpgRepository);
   }
 
   @Override
