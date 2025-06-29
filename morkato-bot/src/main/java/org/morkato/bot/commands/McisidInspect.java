@@ -1,7 +1,7 @@
 package org.morkato.bot.commands;
 
 import org.morkato.bmt.components.CommandHandler;
-import org.morkato.bmt.context.CommandContext;
+import org.morkato.bmt.commands.CommandContext;
 import org.morkato.utility.mcisid.McisidUtil;
 
 import java.time.Instant;

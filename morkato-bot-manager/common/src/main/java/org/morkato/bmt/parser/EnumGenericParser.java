@@ -1,7 +1,7 @@
 package org.morkato.bmt.parser;
 
 import org.morkato.bmt.startup.management.ReferenceGetter;
-import org.morkato.bmt.context.CommandContext;
+import org.morkato.bmt.commands.CommandContext;
 import org.morkato.bmt.components.ObjectParser;
 import java.util.EnumSet;
 import java.util.HashMap;

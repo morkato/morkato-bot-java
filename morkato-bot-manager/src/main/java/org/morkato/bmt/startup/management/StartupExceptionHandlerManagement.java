@@ -35,13 +35,21 @@ public class StartupExceptionHandlerManagement
     }
   }
 
+  @SuppressWarnings("unchecked")
+  private <E extends Exception> CommandExceptionRegistry<E> flushCommandExceptionRegistry(
+    Class<?> clazz,
+    CommandExceptionHandler<?> handler
+  ) {
+    return new CommandExceptionRegistry<>((CommandExceptionHandler<E>)handler, (Class<E>)clazz);
+  }
+
   @Override
   public ExceptionsHandleStaticRegistries flush() {
-    final Map<Class<?>, CommandExceptionRegistry> registries = new HashMap<>();
+    final Map<Class<?>, CommandExceptionRegistry<?>> registries = new HashMap<>();
     for (Map.Entry<Class<?>, CommandExceptionHandler<?>> entry : commandExceptions.entrySet()) {
       Class<?> clazz = entry.getKey();
       CommandExceptionHandler<?> handler = entry.getValue();
-      registries.put(clazz, new CommandExceptionRegistry(handler, clazz));
+      registries.put(clazz, this.flushCommandExceptionRegistry(clazz, handler));
       LOGGER.info("Success to flush command exception handler: {} ({}). The content is available for requests.", handler, clazz);
     }
     return new ExceptionsHandleStaticRegistries(registries);

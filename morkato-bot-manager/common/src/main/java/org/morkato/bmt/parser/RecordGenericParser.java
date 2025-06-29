@@ -2,7 +2,7 @@ package org.morkato.bmt.parser;
 
 import org.morkato.bmt.startup.management.ReferenceGetter;
 import org.morkato.boot.annotation.NotRequired;
-import org.morkato.bmt.context.CommandContext;
+import org.morkato.bmt.commands.CommandContext;
 import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.Field;
 import org.morkato.bmt.exception.RecordInternalParserNotFound;

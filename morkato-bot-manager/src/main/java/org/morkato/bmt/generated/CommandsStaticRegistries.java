@@ -1,5 +1,6 @@
 package org.morkato.bmt.generated;
 
+import org.morkato.bmt.generated.registries.ActionRegistry;
 import org.morkato.bmt.generated.registries.CommandRegistry;
 import org.morkato.bmt.generated.registries.SlashCommandRegistry;
 
@@ -44,5 +45,13 @@ public class CommandsStaticRegistries {
 
   public SlashCommandRegistry<?>[] getRegisteredSlashCommands(){
     return Arrays.copyOf(slashcommands,slashcommands.length);
+  }
+
+  public int getRegisteredTextCommandsLength() {
+    return textcommands.length;
+  }
+
+  public int getRegisteredSlashCommandsLength() {
+    return textcommands.length;
   }
 }

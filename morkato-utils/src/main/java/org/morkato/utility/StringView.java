@@ -31,6 +31,15 @@ public class StringView {
       return '\0';
     }
   }
+  public char next() {
+    if (this.eof()) {
+      return '\0';
+    }
+    char current = this.current();
+    prev = idx;
+    idx += 1;
+    return current;
+  }
   public char get() {
     if (this.eof()) {
       return '\0';

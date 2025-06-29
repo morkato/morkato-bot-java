@@ -1,8 +1,8 @@
 package org.morkato.bot.slashmapper;
 
 import org.morkato.bmt.components.SlashMapper;
-import org.morkato.bmt.context.SlashMapperData;
-import org.morkato.bmt.context.SlashMappingInteraction;
+import org.morkato.bmt.commands.rules.SlashMapperData;
+import org.morkato.bmt.commands.rules.SlashMappingInteraction;
 
 public class TestMapper implements SlashMapper<String> {
   @Override

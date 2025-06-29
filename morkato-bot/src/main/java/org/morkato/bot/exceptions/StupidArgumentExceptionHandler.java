@@ -2,7 +2,7 @@ package org.morkato.bot.exceptions;
 
 import org.morkato.bmt.exception.StupidArgumentException;
 import org.morkato.bmt.components.CommandExceptionHandler;
-import org.morkato.bmt.context.CommandContext;
+import org.morkato.bmt.commands.CommandContext;
 
 public class StupidArgumentExceptionHandler implements CommandExceptionHandler<StupidArgumentException>{
   @Override

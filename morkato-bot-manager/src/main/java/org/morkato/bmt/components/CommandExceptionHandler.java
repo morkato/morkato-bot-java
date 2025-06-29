@@ -1,7 +1,7 @@
 package org.morkato.bmt.components;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
-import org.morkato.bmt.context.CommandContext;
+import org.morkato.bmt.commands.CommandContext;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.Type;
 import java.util.Map;

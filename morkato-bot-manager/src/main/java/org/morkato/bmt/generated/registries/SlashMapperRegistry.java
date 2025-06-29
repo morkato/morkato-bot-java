@@ -1,12 +1,8 @@
 package org.morkato.bmt.generated.registries;
 
-import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.morkato.bmt.components.SlashMapper;
-import org.morkato.bmt.context.SlashMapperData;
-import org.morkato.bmt.context.SlashMappingInteraction;
-
-import java.util.Collection;
+import org.morkato.bmt.commands.rules.SlashMapperData;
+import org.morkato.bmt.commands.rules.SlashMappingInteraction;
 
 public class SlashMapperRegistry<T> {
   private final SlashMapper<T> internal;

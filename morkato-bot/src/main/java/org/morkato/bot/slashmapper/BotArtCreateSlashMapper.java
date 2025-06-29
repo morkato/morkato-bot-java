@@ -3,8 +3,8 @@ package org.morkato.bot.slashmapper;
 import org.morkato.api.entity.art.ArtType;
 import org.morkato.api.repository.art.ArtCreationQuery;
 import org.morkato.bmt.components.SlashMapper;
-import org.morkato.bmt.context.SlashMapperData;
-import org.morkato.bmt.context.SlashMappingInteraction;
+import org.morkato.bmt.commands.rules.SlashMapperData;
+import org.morkato.bmt.commands.rules.SlashMappingInteraction;
 
 public class BotArtCreateSlashMapper implements SlashMapper<ArtCreationQuery> {
   private static ArtType mapType(String type) {

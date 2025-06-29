@@ -1,8 +1,10 @@
 package org.morkato.bmt.components;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
-import org.morkato.bmt.context.CommandContext;
+import org.morkato.bmt.commands.CommandContext;
 import org.morkato.bmt.NoArgs;
+import org.morkato.bmt.startup.CommandsInitialization;
+
 import javax.annotation.Nonnull;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.Type;
@@ -21,4 +23,5 @@ public interface CommandHandler<Args> {
     return (Class<?>) type;
   }
   void invoke(CommandContext<Args> context) throws Exception;
+  default void initialize(CommandsInitialization init) {}
 }

@@ -2,7 +2,7 @@ package org.morkato.bmt.components;
 
 import org.morkato.bmt.startup.management.ReferenceGetter;
 import org.apache.commons.lang3.reflect.TypeUtils;
-import org.morkato.bmt.context.CommandContext;
+import org.morkato.bmt.commands.CommandContext;
 import java.lang.reflect.TypeVariable;
 import javax.annotation.Nonnull;
 import java.lang.reflect.Type;

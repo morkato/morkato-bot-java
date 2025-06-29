@@ -1,6 +1,6 @@
 package org.morkato.bot.exceptions;
 
-import org.morkato.bmt.context.CommandContext;
+import org.morkato.bmt.commands.CommandContext;
 
 public class CommandExceptionHandler implements org.morkato.bmt.components.CommandExceptionHandler<Exception>{
   @Override

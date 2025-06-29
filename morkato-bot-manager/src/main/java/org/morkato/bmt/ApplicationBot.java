@@ -1,11 +1,10 @@
 package org.morkato.bmt;
 
-import org.morkato.bmt.context.BotContext;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.JDA;
-import org.morkato.bmt.generated.ApplicationStaticRegistries;
+import org.morkato.bmt.startup.BotContextFactory;
 import org.morkato.bmt.startup.BotRegistrationFactory;
 import org.morkato.boot.DependenceInjection;
 import org.morkato.boot.Extension;
@@ -14,8 +13,8 @@ import org.morkato.boot.ExtensionManager;
 import java.util.Collection;
 import java.util.Objects;
 
-public abstract class ApplicationBot extends Application<ApplicationStaticRegistries> {
-  protected abstract BotRegistrationFactory createFactory(JDA jda, DependenceInjection injector) throws Throwable;
+public abstract class ApplicationBot extends Application<BotCore> {
+  protected abstract BotRegistrationFactory createFactory(JDA jda, DependenceInjection injector) throws Exception;
   protected abstract Collection<Extension<BotContext>> createExtensions();
   protected abstract DependenceInjection createDependenceInjection();
   protected abstract Collection<ListenerAdapter> createListeners();
@@ -38,7 +37,7 @@ public abstract class ApplicationBot extends Application<ApplicationStaticRegist
   }
 
   @Override
-  protected ApplicationStaticRegistries bootstrap(JDA jda) throws Throwable {
+  protected BotCore bootstrap(JDA jda) throws Exception {
     LOGGER.info("Initialize bootstrap.");
     Objects.requireNonNull(jda);
     final DependenceInjection injector = this.createDependenceInjection();

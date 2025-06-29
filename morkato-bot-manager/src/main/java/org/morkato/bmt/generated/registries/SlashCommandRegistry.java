@@ -3,9 +3,10 @@ package org.morkato.bmt.generated.registries;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.morkato.bmt.components.CommandHandler;
-import org.morkato.bmt.internal.context.SlashCommandContext;
-import org.morkato.bmt.internal.context.SlashMapperDataInternal;
-import org.morkato.bmt.internal.context.SlashMappingInteractionInternal;
+import org.morkato.bmt.BotCore;
+import org.morkato.bmt.commands.SlashCommandContext;
+import org.morkato.bmt.commands.rules.SlashMapperDataImpl;
+import org.morkato.bmt.commands.rules.SlashMappingInteractionImpl;
 import org.morkato.bmt.startup.attributes.SlashCommandAttributes;
 
 import java.util.Objects;
@@ -25,11 +26,12 @@ public class SlashCommandRegistry<T> {
     this.options = options;
   }
 
-  public SlashCommandContext<T> bindContext(SlashCommandInteractionEvent event) {
-    final T result = Objects.isNull(options) ? null : options.mapInteraction(new SlashMapperDataInternal(event));
+  public SlashCommandContext<T> bindContext(BotCore core, SlashCommandInteractionEvent event) {
+    final T result = Objects.isNull(options) ? null : options.mapInteraction(new SlashMapperDataImpl(event));
     if (this.isDeferReply())
       event.deferReply(this.isResponseEphemeral()).queue();
-    return new SlashCommandContext<>(event, slashcommand, result);
+    return new SlashCommandContext<>(
+      core, event, this, result);
   }
 
   public void invoke(SlashCommandContext<T> ctx) throws Exception {
@@ -59,8 +61,12 @@ public class SlashCommandRegistry<T> {
   public OptionData[] getOptions() {
     if (Objects.isNull(options))
       return new OptionData[0];
-    final SlashMappingInteractionInternal slashmapping = new SlashMappingInteractionInternal();
+    final SlashMappingInteractionImpl slashmapping = new SlashMappingInteractionImpl();
     options.createOptions(slashmapping);
     return slashmapping.build();
+  }
+
+  public CommandHandler<T> getCommandHandler() {
+    return slashcommand;
   }
 }

@@ -4,9 +4,9 @@ import org.morkato.bmt.generated.registries.ObjectParserRegistry;
 import org.morkato.bmt.generated.registries.SlashMapperRegistry;
 import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.components.SlashMapper;
-import org.morkato.bmt.context.CommandContext;
-import org.morkato.bmt.context.SlashMapperData;
-import org.morkato.bmt.context.SlashMappingInteraction;
+import org.morkato.bmt.commands.rules.SlashMappingInteraction;
+import org.morkato.bmt.commands.rules.SlashMapperData;
+import org.morkato.bmt.commands.CommandContext;
 
 public interface NoArgs {
   static final NoArgs INSTANCE = new NoArgsInstance();

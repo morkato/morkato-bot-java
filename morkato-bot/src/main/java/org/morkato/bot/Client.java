@@ -4,15 +4,15 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.morkato.bmt.ApplicationCommon;
-import org.morkato.bmt.generated.ApplicationStaticRegistries;
-import org.morkato.bmt.context.BotContext;
-import org.morkato.bmt.generated.CommandsStaticRegistries;
+import org.morkato.bmt.BotCore;
+import org.morkato.bmt.BotContext;
+import org.morkato.bmt.invoker.ActionInvoker;
 import org.morkato.bmt.invoker.SlashCommandInvoker;
+import org.morkato.bmt.listener.ActionListener;
 import org.morkato.bmt.listener.SlashCommandListener;
 import org.morkato.boot.Extension;
 import org.morkato.bmt.invoker.CommandInvoker;
 import org.morkato.bmt.listener.TextCommandListener;
-import org.morkato.bot.extension.MorkatoAPIExtension;
 import org.morkato.bot.extension.RPGBaseExtension;
 import org.morkato.utility.MorkatoConfigLoader;
 import java.util.Collection;
@@ -21,8 +21,9 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Client extends ApplicationCommon {
-  private final CommandInvoker invoker = new CommandInvoker();
+  private final CommandInvoker textinvoker= new CommandInvoker();
   private final SlashCommandInvoker slashinvoker = new SlashCommandInvoker();
+  private final ActionInvoker actioninvoker = new ActionInvoker();
 
   public Client(Properties properties, String token) {
     super(Client.class, token, properties);
@@ -42,7 +43,6 @@ public class Client extends ApplicationCommon {
   @Override
   protected Collection<Extension<BotContext>> createExtensions() {
     return Set.of(
-      new MorkatoAPIExtension(),
       new RPGBaseExtension()
     );
   }
@@ -50,13 +50,14 @@ public class Client extends ApplicationCommon {
   @Override
   protected Collection<ListenerAdapter> createListeners() {
     return Set.of(
-      new TextCommandListener(invoker) {
+      new TextCommandListener(textinvoker) {
         @Override
         public String getPrefix(){
           return "!!";
         }
       },
-      new SlashCommandListener(slashinvoker)
+      new SlashCommandListener(slashinvoker),
+      new ActionListener(actioninvoker)
     );
   }
 
@@ -68,21 +69,10 @@ public class Client extends ApplicationCommon {
   }
 
   @Override
-  protected void onReady(JDA jda, ApplicationStaticRegistries registries) {
-    super.onReady(jda, registries);
-    invoker.start(
-      registries.getCommands(),
-      registries.getExceptions()
-    );
-    slashinvoker.start(
-      registries.getCommands(),
-      registries.getExceptions()
-    );
-  }
-
-  @Override
-  protected void close() {
-    super.close();
-    invoker.shutdown();
+  protected void onReady(JDA jda, BotCore core) {
+    super.onReady(jda, core);
+    core.invoke(textinvoker);
+    core.invoke(slashinvoker);
+    core.invoke(actioninvoker);
   }
 }

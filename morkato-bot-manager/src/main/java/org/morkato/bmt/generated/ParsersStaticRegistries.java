@@ -39,4 +39,12 @@ public class ParsersStaticRegistries {
       return NoArgs.SLASH_MAPPER_REGISTRY;
     return mapSlashMappers.get(clazz);
   }
+
+  public int getRegisteredObjectParserLength(){
+    return objectparsers.length;
+  }
+
+  public int getRegisteredSlashMapperLength(){
+    return slashmappers.length;
+  }
 }

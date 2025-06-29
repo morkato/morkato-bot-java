@@ -1,24 +1,19 @@
 package org.morkato.bmt;
 
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
-import org.morkato.bmt.context.BotContext;
-import org.morkato.bmt.generated.ApplicationStaticRegistries;
 import org.morkato.bmt.startup.BotRegistrationFactory;
-import org.morkato.bmt.generated.registries.SlashCommandRegistry;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.morkato.boot.DependenceInjection;
 import org.morkato.boot.Extension;
+import net.dv8tion.jda.api.JDA;
 
 import java.lang.management.ManagementFactory;
+import java.util.Properties;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Properties;
 import java.util.Set;
 
-public class ApplicationCommon extends ApplicationBot {
+public abstract class ApplicationCommon extends ApplicationBot {
   private final Class<?> mainClazz;
   private final Properties properties;
   private final String token;
@@ -63,24 +58,14 @@ public class ApplicationCommon extends ApplicationBot {
     return token;
   }
 
-  protected void syncSlashCommands(JDA jda, ApplicationStaticRegistries registries) {
-    LOGGER.info("Preparing to sync slashcommands with discord app.");
-    CommandListUpdateAction action = jda.updateCommands();
-    SlashCommandRegistry<?>[] slashcommands = registries.getCommands().getRegisteredSlashCommands();
-    for (SlashCommandRegistry<?> slash : slashcommands) {
-      LOGGER.debug("Prepare to slashcommand named: {}", slash.getName());
-      action = action.addCommands(
-        Commands.slash(slash.getName(), slash.getDescription() == null ? "..." : slash.getDescription())
-          .addOptions(slash.getOptions())
-      );
-    }
-    action.queue();
-  }
-
   @Override
-  protected void onReady(JDA jda, ApplicationStaticRegistries registries) {
-    this.syncSlashCommands(jda, registries);
+  protected void onReady(JDA jda, BotCore core) {
+    core.syncSlashCommands(jda);
     LOGGER.info("All components have been initialized successfully.");
+    LOGGER.info("Total of {} text parsers, {} slash mappers, {} text commands, {} slash commands and {} actions loaded successfully.",
+      core.getParsers().getRegisteredObjectParserLength(), core.getParsers().getRegisteredSlashMapperLength(),
+      core.getCommands().getRegisteredTextCommandsLength(), core.getCommands().getRegisteredSlashCommandsLength(),
+      core.getActions().getRegisteredActionsLength());
     LOGGER.info("Estou conectado, como: {} (id={})", jda.getSelfUser().getAsTag(), jda.getSelfUser().getId());
   }
 
@@ -91,7 +76,7 @@ public class ApplicationCommon extends ApplicationBot {
   }
 
   @Override
-  public void run() throws Throwable {
+  public void run() throws Exception {
     LOGGER.info("Launching bot: [{}] PID: {}", mainClazz.getSimpleName(), ManagementFactory.getRuntimeMXBean().getPid());
     LOGGER.info("Creating a context to run discord bot ({} -- {}).", ApplicationCommon.class.getPackageName(), mainClazz.getPackageName());
     super.run();

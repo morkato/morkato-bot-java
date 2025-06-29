@@ -2,7 +2,7 @@ package org.morkato.bmt.generated.registries;
 
 import org.morkato.bmt.startup.management.ReferenceGetter;
 import org.morkato.bmt.components.ObjectParser;
-import org.morkato.bmt.context.CommandContext;
+import org.morkato.bmt.commands.CommandContext;
 
 public class ObjectParserRegistry<T> {
   private final ObjectParser<?> parser;

@@ -2,8 +2,8 @@ package org.morkato.bmt.startup;
 
 import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.generated.registries.ObjectParserRegistry;
-import org.morkato.bmt.parser.IntegerParser;
-import org.morkato.bmt.parser.StringParser;
+import org.morkato.bmt.commands.sharedrules.IntegerParser;
+import org.morkato.bmt.commands.sharedrules.StringParser;
 import java.util.HashMap;
 import java.util.Map;
 

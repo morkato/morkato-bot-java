@@ -1,10 +1,11 @@
 package org.morkato.bot.extension;
 
-import org.morkato.bmt.context.BotContext;
-import org.morkato.bmt.parser.IntegerParser;
-import org.morkato.bmt.parser.StringParser;
-import org.morkato.bmt.startup.AppCommandTree;
+import org.morkato.bmt.BotContext;
+import org.morkato.bmt.commands.sharedrules.IntegerParser;
+import org.morkato.bmt.commands.sharedrules.StringParser;
+import org.morkato.bmt.startup.builder.AppBuilder;
 import org.morkato.boot.BaseExtension;
+import org.morkato.bot.action.ResponseTest;
 import org.morkato.bot.commands.TestException;
 import org.morkato.bot.commands.McisidInspect;
 import org.morkato.bot.exceptions.CommandExceptionHandler;
@@ -17,14 +18,19 @@ import org.morkato.bot.slashmapper.TestMapper;
 public class RPGBaseExtension extends BaseExtension<BotContext> {
   @Override
   public void setup(BotContext ctx) throws Throwable {
-    final AppCommandTree apc = ctx.getAppCommandsTree();
+    final AppBuilder apc = ctx.getAppCommandsTree();
+    apc.use(new McisidInspect());
+    apc.use(new TestException());
+    apc.action(new ResponseTest())
+      .setId("test")
+      .queue();
     /* Comandos padrões */
-    apc.text(new McisidInspect())
+    apc.textCommand(McisidInspect.class)
       .setName("mcisid")
       .addAlias("mcis")
       .queue();
-    apc.text(new TestException())
-      .setName("exception")
+    apc.textCommand(TestException.class)
+      .setName("interaction")
       .queue();
     /* Parsers para argumentos */
     apc.objectParser(new StringParser())
@@ -36,20 +42,20 @@ public class RPGBaseExtension extends BaseExtension<BotContext> {
     apc.objectParser(new ArtOptionParser())
       .queue();
     /* Tratamento de erros nos comandos */
-    apc.exceptionHandler(new StupidArgumentExceptionHandler())
+    apc.commandExceptionHandler(new StupidArgumentExceptionHandler())
         .queue();
-    apc.exceptionHandler(new CommandExceptionHandler())
+    apc.commandExceptionHandler(new CommandExceptionHandler())
         .queue();
     /* Slash Commands */
     apc.slashMapper(new TestMapper())
         .queue();
     apc.slashMapper(new BotArtCreateSlashMapper())
       .queue();
-    apc.slash(new McisidInspect())
+    apc.slashCommand(McisidInspect.class)
       .setName("mcisid")
       .setDescription("[Utilitários] Inspeciona o ID.")
       .queue();
-    apc.slash(new TestException())
+    apc.slashCommand(TestException.class)
       .setName("exception")
       .deferReply()
       .queue();

@@ -8,8 +8,8 @@ import java.util.Objects;
 
 public abstract class Application<T extends Shutdownable> {
   protected abstract JDA getJDA();
-  protected abstract void onReady(JDA jda, T managment) throws Throwable;
-  protected abstract T bootstrap(JDA jda) throws Throwable;
+  protected abstract void onReady(JDA jda, T managment) throws Exception;
+  protected abstract T bootstrap(JDA jda) throws Exception;
   protected abstract void close();
 
   protected final Logger LOGGER = LoggerFactory.getLogger(Application.class);
@@ -20,13 +20,13 @@ public abstract class Application<T extends Shutdownable> {
     Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
   }
 
-  public void run() throws Throwable {
+  public void run() throws Exception {
     try {
       jda = Objects.requireNonNull(this.getJDA());
       managment = Objects.requireNonNull(this.bootstrap(jda));
       jda.awaitReady();
       this.onReady(jda, managment);
-    } catch (Throwable exc) {
+    } catch (Exception exc) {
       this.shutdown();
       throw exc;
     }

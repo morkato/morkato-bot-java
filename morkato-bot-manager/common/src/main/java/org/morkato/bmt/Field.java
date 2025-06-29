@@ -1,8 +1,7 @@
 package org.morkato.bmt;
 
-import org.morkato.bmt.context.CommandContext;
+import org.morkato.bmt.commands.CommandContext;
 import org.morkato.bmt.components.ObjectParser;
-import org.morkato.bmt.generated.registries.ObjectParserRegistry;
 
 import java.lang.annotation.Annotation;
 import javax.annotation.Nonnull;

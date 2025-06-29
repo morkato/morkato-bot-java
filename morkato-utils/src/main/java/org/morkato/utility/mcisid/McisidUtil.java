@@ -47,4 +47,18 @@ public class McisidUtil {
     long t6 = IDENTIFIERS.indexOf(mcisid.charAt(11));
     return (t6 << 36) | (t5 << 30) | (t4 << 24) | (t3 << 18) | (t2 << 12) | (t1 << 6) | t0;
   }
+
+  public static int getIntValue(String sessionid) {
+    if (sessionid.length() > 5)
+      /* TODO: Add custom exception */
+      throw new RuntimeException("Message");
+    int value = 0;
+    for (int i = 0; i < sessionid.length(); ++i)
+      value |= (IDENTIFIERS.indexOf(sessionid.charAt(i)) << (6 * i));
+    return value;
+  }
+
+  public static char getCharFromValue(int value) {
+    return IDENTIFIERS.charAt(value & 0x3f);
+  }
 }
