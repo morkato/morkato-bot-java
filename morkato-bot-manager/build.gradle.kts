@@ -15,8 +15,8 @@ dependencies {
   implementation("com.google.code.findbugs:jsr305:3.0.2")
   implementation("ch.qos.logback:logback-classic:1.5.13")
   implementation("org.jetbrains:annotations:24.0.0")
-  implementation(project(":morkato-utils"))
   implementation(project(":morkato-boot"))
+  implementation(project(":mcisid-java"))
   api("net.dv8tion:JDA:5.3.0")
 }
 

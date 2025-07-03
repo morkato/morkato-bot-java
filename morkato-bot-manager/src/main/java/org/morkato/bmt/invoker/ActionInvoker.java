@@ -9,10 +9,10 @@ import org.morkato.bmt.components.ActionHandler;
 import org.morkato.bmt.actions.ActionSession;
 import org.morkato.bmt.BotCore;
 import org.morkato.bmt.actions.ButtonClickedActionContext;
-import org.morkato.utility.mcisid.McisidUtil;
-import org.morkato.utility.StringView;
-import org.slf4j.Logger;
+import org.morkato.bmt.util.StringView;
+import org.morkato.mcisid.Mcisid;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.Objects;
 import java.util.concurrent.Executors;
@@ -113,7 +113,7 @@ public class ActionInvoker implements Invoker<ButtonInteractionEvent> {
   private <T> void invokeActionSession(ButtonInteractionEvent interaction, StringView view) {
     long initial = System.nanoTime();
     final String sessionid = view.read(2);
-    final int slot = McisidUtil.getIntValue(sessionid);
+    final int slot = LayoutAction.getUnpackedSlots(sessionid);
     ActionContext<T> context;
     ActionHandler<T> handler;
     read.lock();

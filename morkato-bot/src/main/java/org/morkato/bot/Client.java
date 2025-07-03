@@ -14,6 +14,7 @@ import org.morkato.boot.Extension;
 import org.morkato.bmt.invoker.CommandInvoker;
 import org.morkato.bmt.listener.TextCommandListener;
 import org.morkato.bot.extension.RPGBaseExtension;
+import org.morkato.mcisid.Mcisid;
 import org.morkato.utility.MorkatoConfigLoader;
 import java.util.Collection;
 import java.util.Properties;
@@ -30,6 +31,7 @@ public class Client extends ApplicationCommon {
   }
 
   public static void main(String[] args) throws Throwable {
+    Mcisid.ensureLoadLib();
     final Properties properties = MorkatoConfigLoader.loadDefault();
     final String token = properties.getProperty("morkato.bot.token");
     Objects.requireNonNull(token, "morkato.bot.token is required to run bot!");

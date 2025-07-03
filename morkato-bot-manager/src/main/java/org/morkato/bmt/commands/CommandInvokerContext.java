@@ -1,7 +1,7 @@
 package org.morkato.bmt.commands;
 
 import net.dv8tion.jda.api.entities.Message;
-import org.morkato.utility.StringView;
+import org.morkato.bmt.util.StringView;
 
 import java.util.Objects;
 

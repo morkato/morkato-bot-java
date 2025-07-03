@@ -1,4 +1,4 @@
-package org.morkato.utility;
+package org.morkato.bmt.util;
 
 import org.jetbrains.annotations.NotNull;
 

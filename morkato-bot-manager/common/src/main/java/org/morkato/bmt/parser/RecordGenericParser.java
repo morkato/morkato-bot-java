@@ -6,7 +6,7 @@ import org.morkato.bmt.commands.CommandContext;
 import org.morkato.bmt.components.ObjectParser;
 import org.morkato.bmt.Field;
 import org.morkato.bmt.exception.RecordInternalParserNotFound;
-import org.morkato.utility.StringView;
+import org.morkato.bmt.util.StringView;
 import java.lang.reflect.RecordComponent;
 import java.lang.reflect.Constructor;
 import java.util.Objects;

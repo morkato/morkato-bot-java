@@ -9,6 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/mcisid-java" />
             <option value="$PROJECT_DIR$/morkato-api" />
             <option value="$PROJECT_DIR$/morkato-api/database" />
             <option value="$PROJECT_DIR$/morkato-api/entity" />

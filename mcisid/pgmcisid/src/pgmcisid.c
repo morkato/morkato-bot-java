@@ -29,8 +29,8 @@
 #include "fmgr.h"
 #include "port.h"
 
-#include "mcisid/mcisidv1.h"
-#include "mcisid/mcisid.h"
+#include "mcisidv1.h"
+#include "mcisid.h"
 
 PG_MODULE_MAGIC;
 

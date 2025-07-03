@@ -25,6 +25,7 @@ dependencies {
   implementation(project(":morkato-boot"))
   implementation(project(":morkato-utils"))
   implementation(project(":morkato-api:database"))
+  implementation(project(":mcisid-java"))
 }
 
 tasks.named<JavaExec>("run") {
@@ -32,6 +33,7 @@ tasks.named<JavaExec>("run") {
     "-Xmx1024M", /* Máximo 1GB de RAM para consumo */
     "-Xms64M", /* Mínimo 64MB de RAM para consumo */
     "-Dmorkato.conf=${morkatoconf}", /* Arquivo de configuração */
+    "-Djava.library.path=/usr/local/lib/x86_64-linux-gnu",
     "-DMORKATO_LOG_LEVEL=TRACE"
   )
 }

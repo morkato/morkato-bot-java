@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.morkato.bmt.commands.CommandInvokerContext;
 import org.morkato.bmt.invoker.Invoker;
-import org.morkato.utility.StringView;
+import org.morkato.bmt.util.StringView;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 

@@ -85,16 +85,6 @@ typedef struct mcisidv1snapshot {
 
 typedef int mcisidv1cmp;
 
-/* Deprecated */
-// typedef struct mcisidv1gen {
-//   mcisidv1seq* sequences;
-//   time_t epoch;
-// } mcisidv1gen;
-
-// void mcisidv1BootGenerator(mcisidv1gen* generator, mcisidv1seq* sequences);
-// time_t mcisidv1CreatedAt(mcisidv1gen* generator, mcisidv1* input);
-/* End Deprecatetion */
-
 mcisidstate mcisidv1NextValue(mcisidv1seq* sequence, time_t instant);
 void mcisidv1ResetSequence(mcisidv1seq* sequence);
 mcisidv1snapshot mcisidv1TakeSnapshot(const mcisidv1seq* seq, int8_t model);

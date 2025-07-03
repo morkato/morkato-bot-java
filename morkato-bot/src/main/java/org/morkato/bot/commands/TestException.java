@@ -12,16 +12,15 @@ public class TestException implements CommandHandler<NoArgs> {
   private ActionRegistry<String> action;
   @Override
   public void invoke(CommandContext<NoArgs> ctx) {
-    throw new RuntimeException("A error");
+    ctx.reply()
+      .setContent("Amoeba")
+      .mentionRepliedUser(false)
+      .setActionSession(action, "a")
+      .queue();
   }
 
   @Override
   public void initialize(CommandsInitialization init) {
     action = init.action(ResponseTest.class);
-    /* tipo um... "init.message("prop", message)" */
-  }
-
-  public void onMessageOriginalDispatched(CommandContext<NoArgs> ctx, Message message) {
-    /* LÓGICA */
   }
 }

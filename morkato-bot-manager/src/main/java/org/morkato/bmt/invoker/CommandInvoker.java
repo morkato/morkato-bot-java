@@ -4,7 +4,7 @@ import org.morkato.bmt.BotCore;
 import org.morkato.bmt.commands.CommandInvokeHandle;
 import org.morkato.bmt.generated.registries.CommandRegistry;
 import org.morkato.bmt.commands.CommandInvokerContext;
-import org.morkato.utility.StringView;
+import org.morkato.bmt.util.StringView;
 import net.dv8tion.jda.api.entities.Message;
 import java.util.concurrent.*;
 import java.util.Objects;

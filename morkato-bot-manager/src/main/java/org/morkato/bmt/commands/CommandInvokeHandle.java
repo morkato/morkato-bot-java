@@ -4,7 +4,7 @@ import org.morkato.bmt.BotCore;
 import org.morkato.bmt.generated.registries.CommandExceptionRegistry;
 import org.morkato.bmt.generated.registries.CommandRegistry;
 import net.dv8tion.jda.api.entities.Message;
-import org.morkato.utility.StringView;
+import org.morkato.bmt.util.StringView;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import java.util.Objects;

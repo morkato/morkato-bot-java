@@ -1,7 +1,10 @@
 #include <time.h>
-#include "mcisid/mcisidv1.h"
-#include "mcisid/mcisid.h"
+#include "mcisidv1.h"
+#include "mcisid.h"
 
+/*
+ * Locomove a sequência passada para frente com base no instante de tempo.
+*/
 mcisidstate mcisidv1NextValue(mcisidv1seq* sequence, time_t instant) {
   if (instant < sequence->lastime)
     return MCISIDV1_INSTANT_CORRUPTED;
