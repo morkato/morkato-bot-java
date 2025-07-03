@@ -1,23 +1,20 @@
 package org.morkato.bot.extension;
 
-import org.morkato.bmt.BotContext;
-import org.morkato.bmt.commands.sharedrules.IntegerParser;
-import org.morkato.bmt.commands.sharedrules.StringParser;
-import org.morkato.bmt.startup.builder.AppBuilder;
+import org.morkato.mcbmt.BotContext;
+import org.morkato.mcbmt.commands.sharedrules.IntegerParser;
+import org.morkato.mcbmt.commands.sharedrules.StringParser;
+import org.morkato.mcbmt.startup.builder.AppBuilder;
 import org.morkato.boot.BaseExtension;
 import org.morkato.bot.action.ResponseTest;
 import org.morkato.bot.commands.TestException;
 import org.morkato.bot.commands.McisidInspect;
 import org.morkato.bot.exceptions.CommandExceptionHandler;
 import org.morkato.bot.exceptions.StupidArgumentExceptionHandler;
-import org.morkato.bot.parsers.ArtCommandDataParser;
-import org.morkato.bot.parsers.ArtOptionParser;
-import org.morkato.bot.slashmapper.BotArtCreateSlashMapper;
 import org.morkato.bot.slashmapper.TestMapper;
 
 public class RPGBaseExtension extends BaseExtension<BotContext> {
   @Override
-  public void setup(BotContext ctx) throws Throwable {
+  public void setup(BotContext ctx) {
     final AppBuilder apc = ctx.getAppCommandsTree();
     apc.use(new McisidInspect());
     apc.use(new TestException());
@@ -34,22 +31,16 @@ public class RPGBaseExtension extends BaseExtension<BotContext> {
       .queue();
     /* Parsers para argumentos */
     apc.objectParser(new StringParser())
-        .queue();
-    apc.objectParser(new IntegerParser())
-        .queue();
-    apc.objectParser(new ArtCommandDataParser())
       .queue();
-    apc.objectParser(new ArtOptionParser())
+    apc.objectParser(new IntegerParser())
       .queue();
     /* Tratamento de erros nos comandos */
     apc.commandExceptionHandler(new StupidArgumentExceptionHandler())
-        .queue();
+      .queue();
     apc.commandExceptionHandler(new CommandExceptionHandler())
-        .queue();
+      .queue();
     /* Slash Commands */
     apc.slashMapper(new TestMapper())
-        .queue();
-    apc.slashMapper(new BotArtCreateSlashMapper())
       .queue();
     apc.slashCommand(McisidInspect.class)
       .setName("mcisid")

@@ -1,11 +1,10 @@
 package org.morkato.bot.commands;
 
-import net.dv8tion.jda.api.entities.Message;
-import org.morkato.bmt.components.CommandHandler;
-import org.morkato.bmt.commands.CommandContext;
-import org.morkato.bmt.generated.registries.ActionRegistry;
-import org.morkato.bmt.startup.CommandsInitialization;
-import org.morkato.bmt.NoArgs;
+import org.morkato.mcbmt.components.CommandHandler;
+import org.morkato.mcbmt.commands.CommandContext;
+import org.morkato.mcbmt.generated.registries.ActionRegistry;
+import org.morkato.mcbmt.startup.CommandsInitialization;
+import org.morkato.mcbmt.NoArgs;
 import org.morkato.bot.action.ResponseTest;
 
 public class TestException implements CommandHandler<NoArgs> {

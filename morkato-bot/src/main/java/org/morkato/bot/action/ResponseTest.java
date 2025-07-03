@@ -1,11 +1,11 @@
 package org.morkato.bot.action;
 
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
-import org.morkato.bmt.actions.ActionSession;
-import org.morkato.bmt.actions.ButtonAction;
-import org.morkato.bmt.components.ActionHandler;
-import org.morkato.bmt.actions.ActionContext;
-import org.morkato.bmt.actions.LayoutAction;
+import org.morkato.mcbmt.actions.ActionSession;
+import org.morkato.mcbmt.actions.ButtonAction;
+import org.morkato.mcbmt.components.ActionHandler;
+import org.morkato.mcbmt.actions.ActionContext;
+import org.morkato.mcbmt.actions.LayoutAction;
 
 public class ResponseTest implements ActionHandler<String> {
   private ButtonAction test = ButtonAction.builder()

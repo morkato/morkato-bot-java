@@ -1,8 +1,8 @@
 package org.morkato.bot.commands;
 
-import org.morkato.bmt.components.CommandHandler;
-import org.morkato.bmt.commands.CommandContext;
-import org.morkato.utility.mcisid.McisidUtil;
+import org.morkato.mcbmt.components.CommandHandler;
+import org.morkato.mcbmt.commands.CommandContext;
+import org.morkato.mcisid.Mcisidv1;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -24,13 +24,13 @@ public class McisidInspect implements CommandHandler<String> {
   }
   @Override
   public void invoke(CommandContext<String> ctx) {
-    final String mcisid = ctx.getDefinedArguments();
-    final int identifier = McisidUtil.getIdentifier(mcisid);
+    final Mcisidv1 mcisid = Mcisidv1.fromString(ctx.getDefinedArguments());
+    final int identifier = mcisid.getIdentifier();
     if (identifier != 0)
       throw new RuntimeException("A versão do ID: " + mcisid + "/" + identifier + " não é reconhecida, portanto, não existe.");
-    final int model = McisidUtil.getV1OriginModel(mcisid);
-    final int seqnext = McisidUtil.getV1Sequence(mcisid);
-    final long instant = McisidUtil.getV1InstantInMilis(mcisid);
+    final int model = mcisid.getOriginModel();
+    final int seqnext = mcisid.getSequenceValue();
+    final long instant = mcisid.getInstantCreated();
     final Instant createdAt = Instant.ofEpochMilli(TimeUnit.SECONDS.toMillis(1716994800) + instant);
     if (model == -1)
         throw new RuntimeException("O modelo do ID: " + mcisid + "/unknown é inválido.");

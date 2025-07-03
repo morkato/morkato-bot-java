@@ -1,1 +1,0 @@
-DELETE FROM "guilds" WHERE "id" = ?;

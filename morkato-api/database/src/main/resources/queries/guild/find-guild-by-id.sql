@@ -1,1 +1,0 @@
-SELECT * FROM "guilds" WHERE "id" = ? LIMIT 1;

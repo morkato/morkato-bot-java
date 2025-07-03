@@ -47,3 +47,7 @@ bin/
 .DS_Store
 
 *.jar
+
+### Alterando
+ignore/morkato-jdbc/
+ignore/morkato-api/

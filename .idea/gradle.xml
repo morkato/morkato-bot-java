@@ -9,17 +9,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/mcbmt" />
+            <option value="$PROJECT_DIR$/mcbmt/common" />
             <option value="$PROJECT_DIR$/mcisid-java" />
-            <option value="$PROJECT_DIR$/morkato-api" />
-            <option value="$PROJECT_DIR$/morkato-api/database" />
-            <option value="$PROJECT_DIR$/morkato-api/entity" />
-            <option value="$PROJECT_DIR$/morkato-api/tests" />
             <option value="$PROJECT_DIR$/morkato-boot" />
             <option value="$PROJECT_DIR$/morkato-bot" />
-            <option value="$PROJECT_DIR$/morkato-bot-manager" />
-            <option value="$PROJECT_DIR$/morkato-bot-manager/common" />
-            <option value="$PROJECT_DIR$/morkato-jdbc" />
-            <option value="$PROJECT_DIR$/morkato-utils" />
           </set>
         </option>
       </GradleProjectSettings>

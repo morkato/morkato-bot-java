@@ -1,1 +1,0 @@
-SELECT * FROM mcrpgs WHERE "id" = CAST(? AS mcisidv1);
