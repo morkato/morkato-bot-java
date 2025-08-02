@@ -4,51 +4,59 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
-import org.morkato.mcbmt.components.ActionHandler;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import org.morkato.mcbmt.commands.CommandContext;
+import org.morkato.mcbmt.actions.LayoutAction;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.Collection;
 
-public class SlashMessageCreation implements MessageCreation {
+public class SlashMessageCreation<ContextType>
+  extends SessionableMessageCreation<ContextType>
+  implements MessageCreation<ContextType> {
   private final MessageCreateBuilder builder = new MessageCreateBuilder();
   private final CommandInteraction interaction;
 
-  public SlashMessageCreation(CommandContext<?> ctx) {
+  public SlashMessageCreation(CommandContext<ContextType> ctx) {
+    super(ctx);
     this.interaction = ctx.getInteraction();
   }
 
   @Override
-  public MessageCreation setContent(String content) {
+  protected void syncBuilderWithLayout(LayoutAction layout){
+    builder.addComponents(layout.build());
+  }
+
+  private void dispatchQuotedHook(InteractionHook hook) {
+    hook.retrieveOriginal().queue(this::dispatchQueuedMessage);
+  }
+
+  @Override
+  public MessageCreation<ContextType> setContent(String content) {
     builder.setContent(content);
     return this;
   }
 
   @Override
-  public MessageCreation addEmbed(MessageEmbed embed) {
+  public MessageCreation<ContextType> addEmbed(MessageEmbed embed) {
     builder.addEmbeds(embed);
     return this;
   }
 
   @Override
-  public MessageCreation mentionRepliedUser(boolean m) {
+  public MessageCreation<ContextType> mentionRepliedUser(boolean m) {
     builder.mentionRepliedUser(m);
     return this;
   }
 
   @Override
-  public MessageCreation setMessageReference(String id) {
+  public MessageCreation<ContextType> setMessageReference(String id) {
     return this;
   }
 
   @Override
-  public MessageCreation allowedMentions(Collection<Message.MentionType> mentions) {
+  public MessageCreation<ContextType> allowedMentions(Collection<Message.MentionType> mentions) {
     builder.setAllowedMentions(mentions);
-    return this;
-  }
-
-  @Override
-  public <T> MessageCreation setActionSession(ActionHandler<T> actionhandler,T payload){
     return this;
   }
 
@@ -56,9 +64,9 @@ public class SlashMessageCreation implements MessageCreation {
   public void queue() {
     final MessageCreateData data = builder.build();
     if (interaction.isAcknowledged()) {
-      interaction.getHook().sendMessage(data).queue();
+      interaction.getHook().sendMessage(data).queue(this::dispatchQueuedMessage);
       return;
     }
-    interaction.reply(data).queue();
+    interaction.reply(data).queue(this::dispatchQuotedHook);
   }
 }

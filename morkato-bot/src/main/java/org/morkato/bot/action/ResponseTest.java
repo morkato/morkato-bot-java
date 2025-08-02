@@ -32,5 +32,8 @@ public class ResponseTest implements ActionHandler<String> {
   @Override
   public void onSessionExpired(ActionSession<String> session) {
     session.cleanLayout();
+    session.getMessage()
+      .reply("Sua sessão hospedada no slot: " + session.getSlot() + " foi dropada com sucesso (i).")
+      .queue();
   }
 }

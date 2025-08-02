@@ -1,6 +1,5 @@
 #include <stdbool.h>
 #include <stdint.h>
-#include <time.h>
 #include "./mcisid.h"
 
 #ifndef MCISID_V1_H
@@ -13,6 +12,7 @@
 #define MCISIDV1_IDENTIFER           0
 #define MCISIDV1_IOSIZE              12
 #define MCISIDV1_INVALID_SEQVALUE    0
+#define MCISIDV1_INVALID_ID          "000000000000"
 
 /*
  * Estado de retorno da função mcisidv1Generate e mcisidv1NextValue:
@@ -48,6 +48,12 @@
 #define MCISIDV1_COMPARE_EQUAL   0
 #define MCISIDV1_COMPARE_GREATER 1
 
+#if defined(__unix)
+  #define MCISIDV1_BASE_EPOCH_UNIX_MS 1704067200000ULL // 2024-01-01T00:00:00Z
+#elif defined(_WIN32)
+  #define MCISIDV1_BASE_EPOCH_WINDOWS_MS /* Não sei */ 1704067200000ULL
+#endif
+
 /*
  * ESTRUTURA DO MCISIDV1 (VERSÃO 1)
  *
@@ -61,39 +67,43 @@
  * TAMANHO FIXO: 12 BYTES (72 BITS BRUTO) - Conversão de caracteres por bs64
  * ESTRUTURA BINÁRIA: [IDENTIFIER: 6b] [MODEL: 6b] [SEQUENCE: 18b] [TIMESTAMP: 42b]
  */
-typedef struct __attribute__((packed)) mcisidv1 {
+typedef struct __attribute__((packed)) _mcisidv1 {
   char identifier;
   char model;
   char sequence[3];
   char timestamp[7];
-} mcisidv1;
-typedef char mcisidv1raw[MCISIDV1_IOSIZE];
+} _mcisidv1;
+typedef char mcisidv1[MCISIDV1_IOSIZE];
 
-_Static_assert(sizeof(mcisidv1) == MCISIDV1_IOSIZE, "O tamanho de mcisidv1 deve conter o mesmo espaço reservado no macro MCISIDV1_IOSIZE.");
-_Static_assert(sizeof(mcisidv1raw) == MCISIDV1_IOSIZE, "O tamanho de mcisidv1raw deve conter o mesmo espaço reservado no macro MCISIDV1_IOSIZE.");
+_Static_assert(sizeof(_mcisidv1) == MCISIDV1_IOSIZE, "O tamanho de _mcisidv1 deve conter o mesmo espaço reservado no macro MCISIDV1_IOSIZE.");
+_Static_assert(sizeof(mcisidv1) == MCISIDV1_IOSIZE, "O tamanho de mcisidv1raw deve conter o mesmo espaço reservado no macro MCISIDV1_IOSIZE.");
+
+typedef int8_t  mcisidv1_vmodel;
+typedef int32_t mcisidv1_vsequence;
+typedef int64_t mcisidv1tm;
+typedef int32_t mcisidv1cmp;
 
 typedef struct mcisidv1seq {
-  int32_t current;
-  time_t lastime;
+  int32_t    current;
+  mcisidv1tm lastime;
 } mcisidv1seq;
 
 typedef struct mcisidv1snapshot {
-  int8_t model;
-  int32_t seqnext;
-  time_t instant;
+  mcisidv1_vmodel    model;
+  mcisidv1_vsequence seqnext;
+  mcisidv1tm         instant;
 } mcisidv1snapshot;
 
-typedef int mcisidv1cmp;
-
-mcisidstate mcisidv1NextValue(mcisidv1seq* sequence, time_t instant);
-void mcisidv1ResetSequence(mcisidv1seq* sequence);
-mcisidv1snapshot mcisidv1TakeSnapshot(const mcisidv1seq* seq, int8_t model);
-mcisidstate mcisidv1Generate(mcisidv1seq* sequence, int8_t model, time_t instant, mcisidv1* output);
-void mcisidv1WriteOutput(const mcisidv1snapshot* snapshot, mcisidv1* output);
-bool mcisidv1IsInvalid(const mcisidv1* mcisid);
-int8_t mcisidv1GetOriginModel(const mcisidv1* input);
-int32_t mcisidv1GetSequence(const mcisidv1* input);
-time_t mcisidv1GetTimeInstantMilis(const mcisidv1* input);
-mcisidv1cmp mcisidv1Compare(const mcisidv1* a, const mcisidv1* b);
+mcisidv1tm       mcisidv1GetSystemInstant    ();
+mcisidstate      mcisidv1NextValue           (mcisidv1seq* sequence, mcisidv1tm instant);
+void             mcisidv1ResetSequence       (mcisidv1seq* sequence);
+mcisidv1snapshot mcisidv1TakeSnapshot        (const mcisidv1seq* seq, mcisidv1_vmodel model);
+mcisidstate      mcisidv1Generate            (mcisidv1seq* sequence, mcisidv1_vmodel model, mcisidv1tm instant, mcisidv1 output);
+void             mcisidv1WriteOutput         (const mcisidv1snapshot* snapshot, mcisidv1 output);
+bool             mcisidv1IsInvalid           (const mcisidv1 mcisid);
+mcisidv1_vmodel  mcisidv1GetOriginModel      (const mcisidv1 input);
+int32_t          mcisidv1GetSequence         (const mcisidv1 input);
+mcisidv1tm       mcisidv1GetTimeInstantMilis (const mcisidv1 input);
+mcisidv1cmp      mcisidv1Compare             (const mcisidv1 a, const mcisidv1 b);
 
 #endif // MCISID_V1_H

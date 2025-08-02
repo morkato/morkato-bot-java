@@ -1,5 +1,6 @@
 package org.morkato.bot.extension;
 
+import org.morkato.bot.action.PagedEmbedAction;
 import org.morkato.mcbmt.BotContext;
 import org.morkato.mcbmt.commands.sharedrules.IntegerParser;
 import org.morkato.mcbmt.commands.sharedrules.StringParser;
@@ -18,8 +19,8 @@ public class RPGBaseExtension extends BaseExtension<BotContext> {
     final AppBuilder apc = ctx.getAppCommandsTree();
     apc.use(new McisidInspect());
     apc.use(new TestException());
-    apc.action(new ResponseTest())
-      .setId("test")
+    apc.action(new PagedEmbedAction())
+      .setId("embed")
       .queue();
     /* Comandos padrões */
     apc.textCommand(McisidInspect.class)
@@ -27,7 +28,7 @@ public class RPGBaseExtension extends BaseExtension<BotContext> {
       .addAlias("mcis")
       .queue();
     apc.textCommand(TestException.class)
-      .setName("interaction")
+      .setName("paged")
       .queue();
     /* Parsers para argumentos */
     apc.objectParser(new StringParser())

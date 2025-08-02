@@ -1,10 +1,16 @@
 plugins {
-  java
+  id("java")
   kotlin("jvm") version "1.9.25"
 }
 
 group = "org.morkato"
 version = rootProject.version
+
+subprojects {
+  layout.buildDirectory.set(file("${rootProject.projectDir}/build/gradle/${project.name}"))
+}
+
+layout.buildDirectory.set(file("${rootProject.projectDir}/build/gradle/root"))
 
 allprojects {
   repositories {

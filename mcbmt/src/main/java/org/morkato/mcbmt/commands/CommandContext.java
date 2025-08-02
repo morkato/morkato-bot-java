@@ -48,16 +48,16 @@ public interface CommandContext<Args> {
   default void deferReplyIfInteraction(boolean ep) {}
   default void deferReplyIfInteraction() {}
 
-  default MessageCreation respond() {
+  default MessageCreation<Args> respond() {
     if (this.isInvokedTextCommand())
-      return new TextMessageCreation(this);
-    return new SlashMessageCreation(this);
+      return new TextMessageCreation<>(this);
+    return new SlashMessageCreation<>(this);
   }
 
-  default MessageCreation reply() {
+  default MessageCreation<Args> reply() {
     if (this.isInvokedTextCommand())
-      return new TextMessageCreation(this)
+      return new TextMessageCreation<>(this)
         .setMessageReference(this.getMessage());
-    return new SlashMessageCreation(this);
+    return new SlashMessageCreation<>(this);
   }
 }

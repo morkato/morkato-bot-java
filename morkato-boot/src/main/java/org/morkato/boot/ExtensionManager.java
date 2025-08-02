@@ -57,7 +57,7 @@ public class ExtensionManager<T> {
         extension.setup(context);
         factory.commit(extension, context);
       } catch (Throwable exc) {
-        LOGGER.error("Failed to setup extension: {}. ", extension.getClass().getName());
+        LOGGER.error("Failed to setup extension: {}. An unexpected error occurred.", extension.getClass().getName(), exc);
       }
     }
     setuped = true;
